@@ -1,0 +1,11 @@
+{
+  "spell.crimson_susanoo.crimson_susanoo": "Crimson Susanoo",
+  "spell.crimson_susanoo.crimson_susanoo.guide": "Cooldown begins when summon ends.",
+  "ui.crimson_susanoo.cleave": "Cleave: %s damage",
+  "ui.crimson_susanoo.crescent": "Inferno Crescent: %s damage (%s mana)",
+  "ui.crimson_susanoo.slash": "Wrathful Slash: %s hit / %s area (%s mana)",
+  "ui.crimson_susanoo.sustain": "Mana: %s + %s/s upkeep | %ss max",
+  "entity.crimson_susanoo.guardian": "Crimson Susanoo",
+  "entity.crimson_susanoo.inferno_crescent": "Inferno Crescent",
+  "death.attack.crimson_susanoo.crimson_susanoo": "%1$s was cut down by %2$s's Crimson Susanoo"
+}

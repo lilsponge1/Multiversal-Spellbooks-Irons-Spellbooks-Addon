@@ -1,0 +1,72 @@
+"""Exercise integration failures which would otherwise break Forge loading."""
+import json
+import tempfile
+import unittest
+import zipfile
+from pathlib import Path
+
+from assemble_combined import assemble, parse_manifest
+
+
+class IntegrationTest(unittest.TestCase):
+    def fixture(self, path, mod_id, extra=None, manifest=None):
+        files = {
+            "META-INF/mods.toml": (
+                'modLoader="javafml"\nloaderVersion="[47,)"\nlicense="All Rights Reserved"\n'
+                f'[[mods]] # comment\n# separated declaration\nmodId="{mod_id}"\nversion="1"\n'
+                f'[[dependencies.{mod_id}]]\nmodId="forge"\nmandatory=true\n'
+                'versionRange="[47,)"\nordering="NONE"\nside="BOTH"\n'
+            ).encode(),
+            "META-INF/MANIFEST.MF": manifest or b"Manifest-Version: 1.0\r\n\r\n",
+            "pack.mcmeta": json.dumps({"pack": {"pack_format": 15, "description": mod_id}}).encode(),
+            f"assets/{mod_id}/original.txt": b"original payload",
+        }
+        files.update(extra or {})
+        with zipfile.ZipFile(path, "w") as jar:
+            for name, data in files.items():
+                jar.writestr(name, data)
+
+    def test_metadata_mixins_and_payload_survive(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            a, b, out = (root / name for name in ("a.jar", "b.jar", "out.jar"))
+            self.fixture(a, "irons_ultimate_explosion", {"test.mixins.json": b"{}"},
+                         b"Manifest-Version: 1.0\r\nMixinConfigs: test.mixins.json\r\n\r\n")
+            self.fixture(b, "crimson_susanoo")
+            report = assemble([a, b], out)
+            self.assertEqual(report["unchanged_payload_entries"], 3)
+            with zipfile.ZipFile(out) as jar:
+                self.assertEqual(parse_manifest(jar.read("META-INF/MANIFEST.MF"))["MixinConfigs"], "test.mixins.json")
+                self.assertEqual(jar.read("assets/crimson_susanoo/original.txt"), b"original payload")
+            with self.assertRaisesRegex(ValueError, "already exists"):
+                assemble([a, b], out)
+
+    def test_collision_and_missing_mixin_fail_before_writing(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            a, b, out = (root / name for name in ("a.jar", "b.jar", "out.jar"))
+            self.fixture(a, "irons_ultimate_explosion", {"collision.class": b"a"})
+            self.fixture(b, "crimson_susanoo", {"collision.class": b"b"})
+            with self.assertRaisesRegex(ValueError, "Payload collision"):
+                assemble([a, b], out)
+            self.assertFalse(out.exists())
+            self.fixture(a, "irons_ultimate_explosion", manifest=b"Manifest-Version: 1.0\r\nMixinConfigs: missing.json\r\n\r\n")
+            self.fixture(b, "crimson_susanoo")
+            with self.assertRaisesRegex(ValueError, "Missing manifest mixin"):
+                assemble([a, b], out)
+            self.assertFalse(out.exists())
+
+    def test_signed_input_and_dependency_classes_rejected(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            a, b, out = (root / name for name in ("a.jar", "b.jar", "out.jar"))
+            self.fixture(b, "crimson_susanoo")
+            for name, message in [("META-INF/TEST.SF", "Signed inputs"), ("net/minecraft/Example.class", "dependency class")]:
+                self.fixture(a, "irons_ultimate_explosion", {name: b"x"})
+                with self.assertRaisesRegex(ValueError, message):
+                    assemble([a, b], out)
+                self.assertFalse(out.exists())
+
+
+if __name__ == "__main__":
+    unittest.main()
