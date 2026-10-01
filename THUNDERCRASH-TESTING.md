@@ -92,4 +92,19 @@ The distribution copy is `build/release/grand-explosion-0.3.0.jar`, with checksu
 
 The user reported that the three requested gameplay checks all passed: visuals including the Ascension/shader comparison; sound after impact, timeout and resource reload; and ordinary movement/gravity/effect cleanup after teleport, death and leaving/rejoining. Their response was that tests one and two were “perfect,” number three had “no issues whatsoever,” and everything was working as expected. They explicitly asked to consider the mod finished and wrap it up.
 
-These are user-reported gameplay passes on the installed test JAR, not new independently reviewed recordings or a claim that the later distribution was already installed. Guided steering had already been accepted. The final distribution remains the unchanged 118-check binary; its default movement matches the accepted tuning. Multiplayer observers, ship contact and broader latency/performance measurements remain deferred, and the high-drop landing retest remains waived. No further tests are required for this user-approved handoff.
+These are user-reported gameplay passes on the installed test JAR, not new independently reviewed recordings or a claim that the later distribution was already installed. Guided steering had already been accepted. That distribution remains the preserved 118-check binary; its default movement matches the accepted tuning. Multiplayer observers, ship contact and broader latency/performance measurements remain deferred, and the high-drop landing retest remains waived. No further tests were required for that user-approved handoff.
+
+### Named scroll and supplied recordings: 0.3.1
+
+The Thundercrash-only follow-up passed **130 assertions**, plus Grand Explosion/staff/Regalia/PvP regressions, on the existing disposable Forge 47.4.10 server. The server saved and shut down cleanly. Evidence is `build/thundercrash-scroll-validation.log`.
+
+- `/give @s irons_ultimate` suggestions include `irons_ultimate_explosion:thundercrash_scroll`.
+- Native command item construction contains Thundercrash I immediately; save/load retains it and preserves an existing level V.
+- Lightning Bottle focus resolves Thundercrash in the forge's enabled, craftable Lightning list.
+- Legendary Ink + Paper + Lightning Bottle yields the named Thundercrash I scroll and consumes one of each.
+- Both given and forged named scrolls pass native Inscription Table acceptance and button handling, preserving the spellbook, spell and level while consuming the scroll.
+- Grand Explosion remains crafting-disabled.
+
+The three user-supplied recordings decode with Minecraft's STB Vorbis library as mono 48 kHz with no clipped decoded samples. Their original bytes are preserved. Evidence is `build/thundercrash-audio-validation.log`; cast/flight/impact durations are approximately 1.086/2.641/5.880 seconds. These are file checks, not a new in-game listening or graphical UI check. Earlier user-accepted gameplay and deferred multiplayer/ship tests remain unchanged in scope.
+
+Current distribution: `build/release/grand-explosion-0.3.1.jar`, SHA256 `D5A2557662FF1ADE4719181D6C091109988A221C2078A64227F670C3F871BDCA`. The previously installed GPT build remains untouched.

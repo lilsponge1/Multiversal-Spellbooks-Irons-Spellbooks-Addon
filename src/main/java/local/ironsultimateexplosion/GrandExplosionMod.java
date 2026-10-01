@@ -18,6 +18,7 @@ public final class GrandExplosionMod {
         ModSpells.SPELLS.register(bus);
         ModSounds.SOUNDS.register(bus);
         ModItems.ITEMS.register(bus);
+        bus.addListener(ModItems::fillCreativeTabs);
         MinecraftForge.EVENT_BUS.register(SpellEvents.class);
         MinecraftForge.EVENT_BUS.register(CraterManager.class);
         MinecraftForge.EVENT_BUS.register(ThundercrashManager.class);

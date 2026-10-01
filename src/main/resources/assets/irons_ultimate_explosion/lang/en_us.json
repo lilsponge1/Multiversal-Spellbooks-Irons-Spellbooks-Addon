@@ -8,6 +8,8 @@
   "item.irons_ultimate_explosion.cinderstar_boots": "Cinderstar Boots",
   "message.irons_ultimate_explosion.spellbook_only": "Grand Explosion must be cast from a spellbook.",
   "spell.irons_ultimate_explosion.thundercrash": "Thundercrash",
+  "item.irons_ultimate_explosion.thundercrash_scroll": "Thundercrash Spell Scroll",
+  "item.irons_ultimate_explosion.thundercrash_scroll.forge": "Scroll Forge: Legendary Ink + Paper + Lightning Bottle",
   "spell.irons_ultimate_explosion.thundercrash.guide": "Become a guided mass of lightning. Aim with your camera and collide to discharge. Flight timeout ends safely without an explosion.",
   "subtitles.irons_ultimate_explosion.thundercrash_cast": "Lightning builds",
   "subtitles.irons_ultimate_explosion.thundercrash_flight": "Thundercrash surges",

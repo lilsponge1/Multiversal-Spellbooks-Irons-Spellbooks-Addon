@@ -108,6 +108,7 @@ public final class ThundercrashHarness {
         collisionCases(level);
         lifecycleCases(level);
         packetCases();
+        giveCases(level,caster,spell);
         forgeCases(level,caster,spell);
         caster.m_6034_(0,80,0); caster.m_146922_(0); caster.m_146926_(0); caster.m_20242_(false);
         ThundercrashManager.charge(caster,5);
@@ -352,6 +353,10 @@ public final class ThundercrashHarness {
         check("native_lightning_school_listing",io.redspace.ironsspellbooks.api.registry.SpellRegistry.getSpellsForSchool(lightning).contains(spell));
         var focusItem=net.minecraftforge.registries.ForgeRegistries.ITEMS.tags().getTag(lightning.getFocus()).iterator().next();
         var focus=new net.minecraft.world.item.ItemStack(focusItem);
+        var visible=io.redspace.ironsspellbooks.api.registry.SchoolRegistry.getSchoolsFromFocus(focus).stream()
+                .flatMap(s -> io.redspace.ironsspellbooks.api.registry.SpellRegistry.getSpellsForSchool(s).stream())
+                .filter(AbstractSpell::allowCrafting).filter(AbstractSpell::isEnabled).toList();
+        check("forge_lightning_focus_discovers_thundercrash",focus.m_204117_(io.redspace.ironsspellbooks.util.ModTags.SCHOOL_FOCUS) && visible.contains(spell));
         var forgePos=new BlockPos(3,80,-3);
         level.m_7731_(forgePos,io.redspace.ironsspellbooks.registries.BlockRegistry.SCROLL_FORGE_BLOCK.get().m_49966_(),3);
         var tile=(io.redspace.ironsspellbooks.block.scroll_forge.ScrollForgeTile)level.m_7702_(forgePos);
@@ -367,12 +372,35 @@ public final class ThundercrashHarness {
         var container=ISpellContainer.get(scroll);
         check("native_forge_produces_thundercrash_scroll",!scroll.m_41619_() && container.getSpellAtIndex(0).getSpell()==spell
                 && container.getSpellAtIndex(0).getLevel()==spell.getMinLevelForRarity(SpellRarity.LEGENDARY));
+        check("native_forge_returns_named_item",scroll.m_150930_(ModItems.THUNDERCRASH_SCROLL.get()));
         menu.getResultSlot().m_6201_(1); menu.getResultSlot().m_142406_(player,scroll);
         check("native_forge_consumes_one_of_each",tile.getStackInSlot(0).m_41619_() && tile.getStackInSlot(1).m_41619_() && tile.getStackInSlot(2).m_41619_());
         System.out.println("THUNDER_FORGE ink="+inkId
                 +" focus="+net.minecraftforge.registries.ForgeRegistries.ITEMS.getKey(focusItem)+" level="+container.getSpellAtIndex(0).getLevel());
         inscriptionCases(level,player,spell,scroll);
         } finally { place(level,forgePos,false); }
+    }
+    private void giveCases(ServerLevel level, ServerPlayer player, AbstractSpell spell) throws Exception {
+        String id="irons_ultimate_explosion:thundercrash_scroll";
+        var dispatcher=level.m_7654_().m_129892_().m_82094_();
+        var source=level.m_7654_().m_129893_();
+        var suggestions=dispatcher.getCompletionSuggestions(dispatcher.parse("give @s irons_ultimate",source))
+                .get(5,java.util.concurrent.TimeUnit.SECONDS).getList();
+        check("give_prefix_suggests_named_thundercrash",suggestions.stream().anyMatch(s -> s.getText().equals(id)));
+        var parsed=dispatcher.parse("give @s "+id,source);
+        check("native_give_argument_parses",parsed.getExceptions().isEmpty() && !parsed.getReader().canRead());
+        var input=(net.minecraft.commands.arguments.item.ItemInput)parsed.getContext().getArguments().get("item").getResult();
+        var given=input.m_120980_(1,true);
+        var data=ISpellContainer.get(given);
+        check("give_immediately_contains_thundercrash",data!=null && data.getSpellAtIndex(0).getSpell()==spell && data.getSpellAtIndex(0).getLevel()==1);
+        var restored=net.minecraft.world.item.ItemStack.m_41712_(given.m_41739_(new net.minecraft.nbt.CompoundTag()));
+        check("named_scroll_survives_save_load",restored.m_150930_(ModItems.THUNDERCRASH_SCROLL.get()) && ISpellContainer.get(restored).getSpellAtIndex(0).getSpell()==spell);
+        var upgraded=given.m_41777_(); ISpellContainer.createScrollContainer(spell,5,upgraded);
+        var upgradedCopy=net.minecraft.world.item.ItemStack.m_41712_(upgraded.m_41739_(new net.minecraft.nbt.CompoundTag()));
+        check("named_scroll_preserves_existing_level",ISpellContainer.get(upgradedCopy).getSpellAtIndex(0).getLevel()==5);
+        check("grand_explosion_crafting_unchanged",!ModSpells.GRAND_EXPLOSION.get().allowCrafting());
+        inscriptionCases(level,player,spell,given);
+        System.out.println("THUNDER_GIVE suggestion="+id+" native_iteminput=true spell_level=1");
     }
     private void inscriptionCases(ServerLevel level, ServerPlayer player, AbstractSpell spell, net.minecraft.world.item.ItemStack scroll) {
         var tablePos=new BlockPos(3,80,-2);

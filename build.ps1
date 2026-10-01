@@ -3,7 +3,7 @@ param(
     [string]$LibraryDir = (Join-Path $PSScriptRoot '..\analysis\runtime-smoke\vs-freeze-diag\libraries'),
     [string]$ModDir = (Join-Path $PSScriptRoot '..\analysis\magic-compat\inputs'),
     [string]$MinecraftJar = (Join-Path $env:APPDATA 'PrismLauncher\libraries\net\minecraftforge\forge\1.20.1-47.4.10\forge-1.20.1-47.4.10-client.jar'),
-    [string]$OutputJar = (Join-Path $PSScriptRoot 'build\grand-explosion-0.3.0.jar')
+    [string]$OutputJar = (Join-Path $PSScriptRoot 'build\grand-explosion-0.3.1.jar')
 )
 $ErrorActionPreference = 'Stop'
 & (Join-Path $PSScriptRoot 'generate-art.ps1')
