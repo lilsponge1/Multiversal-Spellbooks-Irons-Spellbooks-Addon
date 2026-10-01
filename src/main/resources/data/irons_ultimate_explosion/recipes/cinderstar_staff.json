@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [" C ", "RNR", " P "],
+  "key": {
+    "C": {"item": "irons_spellbooks:cinder_essence"},
+    "R": {"item": "irons_spellbooks:fire_rune"},
+    "N": {"item": "minecraft:nether_star"},
+    "P": {"item": "irons_spellbooks:pyrium_staff"}
+  },
+  "result": {"item": "irons_ultimate_explosion:cinderstar_staff", "count": 1}
+}

@@ -1,0 +1,17 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "thundercrash_flight": {
+      "loop": true,
+      "animation_length": 1,
+      "bones": {
+        "body": {"rotation": [70,0,0]},
+        "head": {"rotation": [-60,0,0]},
+        "right_arm": {"rotation": [-155,0,8]},
+        "left_arm": {"rotation": [-155,0,-8]},
+        "right_leg": {"rotation": [10,0,3]},
+        "left_leg": {"rotation": [10,0,-3]}
+      }
+    }
+  }
+}

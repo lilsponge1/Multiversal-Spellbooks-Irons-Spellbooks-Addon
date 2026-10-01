@@ -1,0 +1,17 @@
+# Local build output and copied Minecraft test environment
+/build/
+/test-server/
+
+# Generated binaries and temporary files
+*.class
+*.jar
+*.log
+*.args
+*.tmp
+*.bak
+
+# Editor and Gradle caches
+/.gradle/
+/.idea/
+/.vscode/
+*.iml

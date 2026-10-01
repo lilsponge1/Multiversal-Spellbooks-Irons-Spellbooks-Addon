@@ -1,0 +1,1 @@
+{"type":"minecraft:smithing_transform","template":{"item":"irons_spellbooks:cinder_essence"},"base":{"item":"irons_spellbooks:pyromancer_boots"},"addition":{"item":"minecraft:nether_star"},"result":{"item":"irons_ultimate_explosion:cinderstar_boots","count":1}}

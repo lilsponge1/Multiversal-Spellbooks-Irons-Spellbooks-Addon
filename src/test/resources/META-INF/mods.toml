@@ -1,0 +1,13 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="All Rights Reserved"
+[[mods]]
+modId="grand_explosion_test"
+version="0.1.0"
+displayName="Grand Explosion Disposable Test Harness"
+[[dependencies.grand_explosion_test]]
+modId="irons_ultimate_explosion"
+mandatory=true
+versionRange="[0.1.0,)"
+ordering="AFTER"
+side="SERVER"

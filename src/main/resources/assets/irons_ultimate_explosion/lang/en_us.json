@@ -1,0 +1,21 @@
+{
+  "spell.irons_ultimate_explosion.grand_explosion": "Grand Explosion",
+  "spell.irons_ultimate_explosion.grand_explosion.guide": "Commit your remaining mana to a distant, devastating Fire blast. The power gained from mana has diminishing returns.",
+  "item.irons_ultimate_explosion.cinderstar_staff": "Cinderstar Staff",
+  "item.irons_ultimate_explosion.cinderstar_hat": "Cinderstar Witch Hat",
+  "item.irons_ultimate_explosion.cinderstar_robe": "Cinderstar Robe",
+  "item.irons_ultimate_explosion.cinderstar_leggings": "Cinderstar Leggings",
+  "item.irons_ultimate_explosion.cinderstar_boots": "Cinderstar Boots",
+  "message.irons_ultimate_explosion.spellbook_only": "Grand Explosion must be cast from a spellbook.",
+  "spell.irons_ultimate_explosion.thundercrash": "Thundercrash",
+  "spell.irons_ultimate_explosion.thundercrash.guide": "Become a guided mass of lightning. Aim with your camera and collide to discharge. Flight timeout ends safely without an explosion.",
+  "subtitles.irons_ultimate_explosion.thundercrash_cast": "Lightning builds",
+  "subtitles.irons_ultimate_explosion.thundercrash_flight": "Thundercrash surges",
+  "subtitles.irons_ultimate_explosion.thundercrash_impact": "Thundercrash discharges",
+  "death.attack.irons_ultimate_explosion.thundercrash": "%1$s was struck by Thundercrash",
+  "death.attack.irons_ultimate_explosion.thundercrash.player": "%1$s was struck by %2$s's Thundercrash",
+  "ui.irons_ultimate_explosion.thundercrash.damage": "%s maximum impact damage",
+  "ui.irons_ultimate_explosion.thundercrash.radius": "%s block impact radius",
+  "ui.irons_ultimate_explosion.thundercrash.duration": "%s seconds of guided flight",
+  "message.irons_ultimate_explosion.thundercrash.unavailable": "Thundercrash requires free movement: leave mounts, beds, fluids, and other flight effects first."
+}

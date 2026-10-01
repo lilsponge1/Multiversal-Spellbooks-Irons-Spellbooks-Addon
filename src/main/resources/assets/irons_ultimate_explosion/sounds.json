@@ -1,0 +1,5 @@
+{
+  "thundercrash_cast": {"subtitle":"subtitles.irons_ultimate_explosion.thundercrash_cast","sounds":[{"name":"irons_spellbooks:spell.shockwave.prepare","type":"event"}]},
+  "thundercrash_flight": {"subtitle":"subtitles.irons_ultimate_explosion.thundercrash_flight","sounds":[{"name":"irons_spellbooks:lightning_woosh_01","type":"event"}]},
+  "thundercrash_impact": {"subtitle":"subtitles.irons_ultimate_explosion.thundercrash_impact","sounds":[{"name":"irons_spellbooks:spell.shockwave.cast","type":"event"}]}
+}
