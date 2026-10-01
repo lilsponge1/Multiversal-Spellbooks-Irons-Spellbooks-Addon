@@ -62,3 +62,12 @@ All **130 Thundercrash assertions passed** on the disposable Forge 47.4.10 serve
 The user's cast, flight and impact Vorbis recordings are bundled unchanged at the documented sound paths. Minecraft's bundled STB decoder successfully decoded all three as mono 48 kHz, with no clipped decoded samples. Durations are 1.086 / 2.641 / 5.880 seconds; evidence: `build/thundercrash-audio-validation.log`. This establishes file usability; perceived volume and the supplied flight-loop seam have not had a new in-game listening check. Accepted movement, damage and visual behavior was not retuned.
 
 Distribution: `build/release/grand-explosion-0.3.1.jar`, SHA256 `D5A2557662FF1ADE4719181D6C091109988A221C2078A64227F670C3F871BDCA`. The older releases and GPT installation remain unchanged. Install matching 0.3.1 copies on server and clients, replacing the old addon. Earlier deferred tests remain deferred.
+
+
+## Corrected impact recording: 0.3.2
+
+The user replaced the source Thundercrash_impact.ogg with a corrected recording. Its SHA256 is 1305FD250BB0F6BC592AB3F6387A2715E4270410E8F26D866ACD6767861A7BA2. It was copied unchanged and decoded with Minecraft STB Vorbis as mono 48 kHz, 2.174 seconds, with no clipped decoded samples. Evidence: build/thundercrash-impact-0.3.2-validation.log.
+
+A full comparison of release entries against 0.3.1 confirmed that only the impact audio and META-INF/mods.toml version differ. All classes, cast/flight sounds, other assets and mixin configuration remain byte-identical. Existing 130-assertion gameplay and Grand Explosion regression evidence applies to the unchanged code; this resource-only update did not rerun the server harness. Previous deferred tests remain deferred.
+
+Current distribution: build/release/grand-explosion-0.3.2.jar; SHA256 4F66CD1DEB2DA0376C77760A77578B84B3F48DD79A6C7602145460147BE65698. The prior releases and GPT installation remain preserved. Replace the old addon JAR on matching clients and server.

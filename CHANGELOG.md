@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.2
+
+- Replaced only Thundercrash's impact recording with the corrected file supplied under the same filename. The cast and flight recordings, spell behavior, scroll crafting and command integration are unchanged.
+- The replacement decodes as mono 48 kHz Vorbis, lasts approximately 2.174 seconds and has no clipped decoded samples. Its original bytes are preserved.
+- Compared the release with 0.3.1: only the impact audio and version metadata differ. The previous 130-assertion gameplay/regression results continue to describe the unchanged code; no redundant server rerun was performed.
+
+Replace the old addon JAR with `grand-explosion-0.3.2.jar` on matching clients and server.
+
 ## 0.3.1
 
 - Added `irons_ultimate_explosion:thundercrash_scroll` to `/give` suggestions and Iron's scroll creative tab. New stacks contain Thundercrash I through Iron's public preset spell-container API.
