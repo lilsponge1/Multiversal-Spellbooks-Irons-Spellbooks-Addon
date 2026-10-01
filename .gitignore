@@ -15,3 +15,15 @@
 /.idea/
 /.vscode/
 *.iml
+
+# Each feature keeps its own local dependencies, output and disposable fixtures.
+**/build/
+**/.gradle/
+**/dist/
+**/run/
+**/run-pack*/
+**/preview/
+**/__pycache__/
+**/*.pyc
+/.tools/
+!modules/crimson-susanoo/gradle/wrapper/gradle-wrapper.jar

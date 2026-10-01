@@ -2,6 +2,22 @@
 
 Standalone Forge 1.20.1 addon for Iron's Spells 'n Spellbooks 3.16.3. It adds Grand Explosion, Thundercrash, the Cinderstar Staff, and Cinderstar Regalia. See [PLAN.md](PLAN.md) for design and validation scope.
 
+## Combined Multiversal build
+
+This branch also contains [Crimson Susanoo](modules/crimson-susanoo/README.md), authored independently under `modules/crimson-susanoo/`. Root `src/` remains the Grand Explosion/Thundercrash/Cinderstar project. Both retain their own mod IDs, registry namespaces, authors and configs inside **one combined JAR**. See [CONTRIBUTING.md](CONTRIBUTING.md) for the collaboration workflow and [INTEGRATION.md](INTEGRATION.md) for validation.
+
+Build the root addon with the existing `build.ps1`, and build the Crimson module with its Gradle wrapper and Java 17. Then run:
+
+```powershell
+./build-combined.ps1 -GrandExplosionJar ./build/grand-explosion-0.3.2.jar
+```
+
+Python 3.11+ is required for the packager (standard library only); pass `-Python <python.exe>` if needed. `-BuildCrimson` first rebuilds the module, and `-Offline` uses cached Gradle dependencies. `-CrimsonJar` and `-OutputJar` override paths. The assembler refuses to overwrite an existing release; choose a new output name for another candidate.
+
+The output defaults to `build/release/multiversal-spellbooks-0.3.2-crimson-0.1.0.jar`, with a SHA-256 checksum and input/payload verification report beside it. It merges Forge metadata, preserves Thundercrash's mixin registration, and verifies all gameplay classes and feature assets are unchanged from the inputs. Shared resource-pack metadata has one combined description. Third-party dependencies remain separate mods; they are never bundled.
+
+Install the **same combined JAR** on the server and every matching client. Remove the separate Grand Explosion and Crimson Susanoo JARs first to avoid duplicate mod IDs. Existing spell IDs and config filenames remain valid. The combined artifact still contains Grand Explosion's configurable terrain damage and PvP behavior described below; Crimson's terrain-safe summon behavior remains scoped to Crimson. The original standalone root build remains available.
+
 ## Build
 
 Run `./build.ps1` from this directory with PowerShell. The script currently uses sibling development-workspace paths for the JDK, Forge libraries, and exact Iron's Spells and Ballistix JARs; adapt those paths for another computer. The release output is `build/grand-explosion-0.3.2.jar`. The separate `build-test.ps1` produces a disposable-world test mod and must not be installed with the release.
