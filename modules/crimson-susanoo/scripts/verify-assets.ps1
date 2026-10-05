@@ -31,6 +31,10 @@ foreach ($side in @('left','right')) {
 if (($model.bones | Where-Object name -eq 'sword').parent -ne 'right_hand') {
     throw 'Sword must inherit the gripping hand transform'
 }
+if (($model.bones | Where-Object name -eq 'right_arm').pivot[0] -ge 0 -or
+    ($model.bones | Where-Object name -eq 'right_hand').pivot[0] -ge 0) {
+    throw 'The weapon arm must be on the anatomical right (negative Bedrock X)'
+}
 foreach ($name in $requiredAnimations) {
     if ("animation.guardian.$name" -notin @($animations.animations.PSObject.Properties.Name)) {
         throw "Missing animation: $name"
@@ -89,10 +93,19 @@ $bladeFront = ($swordCubes | ForEach-Object { [double]$_.origin[2] } | Measure-O
 $swordTop = ($swordCubes | ForEach-Object { [double]$_.origin[1] + [double]$_.size[1] } | Measure-Object -Maximum).Maximum
 $outwardTip = ($swordCubes | Where-Object { $_.origin[2] -lt -75 } | ForEach-Object { [double]$_.origin[0] } | Measure-Object -Maximum).Maximum
 $gripThroughHand = @($swordCubes | Where-Object {
-    $_.origin[0] -le 23 -and ($_.origin[0] + $_.size[0]) -ge 23 -and
+    $_.origin[0] -le -23 -and ($_.origin[0] + $_.size[0]) -ge -23 -and
     $_.origin[1] -le 36 -and ($_.origin[1] + $_.size[1]) -ge 36 -and
     $_.origin[2] -le -6 -and ($_.origin[2] + $_.size[2]) -ge 6
 }).Count -gt 0
+$hand = $model.bones | Where-Object name -eq 'right_hand'
+$knuckleFront = ($hand.cubes | ForEach-Object { [double]$_.origin[2] } | Measure-Object -Minimum).Minimum
+$guard = $swordCubes[2]
+if ($swordCubes[0].origin[2] -ge ($guard.origin[2] + $guard.size[2])) {
+    throw 'The wrapped grip must meet the guard without an air gap'
+}
+if ($knuckleFront - ($guard.origin[2] + $guard.size[2]) -lt 6 -or $guard.size[1] -le $guard.size[0]) {
+    throw 'The guard must clear the knuckles and share the vertical blade roll'
+}
 # The refined katana uses a gentler lateral curve than the first blocky blade.
 if ($swordTop -gt 60 -or !$gripThroughHand -or $swordCubes.Count -ne 4) {
     throw "Sword must be held through the right grip and project forward/outward, not upward (front=$bladeFront top=$swordTop outward=$outwardTip grip=$gripThroughHand)"

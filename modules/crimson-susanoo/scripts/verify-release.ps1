@@ -4,7 +4,7 @@ Add-Type -AssemblyName System.IO.Compression.FileSystem
 
 $root = Split-Path -Parent $PSScriptRoot
 if ([string]::IsNullOrWhiteSpace($JarPath)) {
-    $JarPath = Join-Path $root 'dist/crimson_susanoo-0.1.0.jar'
+    $JarPath = Join-Path $root 'dist/crimson_susanoo-0.1.1.jar'
 }
 $jar = (Resolve-Path -LiteralPath $JarPath -ErrorAction Stop).Path
 $assets = Join-Path $root 'src/main/resources/assets/crimson_susanoo'
@@ -65,6 +65,7 @@ try {
         'io/redspace/ironsspellbooks/',
         'com/github/L_Ender/cataclysm/',
         'software/bernie/geckolib/',
+        'com/eliotlash/',
         'net/minecraft/',
         'net/minecraftforge/'
     )

@@ -3,6 +3,8 @@ package com.crimson_susanoo.entity;
 import com.crimson_susanoo.CrimsonSusanoo;
 import com.crimson_susanoo.CrimsonSounds;
 import com.crimson_susanoo.ServerConfig;
+import com.crimson_susanoo.animation.ClientAnimationClock;
+import com.crimson_susanoo.animation.SmoothKeyframeEasing;
 import com.github.L_Ender.cataclysm.init.ModEffect;
 import com.github.L_Ender.cataclysm.init.ModParticle;
 import com.crimson_susanoo.spell.CrimsonSpell;
@@ -30,6 +32,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.HitResult;
@@ -62,6 +65,11 @@ public final class CrimsonEntity extends Mob implements GeoEntity {
     private static final EntityDataAccessor<Long> VISUAL_START = SynchedEntityData.defineId(CrimsonEntity.class, EntityDataSerializers.LONG);
     private static final EntityDataAccessor<Boolean> COLLAPSE = SynchedEntityData.defineId(CrimsonEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> FOLLOWING = SynchedEntityData.defineId(CrimsonEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> GROUNDED = SynchedEntityData.defineId(CrimsonEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> MOVING = SynchedEntityData.defineId(CrimsonEntity.class, EntityDataSerializers.BOOLEAN);
+    private final ClientAnimationClock manifestClock = new ClientAnimationClock();
+    private final ClientAnimationClock actionClock = new ClientAnimationClock();
+    private int movingGraceTicks;
     private final AnimatableInstanceCache animationCache = GeckoLibUtil.createInstanceCache(this);
     private UUID ownerId;
     private int ageTicks;
@@ -110,6 +118,8 @@ public final class CrimsonEntity extends Mob implements GeoEntity {
         entityData.define(VISUAL_START, 0L);
         entityData.define(COLLAPSE, false);
         entityData.define(FOLLOWING, false);
+        entityData.define(GROUNDED, false);
+        entityData.define(MOVING, false);
     }
 
     public void setOwner(ServerPlayer player) {
@@ -118,6 +128,8 @@ public final class CrimsonEntity extends Mob implements GeoEntity {
         getAttribute(Attributes.ARMOR).setBaseValue(ServerConfig.ARMOR.get());
         setHealth(getMaxHealth());
     }
+
+    public boolean isOwnedBy(ServerPlayer player) { return player.getUUID().equals(ownerId); }
 
     @Nullable
     public ServerPlayer getOwnerPlayer() {
@@ -134,8 +146,10 @@ public final class CrimsonEntity extends Mob implements GeoEntity {
         entityData.set(MANIFESTING, true);
     }
     public double getManifestAnimationTick(double partialTick) {
-        double elapsed = Math.max(0, level().getGameTime() - entityData.get(MANIFEST_START)
-                + Math.max(0, Math.min(1, partialTick)));
+        double elapsed = level().isClientSide
+                ? manifestClock.elapsed(entityData.get(MANIFEST_START), level().getGameTime(), tickCount, partialTick)
+                : Math.max(0, level().getGameTime() - entityData.get(MANIFEST_START)
+                    + Math.max(0, Math.min(1, partialTick)));
         // Hold the final pose until the authoritative activation packet arrives.
         return Math.min(59.999, elapsed * 60.0 / entityData.get(MANIFEST_TICKS));
     }
@@ -143,6 +157,8 @@ public final class CrimsonEntity extends Mob implements GeoEntity {
     public int getAction() { return entityData.get(ACTION); }
     public int getFade() { return entityData.get(FADE); }
     public boolean isManaCollapsing() { return entityData.get(COLLAPSE); }
+    public boolean isVisuallyGrounded() { return entityData.get(GROUNDED); }
+    public boolean isVisuallyMoving() { return entityData.get(MOVING); }
 
     public double getActionAnimationTick(double partialTick) {
         int length = switch (getAction()) { case 1 -> 23; case 2 -> 26; case 3 -> 32; default -> 0; };
@@ -155,8 +171,10 @@ public final class CrimsonEntity extends Mob implements GeoEntity {
 
     private double visualElapsed(double partialTick, int length) {
         if (length == 0) return 0;
-        double elapsed = level().getGameTime() - entityData.get(VISUAL_START)
-                + Math.max(0, Math.min(1, partialTick));
+        double elapsed = level().isClientSide
+                ? actionClock.elapsed(entityData.get(VISUAL_START), level().getGameTime(), tickCount, partialTick)
+                : level().getGameTime() - entityData.get(VISUAL_START)
+                    + Math.max(0, Math.min(1, partialTick));
         return Math.max(0, Math.min(length - 0.001, elapsed));
     }
 
@@ -188,6 +206,16 @@ public final class CrimsonEntity extends Mob implements GeoEntity {
     @Override
     public boolean hurt(DamageSource source, float amount) {
         if (isManifesting()) return false;
+        Entity attacker = source.getEntity();
+        if (attacker == null && source.getDirectEntity() instanceof Projectile projectile)
+            attacker = projectile.getOwner();
+        ServerPlayer owner = getOwnerPlayer();
+        // Reject friendly damage before vanilla records a retaliation target or
+        // starts hurt animation. Friends need no scoreboard team in a co-op pack.
+        if (attacker != null && (attacker.getUUID().equals(ownerId)
+                || !ServerConfig.FRIENDLY_FIRE.get() && (isPlayerCompanion(attacker)
+                || owner != null && (owner.isAlliedTo(attacker)
+                || attacker.isAlliedTo(owner))))) return false;
         boolean damaged = super.hurt(source, amount);
         if (damaged && !level().isClientSide) level().playSound(null, blockPosition(), CrimsonSounds.HURT, SoundSource.HOSTILE, 1, 0.6F);
         return damaged;
@@ -195,11 +223,19 @@ public final class CrimsonEntity extends Mob implements GeoEntity {
 
     @Override
     public void tick() {
+        double beforeX = getX(), beforeZ = getZ();
         super.tick();
         if (level().isClientSide) {
             clientAura();
             return;
         }
+        // Remote clients interpolate mob positions; their local velocity/ground
+        // flags are not a reliable animation gate. Send the server's support and
+        // actual travel, retaining a brief pause between path updates.
+        entityData.set(GROUNDED, onGround());
+        if (Math.hypot(getX() - beforeX, getZ() - beforeZ) > .01) movingGraceTicks = 3;
+        else movingGraceTicks = Math.max(0, movingGraceTicks - 1);
+        entityData.set(MOVING, movingGraceTicks > 0);
         if (isDeadOrDying()) return;
         if (!(level() instanceof ServerLevel serverLevel)) return;
         if (isManifesting()) {
@@ -314,19 +350,23 @@ public final class CrimsonEntity extends Mob implements GeoEntity {
 
     public boolean canHarm(ServerPlayer owner, @Nullable Entity entity) {
         if (!(entity instanceof LivingEntity living) || !living.isAlive() || entity == this || entity == owner) return false;
+        // An explicit friendly-fire opt-in still respects the server/team PvP rules.
+        if (entity instanceof Player player && !owner.canHarmPlayer(player)) return false;
+        if (entity instanceof CrimsonEntity other) {
+            ServerPlayer otherOwner = other.getOwnerPlayer();
+            if (otherOwner != null && !owner.canHarmPlayer(otherOwner)) return false;
+        }
         if (!ServerConfig.FRIENDLY_FIRE.get()) {
-            if (entity instanceof Player player && !owner.canHarmPlayer(player)) return false;
-            if (entity instanceof CrimsonEntity other) {
-                ServerPlayer otherOwner = other.getOwnerPlayer();
-                if (otherOwner != null && !owner.canHarmPlayer(otherOwner)) return false;
-            }
+            if (isPlayerCompanion(entity)) return false;
             if (owner.isAlliedTo(entity) || entity.isAlliedTo(owner)) return false;
-            if (entity instanceof TamableAnimal tame && tame.isTame() && ownerId.equals(tame.getOwnerUUID())) return false;
-            if (entity instanceof IMagicSummon summon && summon.getSummoner() == owner) return false;
-            if (entity instanceof IMagicSummon summon && summon.getSummoner() instanceof Player summoner
-                    && !owner.canHarmPlayer(summoner)) return false;
         }
         return true;
+    }
+
+    private static boolean isPlayerCompanion(Entity entity) {
+        return entity instanceof Player || entity instanceof CrimsonEntity
+                || entity instanceof TamableAnimal tame && tame.isTame() && tame.getOwnerUUID() != null
+                || entity instanceof IMagicSummon summon && summon.getSummoner() instanceof Player;
     }
 
     public boolean canStrike(ServerPlayer owner, @Nullable Entity entity) {
@@ -462,7 +502,7 @@ public final class CrimsonEntity extends Mob implements GeoEntity {
     }
 
     private float scaledDamage(ServerPlayer owner, double base) {
-        return (float) (base * CrimsonSusanoo.SPELL.get().getSpellPower(1, owner));
+        return (float) (base * CrimsonSusanoo.SPELL.get().getSpellPower(1, owner) * ServerConfig.DAMAGE_MULTIPLIER.get());
     }
 
     private void cleave(ServerPlayer owner) {
@@ -681,7 +721,7 @@ public final class CrimsonEntity extends Mob implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<CrimsonEntity>(this, "main", 3, state -> {
+        var controller = new AnimationController<CrimsonEntity>(this, "main", 3, state -> {
             // Pack cast-speed modifiers also shorten the preview's lifetime.
             // Start immediately and fit all three visual seconds into that lifetime.
             state.getController().setAnimationSpeed(isManifesting() ? 60.0 / entityData.get(MANIFEST_TICKS) : 1.0);
@@ -699,7 +739,7 @@ public final class CrimsonEntity extends Mob implements GeoEntity {
                 case 1 -> state.setAndContinue(RawAnimation.begin().thenPlay("animation.guardian.cleave"));
                 case 2 -> state.setAndContinue(RawAnimation.begin().thenPlay("animation.guardian.crescent"));
                 case 3 -> state.setAndContinue(RawAnimation.begin().thenPlay("animation.guardian.slash"));
-                default -> state.setAndContinue(state.isMoving()
+                default -> state.setAndContinue(isVisuallyMoving()
                         ? RawAnimation.begin().thenLoop(entityData.get(FOLLOWING)
                                 ? "animation.guardian.follow" : "animation.guardian.walk")
                         : RawAnimation.begin().thenLoop("animation.guardian.idle"));
@@ -716,7 +756,10 @@ public final class CrimsonEntity extends Mob implements GeoEntity {
                 if (getAction() != 0) return getActionAnimationTick(partialTick);
                 return localTick;
             }
-        });
+        };
+        var easing = new SmoothKeyframeEasing();
+        controller.setOverrideEasingTypeFunction(entity -> easing.prepare(controller.getCurrentAnimation()));
+        controllers.add(controller);
     }
 
     @Override public AnimatableInstanceCache getAnimatableInstanceCache() { return animationCache; }

@@ -5,19 +5,19 @@ Add-Type -AssemblyName System.IO.Compression.FileSystem
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $distRoot = (Resolve-Path -LiteralPath (Join-Path $projectRoot 'dist')).Path
 if ([string]::IsNullOrWhiteSpace($JarPath)) {
-    $JarPath = Join-Path $distRoot 'crimson_susanoo-0.1.0.jar'
+    $JarPath = Join-Path $distRoot 'crimson_susanoo-0.1.1.jar'
 }
 $sourceJar = (Resolve-Path -LiteralPath $JarPath).Path
 & (Join-Path $PSScriptRoot 'verify-release.ps1') -JarPath $sourceJar
 $jarHash = (Get-FileHash -LiteralPath $sourceJar -Algorithm SHA256).Hash
 $shortHash = $jarHash.Substring(0, 6).ToLowerInvariant()
-$jarName = 'crimson_susanoo-0.1.0.jar'
-$bundlePath = Join-Path $distRoot "crimson_susanoo-0.1.0-test-$shortHash.zip"
+$jarName = 'crimson_susanoo-0.1.1.jar'
+$bundlePath = Join-Path $distRoot "crimson_susanoo-0.1.1-test-$shortHash.zip"
 if (Test-Path -LiteralPath $bundlePath) { throw "Candidate package already exists: $bundlePath" }
 $partialPath = "$bundlePath.partial"
 
 $instructions = @"
-Crimson Susanoo 0.1.0 - test candidate
+Crimson Susanoo 0.1.1 - test candidate
 Addon SHA256: $jarHash
 
 Requires Minecraft 1.20.1, Java 17 and the matching Forge 47.4.10 modpack:

@@ -1,0 +1,24 @@
+plugins { id 'net.minecraftforge.gradle' version '[6.0,6.2)' }
+version = '0.1.0'
+group = 'local.ignisarmorcompat'
+base { archivesName = 'ignis_armor_compat' }
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+layout.buildDirectory = file(new File(System.getProperty('java.io.tmpdir'), 'multiversal-ignis-armor-compat-build'))
+minecraft { mappings channel: 'official', version: '1.20.1' }
+dependencies { minecraft 'net.minecraftforge:forge:1.20.1-47.4.0' }
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    // Both supported method names are explicit in the mixin. No generated
+    // refmap or dependency on a network-fetched Mixin annotation processor.
+    options.compilerArgs += ['-proc:none']
+}
+tasks.named('jar', Jar).configure {
+    manifest { attributes('MixinConfigs': 'ignis_armor_compat.mixins.json') }
+    finalizedBy 'reobfJar'
+}
+tasks.register('packageAddon', Copy) {
+    dependsOn tasks.named('reobfJar')
+    from tasks.named('jar').flatMap { it.archiveFile }
+    into file('dist')
+}
+tasks.named('build').configure { finalizedBy tasks.named('packageAddon') }

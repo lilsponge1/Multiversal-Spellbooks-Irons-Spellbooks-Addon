@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:smithing_transform",
+  "template": { "item": "minecraft:netherite_upgrade_smithing_template" },
+  "base": { "item": "traveloptics:riptide_sovereign_fincloak" },
+  "addition": { "item": "irons_ultimate_explosion:thundercrash_scroll" },
+  "result": { "item": "irons_ultimate_explosion:cuirass_of_the_thunderstar" }
+}

@@ -1,34 +1,47 @@
-# Grand Explosion addon
+# Multiversal Spellbooks addon
 
-Standalone Forge 1.20.1 addon for Iron's Spells 'n Spellbooks 3.16.3. It adds Grand Explosion, Thundercrash, the Cinderstar Staff, and Cinderstar Regalia. See [PLAN.md](PLAN.md) for design and validation scope.
+Forge Minecraft 1.20.1 addon for Iron's Spells 'n Spellbooks. This update combines Grand Explosion **0.3.3**, Crimson Susanoo **0.1.1** and Ignis Armor Compatibility **0.1.0** into one JAR while retaining separate mod IDs, packages, resources and configs.
 
-## Combined Multiversal build
+## Latest changes
 
-This branch also contains [Crimson Susanoo](modules/crimson-susanoo/README.md), authored independently under `modules/crimson-susanoo/`. Root `src/` remains the Grand Explosion/Thundercrash/Cinderstar project. Both retain their own mod IDs, registry namespaces, authors and configs inside **one combined JAR**. See [CONTRIBUTING.md](CONTRIBUTING.md) for the collaboration workflow and [INTEGRATION.md](INTEGRATION.md) for validation.
+- Thundercrash: new lightning-gauntlet icon and charge/flight/impact audio synchronized to actual flight and collision.
+- Cuirass of the Thunderstar: refined ivory/gold/blue armor, one equipped spell slot, normal Travel Optics Riptide material attributes and a unique 20% Thundercrash impact bonus.
+- Crimson Susanoo: remote walking synchronization, smooth pose interpolation, corrected right-hand katana/grip, half outgoing direct damage by default, co-op damage/aggro protection and a second-cast recall with no extra mana.
+- Ignis Mage armor: normal enchanting-table and anvil support, including survival XP/lapis costs and ordinary compatibility rules.
 
-Build the root addon with the existing `build.ps1`, and build the Crimson module with its Gradle wrapper and Java 17. Then run:
+See [release notes](RELEASE-0.3.3.md), [validation](INTEGRATION.md), [Thunderstar](THUNDERSTAR-CUIRASS.md), [Susanoo](modules/crimson-susanoo/README.md) and [Ignis compatibility](modules/ignis-armor-compat/README.md).
+
+## Install
+
+Download the combined JAR from this update's GitHub release assets:
+
+`multiversal-spellbooks-0.3.3-crimson-0.1.1-ignis-0.1.0-thunderstar-recall3.jar`
+
+SHA-256: `D74BFA26C913D2E3C540D81ED8A468D7F8A32817A169D9516543E275DCCBE4F0`
+
+Stop Minecraft and the server, back up the world/configs, and replace the older addon JAR with this **same file on the server and every client**. Remove separate Grand Explosion, Crimson Susanoo and Ignis compatibility JARs if present; their contents are already included. Keep normal modpack dependencies beside it. This build requires Travel Optics 6.3.0+ and Cataclysm: Spellbooks 1.2.9 (below 1.3), in addition to the existing Iron's/Cataclysm/GeckoLib dependencies. Testing used Forge 47.4.10 and Iron's Spells 3.16.3. Omit diagnostic JVM flags in normal play.
+
+Existing item/spell IDs and config files remain valid. The new Susanoo `damageMultiplier=0.5` applies to saved older damage bases; keep `friendlyFire=false` for co-op protection. The server owners handle production installation and the final two-player visual check. See [installation checklist](docs/INSTALL-COMBINED.txt).
+
+## Build and collaborate
+
+Root `src/` contains Grand Explosion, Thundercrash, Thunderstar and Cinderstar. Independent modules live under `modules/crimson-susanoo/` and `modules/ignis-armor-compat/`. See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+Use Java 17. Build root `src/` with `build.ps1`; its defaults reference an existing development workspace, so supply `-JdkBin`, `-LibraryDir`, `-ModDir`, `-MinecraftJar`, `-MinecraftServerJar` and `-SrgMinecraftJar` for another machine. The script needs the matching Forge runtime and SRG Minecraft JARs plus the pack libraries. Root output defaults to `build/grand-explosion-0.3.3.jar`. `build-test.ps1` creates a separate disposable-world harness, excluded from production.
+
+Build each module with its own Gradle wrapper (see its README), then assemble:
 
 ```powershell
-./build-combined.ps1 -GrandExplosionJar ./build/grand-explosion-0.3.2.jar
+./build-combined.ps1 -GrandExplosionJar ./build/grand-explosion-0.3.3.jar
 ```
 
-Python 3.11+ is required for the packager (standard library only); pass `-Python <python.exe>` if needed. `-BuildCrimson` first rebuilds the module, and `-Offline` uses cached Gradle dependencies. `-CrimsonJar` and `-OutputJar` override paths. The assembler refuses to overwrite an existing release; choose a new output name for another candidate.
+Python 3.11+ is required for the packager; pass `-Python <python.exe>` if needed. `-BuildCrimson` and `-BuildIgnisArmor` build the modules first; `-Offline` requires cached Gradle dependencies. `-CrimsonJar`, `-IgnisArmorJar` and `-OutputJar` override inputs/output. Passing `-IgnisArmorJar ''` omits the optional compatibility module. Default output is `build/release/multiversal-spellbooks-0.3.3-crimson-0.1.1-ignis-0.1.0.jar`, with checksum and input/payload report. Existing output files are never overwritten. Only shared metadata is merged; third-party dependencies are never bundled.
 
-The output defaults to `build/release/multiversal-spellbooks-0.3.2-crimson-0.1.0.jar`, with a SHA-256 checksum and input/payload verification report beside it. It merges Forge metadata, preserves Thundercrash's mixin registration, and verifies all gameplay classes and feature assets are unchanged from the inputs. Shared resource-pack metadata has one combined description. Third-party dependencies remain separate mods; they are never bundled.
+The published review artifact retains its tested filename and bytes. A fresh build can differ in archive metadata; validate and test a rebuilt release before deploying it.
 
-Install the **same combined JAR** on the server and every matching client. Remove the separate Grand Explosion and Crimson Susanoo JARs first to avoid duplicate mod IDs. Existing spell IDs and config filenames remain valid. The combined artifact still contains Grand Explosion's configurable terrain damage and PvP behavior described below; Crimson's terrain-safe summon behavior remains scoped to Crimson. The original standalone root build remains available.
+## Grand Explosion and Cinderstar
 
-## Build
-
-Run `./build.ps1` from this directory with PowerShell. The script currently uses sibling development-workspace paths for the JDK, Forge libraries, and exact Iron's Spells and Ballistix JARs; adapt those paths for another computer. The release output is `build/grand-explosion-0.3.2.jar`. The separate `build-test.ps1` produces a disposable-world test mod and must not be installed with the release.
-
-## Install and use
-
-The current distribution is `build/release/grand-explosion-0.3.2.jar` (checksum beside it). It adds a named Thundercrash scroll for `/give`, Scroll Forge and Inscription Table integration, and the user's custom cast, flight and impact audio. Version 0.3.2 replaces only the impact recording and version metadata in the 0.3.1 package, whose unchanged gameplay code passed 130 disposable-server assertions and Grand Explosion regressions. The earlier 0.3.0 distributions and the user's GPT installation are preserved. See the Thundercrash testing document for runtime evidence and deferred multiplayer/ship checks.
-
-Thundercrash was accepted as finished on September 30, 2026 after the user confirmed steering, visuals, sound and lifecycle cleanup. Multiplayer/ship checks and broader latency/performance measurements remain deferred. The final distribution has not been installed into GPT automatically.
-
-Copy only `grand-explosion-0.3.2.jar` into both the Forge server and matching clients' `mods` directories. Its display name is "Grand Explosion" and its author field says "Sponge." The spell ID is `irons_ultimate_explosion:grand_explosion`. The craftable `cinderstar_staff` comes imbued with Grand Explosion V; an admin can also put the spell into a spellbook. Cinderstar Regalia has four armor items: `cinderstar_hat`, `cinderstar_robe`, `cinderstar_leggings`, and `cinderstar_boots`. The hair-free model has cream shoulders, a crimson robe with a dark front panel, one light and one dark leg, orange boots, and a separate pointed hat that leaves the player's face visible. Each item is a smithing upgrade from the matching Pyromancer piece using Cinder Essence as the template and a Nether Star as the addition. Grand Explosion damages entities within 60 blocks of the impact. Wearing all four pieces doubles its center damage before the 320 cap and extends its entity damage radius to 80 blocks. The crater radius does not change with the set.
+Grand Explosion's spell ID is `irons_ultimate_explosion:grand_explosion`. The craftable Cinderstar Staff comes imbued with Grand Explosion V. Cinderstar Regalia contains `cinderstar_hat`, `cinderstar_robe`, `cinderstar_leggings` and `cinderstar_boots`, each upgraded from matching Pyromancer armor using Cinder Essence and a Nether Star. Grand Explosion's damage radius is 60 blocks, or 80 with all four armor pieces; its full-set center bonus applies before the 320 cap. The crater radius is unchanged by the set.
 
 The default server config allows a crater when Iron's `spellGriefing` is also enabled, and allows Grand Explosion to damage **other players**. The caster is always excluded from the spell's entity target list. `pvpDamage=false` disables damage to other players; the server's own PvP setting and normal protection rules still apply. After casting, the caster gets 15 seconds of Slowness II by default (configurable from 0 to 20 seconds). With Ballistix installed, the crater uses its nuclear raycast, energy, block explosion hooks, occasional surface fire, and block-break debris; it does not create radiation or irradiated blocks. Ballistix's `EXPLOSIVE_NUCLEAR_SIZE` defaults to 45 in this pack, but is a raycast setting rather than a strict spherical radius. Without Ballistix, the addon uses a downward bowl with configurable `craterRadius` (45 by default). Existing worlds with saved settings must set `terrainDamage=true`, `pvpDamage=true`, `visualRadius=128`, and `exhaustionSeconds=15` to use these defaults.
 
@@ -53,7 +66,7 @@ The full copied pack started on Forge 47.4.10 with this addon. A disposable harn
 
 The disposable harness is under `src/test` and is excluded from the release JAR. The staff pose, mana-consuming cast, colored charge, and Ballistix detonation were checked in the GPT Prism copy with Solas enabled and disabled. The shaders-off rerun showed the large orange-red blast and gray mushroom cloud; Solas was restored afterward. A later actual staff cast displayed Ballistix's “Nuclear bomb detonates” subtitle after the server sound-delivery fix, and the player confirmed the sound was right. The revised Cinderstar armor was visually checked in the GPT client from the front and back; its face is visible below the hat brim. The earlier full-set damage and radius checks passed on the copied server; the latest 60/80-block damage radius change compiled but has not had a separate gameplay check. The PvP harness confirmed that Grand Explosion damages another ordinary ServerPlayer, leaves its caster unharmed, and spares the other player when `pvpDamage=false`; the harness clears the synthetic players' initial spawn protection before measuring damage. Pressing E in the GPT creative-mode client caused a separate Fetzi's Displays creative-tab exception (`The stack count must be 1`), so inventory inspection in that copy remains blocked by that mod. The client particle-quality option controls the addon's charge and fallback particles; Ballistix controls the density of its own nuclear effect.
 
-## Thundercrash (0.3.2)
+## Thundercrash
 
 `irons_ultimate_explosion:thundercrash` is a craftable Legendary Lightning spell with five levels. Place a Lightning Bottle in Iron's Scroll Forge focus slot to show Lightning spells, then select Thundercrash. With the verified pack defaults, one Legendary Ink, one Paper and one Lightning Bottle produce Thundercrash I; the native server forge test verified the output and ingredient consumption. Inscribe the scroll into a spellbook normally; the native Inscription Table menu test verified that path too. Existing Iron's per-spell overrides can still disable crafting or change the school. Grand Explosion remains unavailable for Scroll Forge crafting.
 
@@ -67,6 +80,6 @@ Movement is server-owned, with bounded client prediction and scoped mixins for t
 
 The aura directly calls Ascension's public electricity helper. Distance-sampled electrical trails, short Iron's zap arcs, a forward cluster, and a cyan blastwave build on its particles without bundling upstream textures. Particle budgets prioritize nearby casters and impact effects. The original playerAnimator posture does not enable a spin attack or change the camera mode.
 
-Audio now uses the user's custom casting, flight and impact recordings. The supplied mono, 48 kHz Ogg **Vorbis** files are included unchanged under `assets/irons_ultimate_explosion/sounds/thundercrash/` as `thundercrash_cast.ogg`, `thundercrash_flight.ogg`, and `thundercrash_impact.ogg`. All three passed decoding with Minecraft's bundled STB Vorbis library. Their durations are approximately 1.086, 2.641 and 2.174 seconds; final perceived volume and the recorded flight-loop seam have not had a new in-game listening check. To replace the recordings, retain these filenames; a resource pack can override the same assets. Playback code supplies looping, follows the caster and explicitly stops flight audio on termination, tracking loss, unload, disconnect, reload, or a stale snapshot.
+Thundercrash uses recorded casting, looping flight and impact audio. The charge stops on authoritative launch; flight follows the caster until the actual server collision; impact stops charge/flight before playing the crash. Timeout, cancellation, tracking loss, unload, disconnect and stale snapshots stop playback. The mono 48 kHz Vorbis clips last approximately 0.80 / 3.79 / 4.39 seconds; the flight clip loops instead of scheduling impact at a fixed time. See [THUNDERCRASH-POLISH.md](THUNDERCRASH-POLISH.md).
 
 See [THUNDERCRASH-TESTING.md](THUNDERCRASH-TESTING.md) for the gameplay checklist and automated validation limits.

@@ -57,9 +57,9 @@ final class CrimsonKatana {
         float wave = .5F + .5F * (float)Math.sin(t * 25 - time * .11);
         float heat = .18F + wave * .11F;
         boolean cuttingEdge = edge == 2;
-        emit(out, pose, -(24 + 4 * t * t) / 16F + cross * w / 2,
-                (36 + 3 * t) / 16F + vertical * thick,
-                -(18 + 80 * t) / 16F,
+        emit(out, pose, (23 - 3 * t) / 16F - vertical * thick,
+                (37 + 4 * t * t) / 16F - cross * w / 2,
+                -(24 + 80 * t) / 16F,
                 cuttingEdge ? .95F : .32F + heat,
                 cuttingEdge ? .54F : .055F + heat * .15F,
                 cuttingEdge ? .22F : .065F, 1, t, (cross + 1) / 2, vertical);
@@ -69,9 +69,9 @@ final class CrimsonKatana {
         float cross = .48F + .10F * (float)Math.sin(t * 31 - time * .075) + edge * .065F;
         float wave = .5F + .5F * (float)Math.sin(t * 24 - time * .16);
         float thick = .095F * (1 - t * .7F);
-        emit(out, pose, -(24 + 4 * t * t) / 16F + cross * width(t) / 2,
-                (36 + 3 * t) / 16F + side * (thick * (1 - cross) + .003F),
-                -(18 + 80 * t) / 16F, 1, .24F + .4F * wave, .025F,
+        emit(out, pose, (23 - 3 * t) / 16F - side * (thick * (1 - cross) + .003F),
+                (37 + 4 * t * t) / 16F - cross * width(t) / 2,
+                -(24 + 80 * t) / 16F, 1, .24F + .4F * wave, .025F,
                 .48F + .18F * wave, t, cross, side);
     }
 
@@ -80,9 +80,9 @@ final class CrimsonKatana {
         float wave = .5F + .5F * (float)Math.sin(t * 38 - time * .19 + plane * 2.4);
         float envelope = (float)Math.sin(Math.PI * t);
         float lift = edge * envelope * (.045F + wave * wave * (.15F + .19F * surge));
-        float x = -(24 + 4*t*t)/16F + width(t)/2 + (plane == 0 ? lift : lift*.35F);
-        float y = (36+3*t)/16F + (plane == 0 ? .008F : lift);
-        emit(out, pose, x, y, -(18+80*t)/16F,
+        float x = (23-3*t)/16F - (plane == 0 ? .008F : lift);
+        float y = (37+4*t*t)/16F - width(t)/2 - (plane == 0 ? lift : lift*.35F);
+        emit(out, pose, x, y, -(24+80*t)/16F,
                 1, edge == 0 ? .57F : .13F + wave*.24F, .025F,
                 envelope * (edge == 0 ? .46F + surge*.15F : .035F),
                 t, edge, 1);
@@ -92,6 +92,6 @@ final class CrimsonKatana {
                              float r, float g, float b, float alpha, float t, float u, float ny) {
         out.vertex(pose, x, y, z).color(r, g, b, alpha).uv(u, t)
                 .overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880)
-                .normal(0, ny == 0 ? 1 : ny, 0).endVertex();
+                .normal(-(ny == 0 ? 1 : ny), 0, 0).endVertex();
     }
 }

@@ -7,7 +7,7 @@ import java.util.Map;
 final class FootPlanting {
     @FunctionalInterface interface Ground { double height(double x, double z); }
     private static final String[] SIDES = {"left", "right"};
-    private static final double[] HIP_X = {8, -8}; // Gecko's converted model coordinates
+    private static final double[] HIP_X = {-8, 8}; // Gecko's converted, anatomically correct rig
     private static final double CONTACT_HEIGHT = .20 / 16;
     private final Foot[] feet = {new Foot(), new Foot()};
     private double lastFrame = Double.NEGATIVE_INFINITY;

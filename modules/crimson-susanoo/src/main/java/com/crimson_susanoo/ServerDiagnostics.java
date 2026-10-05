@@ -52,6 +52,79 @@ import java.util.UUID;
 
 /** Opt-in isolated-server checks against the installed Iron's and Cataclysm APIs. */
 public final class ServerDiagnostics {
+    private void verifyFriendlyProtection(ServerLevel level, FakePlayer owner, CrimsonEntity guardian) throws Exception {
+        FakePlayer visitor = FakePlayerFactory.get(level, new GameProfile(UUID.randomUUID(), "CrimsonGuest"));
+        visitor.moveTo(guardian.getX()+3, guardian.getY(), guardian.getZ());
+        Zombie hostile = EntityType.ZOMBIE.create(level);
+        Wolf pet = EntityType.WOLF.create(level);
+        var arrow = EntityType.ARROW.create(level);
+        CrimsonEntity companion = CrimsonSusanoo.GUARDIAN.get().create(level);
+        if (hostile == null || pet == null || arrow == null || companion == null)
+            throw new IllegalStateException("Could not create friendly-fire fixtures");
+        hostile.moveTo(guardian.getX()+1, guardian.getY(), guardian.getZ());
+        pet.setTame(true);
+        pet.setOwnerUUID(visitor.getUUID());
+        companion.setOwner(visitor);
+        arrow.setOwner(visitor);
+        boolean previousPolicy = ServerConfig.FRIENDLY_FIRE.get();
+        float previousHealth = guardian.getHealth();
+        LivingEntity previousAttacker = guardian.getLastHurtByMob();
+        LivingEntity previousOwnerAttacker = owner.getLastHurtByMob();
+        LivingEntity previousOwnerVictim = owner.getLastHurtMob();
+        var target = CrimsonEntity.class.getDeclaredField("attackTarget");
+        target.setAccessible(true);
+        Object previousTarget = target.get(guardian);
+        var choose = CrimsonEntity.class.getDeclaredMethod("selectTarget", net.minecraft.server.level.ServerPlayer.class);
+        choose.setAccessible(true);
+        try {
+            ServerConfig.FRIENDLY_FIRE.set(false);
+            check(visitor.getTeam() == null, "friendly guest requires no scoreboard team");
+            check(!guardian.canHarm(owner, visitor) && !guardian.canStrike(owner, visitor),
+                    "default guardian damage excludes an unteamed player");
+            guardian.setLastHurtByMob(hostile);
+            int retaliationTimestamp = guardian.getLastHurtByMobTimestamp();
+            check(!guardian.hurt(level.damageSources().playerAttack(visitor), 20), "friendly melee hit is rejected");
+            check(!guardian.hurt(level.damageSources().arrow(arrow, visitor), 20), "friendly arrow is rejected");
+            check(!guardian.hurt(level.damageSources().arrow(arrow, null), 20),
+                    "friendly projectile owner is resolved when damage source omits its attacker");
+            check(!guardian.hurt(level.damageSources().indirectMagic(arrow, visitor), 20), "friendly attributed spell hit is rejected");
+            check(guardian.getHealth() == previousHealth && guardian.getLastHurtByMob() == hostile
+                            && guardian.getLastHurtByMobTimestamp() == retaliationTimestamp,
+                    "friendly hits preserve health and existing hostile retaliation history");
+            check(!guardian.canHarm(owner, pet) && !guardian.hurt(level.damageSources().mobAttack(pet), 20),
+                    "another player's tamed pet is protected in both directions");
+            check(!guardian.canHarm(owner, companion) && !guardian.hurt(level.damageSources().mobAttack(companion), 20),
+                    "another player's Crimson summon is protected in both directions");
+            for (int source=0; source<3; source++) {
+                owner.setLastHurtByMob(source == 0 ? visitor : null);
+                owner.setLastHurtMob(source == 1 ? visitor : null);
+                guardian.setLastHurtByMob(source == 2 ? visitor : null);
+                target.set(guardian, visitor);
+                choose.invoke(guardian, owner);
+                check(target.get(guardian) != visitor, "player cannot enter retaliation targeting through history source " + source);
+            }
+            check(guardian.canHarm(owner, hostile), "co-op protection still permits hostile mob combat");
+            guardian.invulnerableTime = 0;
+            check(guardian.hurt(level.damageSources().mobAttack(hostile), 20) && guardian.getHealth() < previousHealth,
+                    "hostile mob damage still reaches the guardian");
+            ServerConfig.FRIENDLY_FIRE.set(true);
+            check(guardian.canHarm(owner, visitor) == owner.canHarmPlayer(visitor),
+                    "explicit player-combat opt-in follows server/team PvP permission");
+            check(!guardian.hurt(level.damageSources().playerAttack(owner), 20),
+                    "owner's own hit stays harmless even with friendly combat enabled");
+        } finally {
+            ServerConfig.FRIENDLY_FIRE.set(previousPolicy);
+            guardian.setHealth(previousHealth);
+            guardian.invulnerableTime = 0;
+            guardian.hurtTime = 0;
+            guardian.setLastHurtByMob(previousAttacker);
+            owner.setLastHurtByMob(previousOwnerAttacker);
+            owner.setLastHurtMob(previousOwnerVictim);
+            target.set(guardian, previousTarget);
+            hostile.discard(); pet.discard(); arrow.discard(); companion.discard();
+        }
+    }
+
     private void verifyScrollForge(ServerLevel level, FakePlayer player) {
         var spell = CrimsonSusanoo.SPELL.get();
         var tile = new io.redspace.ironsspellbooks.block.scroll_forge.ScrollForgeTile(
@@ -168,6 +241,7 @@ public final class ServerDiagnostics {
             var firePower = player.getAttribute(AttributeRegistry.FIRE_SPELL_POWER.get());
             if (firePower == null) throw new IllegalStateException("Fake player lacks Iron's Fire Spell Power attribute");
             double basePower = spell.getSpellPower(1, player);
+            verifyDamageBalance(level, player);
             double oldFirePower = firePower.getBaseValue();
             firePower.setBaseValue(oldFirePower + 1);
             double effectiveFirePower = firePower.getValue();
@@ -239,6 +313,7 @@ public final class ServerDiagnostics {
                 guardian.setOwner(player);
                 guardian.moveTo(safePosition.x, safePosition.y, safePosition.z);
                 check(level.addFreshEntity(guardian), "guardian registers in the server level");
+                verifyFriendlyProtection(level, player, guardian);
                 player.getPersistentData().putUUID(CrimsonSpell.ACTIVE_ID, guardian.getUUID());
                 magic.setMana(200);
                 check(CrimsonSpell.findActive(player, level) == guardian, "owner finds its active guardian");
@@ -319,7 +394,7 @@ public final class ServerDiagnostics {
                 check(Math.abs(cleaveBehind.getHealth() - 200) < 0.001
                                 && Math.abs(cleaveSide.getHealth() - 200) < 0.001,
                         "Cleave excludes targets behind and outside its 120-degree arc");
-                check(Math.abs(baseCleaveDamage - ServerConfig.CLEAVE_DAMAGE.get() * basePower) < 0.2,
+                check(Math.abs(baseCleaveDamage - ServerConfig.CLEAVE_DAMAGE.get() * basePower * ServerConfig.DAMAGE_MULTIPLIER.get()) < 0.2,
                         "Cleave damages its front target once");
                 cleaveTarget.setHealth(200);
                 cleaveTarget.invulnerableTime = 0;
@@ -644,9 +719,26 @@ public final class ServerDiagnostics {
             check(!magic.getPlayerCooldowns().isOnCooldown(spell),
                     "completed scroll cast leaves cooldown clear while active");
             spell.onServerCastComplete(level, 1, player, magic, false);
+            magic.setMana(1);
+            check(magic.getPlayerRecasts().hasRecastForSpell(spell)
+                            && spell.getEffectiveCastTime(1, player) == 0,
+                    "active guardian exposes an instant Iron's recall");
+            check(spell.attemptInitiateCast(scroll, 1, level, player, CastSource.SPELLBOOK, false, ""),
+                    "Iron's spellbook initiation accepts recall below the summon mana cost");
+            spell.castSpell(level, 1, player, CastSource.SPELLBOOK, true);
+            check(scrollGuardian != null && scrollGuardian.isDismissing()
+                            && CrimsonSpell.findActive(player, level) == null,
+                    "recasting dismisses the same guardian rather than spawning another");
+            check(Math.abs(magic.getMana() - 1) < 0.001,
+                    "recall costs no additional mana");
+            check(!magic.getPlayerRecasts().hasRecastForSpell(spell)
+                            && magic.getPlayerCooldowns().isOnCooldown(spell),
+                    "recall clears the recast overlay and starts the existing cooldown");
+            spell.onServerCastComplete(level, 1, player, magic, false);
             magic.setMana(200);
-            check(!spell.attemptInitiateCast(scroll, 1, level, player, CastSource.SCROLL, false, ""),
-                    "Iron's scroll initiation rejects a second active guardian");
+            spell.castSpell(level, 1, player, CastSource.SPELLBOOK, true);
+            check(CrimsonSpell.findActive(player, level) == null && Math.abs(magic.getMana() - 200) < 0.001,
+                    "late recall completion cannot resummon or spend mana during cooldown");
             CrimsonSpell.clearOwnerMarker(player);
             if (scrollGuardian != null) scrollGuardian.discard();
 
@@ -827,6 +919,33 @@ public final class ServerDiagnostics {
                 "actual spell damage events attribute owner as cause and guardian or wave as direct attacker");
         diagnosticCombatOwner = null;
         CrimsonSusanoo.LOGGER.info("Crimson Susanoo diagnostics: {} passed, {} failed", passed, failed);
+    }
+
+    private void verifyDamageBalance(ServerLevel level, FakePlayer owner) throws Exception {
+        CrimsonEntity guardian = CrimsonSusanoo.GUARDIAN.get().create(level);
+        Method damage = CrimsonEntity.class.getDeclaredMethod("scaledDamage", net.minecraft.server.level.ServerPlayer.class, double.class);
+        Method tooltip = CrimsonSpell.class.getDeclaredMethod("formatDamage", double.class, float.class);
+        damage.setAccessible(true);
+        tooltip.setAccessible(true);
+        double previous = ServerConfig.DAMAGE_MULTIPLIER.get();
+        float power = CrimsonSusanoo.SPELL.get().getSpellPower(1, owner);
+        try {
+            for (double base : new double[]{ServerConfig.CLEAVE_DAMAGE.get(), ServerConfig.CRESCENT_DAMAGE.get(),
+                    ServerConfig.SLASH_DAMAGE.get(), ServerConfig.SLASH_DAMAGE.get() * .5}) {
+                ServerConfig.DAMAGE_MULTIPLIER.set(1.0);
+                float original = (float) damage.invoke(guardian, owner, base);
+                ServerConfig.DAMAGE_MULTIPLIER.set(.5);
+                float reduced = (float) damage.invoke(guardian, owner, base);
+                check(Math.abs(reduced - original * .5) < .00001,
+                        "damage multiplier halves configured attack base " + base + " after spell power");
+                String expected = java.math.BigDecimal.valueOf(reduced).setScale(1, java.math.RoundingMode.HALF_UP)
+                        .stripTrailingZeros().toPlainString();
+                check(expected.equals(tooltip.invoke(null, base, power)),
+                        "scroll damage matches gameplay for attack base " + base);
+            }
+        } finally {
+            ServerConfig.DAMAGE_MULTIPLIER.set(previous);
+        }
     }
 
     private void verifyManaRegeneration(ServerLevel level, FakePlayer owner) throws Exception {
@@ -1487,6 +1606,17 @@ public final class ServerDiagnostics {
         check(controller.getCurrentAnimation() != null
                         && controller.getCurrentAnimation().animation().name().equals("animation.guardian.idle"),
                 "real GeckoLib processor loads guardian idle clip");
+        var movingField = CrimsonEntity.class.getDeclaredField("MOVING");
+        movingField.setAccessible(true);
+        @SuppressWarnings("unchecked")
+        var moving = (net.minecraft.network.syncher.EntityDataAccessor<Boolean>) movingField.get(null);
+        guardian.setDeltaMovement(Vec3.ZERO);
+        guardian.getEntityData().set(moving, true);
+        for (int frame = 10; frame < 18; frame++)
+            model.processor.tickAnimation(guardian, model, manager, frame + .5, state, false);
+        check(controller.getCurrentAnimation().animation().name().equals("animation.guardian.walk"),
+                "server movement flag selects walking even when GeckoLib reports no movement");
+        guardian.getEntityData().set(moving, false);
         Method begin = CrimsonEntity.class.getDeclaredMethod("beginAttack", int.class, int.class);
         begin.setAccessible(true);
         var visualField = CrimsonEntity.class.getDeclaredField("VISUAL_START");
@@ -1546,12 +1676,35 @@ public final class ServerDiagnostics {
         CrimsonEntity second = CrimsonSusanoo.GUARDIAN.get().create(level);
         if (source == null || first == null || second == null) throw new IllegalStateException("Missing sync fixtures");
         source.startManifesting(43);
+        var groundedField = CrimsonEntity.class.getDeclaredField("GROUNDED");
+        var movingField = CrimsonEntity.class.getDeclaredField("MOVING");
+        groundedField.setAccessible(true);
+        movingField.setAccessible(true);
+        @SuppressWarnings("unchecked")
+        var grounded = (net.minecraft.network.syncher.EntityDataAccessor<Boolean>) groundedField.get(null);
+        @SuppressWarnings("unchecked")
+        var moving = (net.minecraft.network.syncher.EntityDataAccessor<Boolean>) movingField.get(null);
+        source.getEntityData().set(grounded, true);
+        source.getEntityData().set(moving, true);
         var startField = CrimsonEntity.class.getDeclaredField("MANIFEST_START");
         startField.setAccessible(true);
         @SuppressWarnings("unchecked")
         var start = (net.minecraft.network.syncher.EntityDataAccessor<Long>) startField.get(null);
         source.getEntityData().set(start, level.getGameTime() - 21);
         copyWireState(source, true, first, second);
+        first.setOnGround(false);
+        second.setOnGround(false);
+        first.setDeltaMovement(Vec3.ZERO);
+        second.setDeltaMovement(Vec3.ZERO);
+        check(first.isVisuallyGrounded() && second.isVisuallyGrounded()
+                        && first.isVisuallyMoving() && second.isVisuallyMoving(),
+                "two receivers retain grounded walking state independently of local physics flags");
+        source.getEntityData().set(grounded, false);
+        source.getEntityData().set(moving, false);
+        copyWireState(source, false, first, second);
+        check(!first.isVisuallyGrounded() && !second.isVisuallyGrounded()
+                        && !first.isVisuallyMoving() && !second.isVisuallyMoving(),
+                "airborne and stopped movement delta clears both receivers");
         first.tickCount = 21;
         second.tickCount = 0;
         double expectedPhase = 21.5 * 60.0 / 43;

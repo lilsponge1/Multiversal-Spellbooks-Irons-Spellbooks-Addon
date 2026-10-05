@@ -26,7 +26,7 @@ public final class FootPlantingCheck {
         return new double[]{x*cz-y*sz,x*sz+y*cz,z};
     }
     static double[] corner(Map<String,float[]> p,int side,double toe,double x,double y,double z,double yaw) {
-        double hipX=side==0?8:-8;
+        double hipX=side==0?-8:8;
         double[] point={hipX,0,toe};
         String s=side==0?"left":"right";
         String[] parts={"_foot","_shin","_leg"};
@@ -125,13 +125,13 @@ public final class FootPlantingCheck {
         for(String name:BONES) require(Arrays.equals(p.get(name),fresh.get(name)),"stale offscreen contact reused");
         FootPlanting stair=new FootPlanting();
         var step=neutral(); step.get("right_shin")[0]=-.9f;
-        stair.apply(0,0,1,0,0,1,true,step,(x,z)->x<0?1:0);
+        stair.apply(0,0,1,0,0,1,true,step,(x,z)->x>0?1:0);
         require(-step.get("pelvis")[4]>8,"fixture must exercise extra stair settling");
         var repeat=neutral();
-        stair.apply(0,0,1,0,0,1,true,repeat,(x,z)->x<0?1:0);
+        stair.apply(0,0,1,0,0,1,true,repeat,(x,z)->x>0?1:0);
         require(Arrays.equals(step.get("right_arm"),repeat.get("right_arm")),"repeat render loses stair arm lift");
         var ending=neutral(); ending.put("right_arm",step.get("right_arm").clone());
-        stair.apply(.5,0,1,0,0,1,false,ending,(x,z)->x<0?1:0);
+        stair.apply(.5,0,1,0,0,1,false,ending,(x,z)->x>0?1:0);
         for(int axis=3;axis<6;axis++) require(ending.get("right_arm")[axis]==0,"stair arm translation leaked into ending pose");
         require(ending.get("right_arm")[0]==step.get("right_arm")[0],"ending reset changed arm rotation");
     }
@@ -189,7 +189,7 @@ public final class FootPlantingCheck {
     }
     private static void splitSupport(double drop,double speed,int fps) {
         FootPlanting feet=new FootPlanting(); double[][] previous=null;
-        FootPlanting.Ground ground=(x,z)->x<0 ? drop : 0;
+        FootPlanting.Ground ground=(x,z)->x>0 ? drop : 0;
         for(int i=0;i<=fps*7;i++) {
             double t=i*20.0/fps,z=Math.min(t,100)*speed;
             var p=neutral(); p.get("root")[4]=(float)(.35*Math.pow(Math.sin(t/5),2));
@@ -203,7 +203,7 @@ public final class FootPlantingCheck {
         }
     }
     private static void transitions(String fixture,double drop) throws Exception {
-        FootPlanting.Ground ground=(x,z)->x<0 ? drop : 0;
+        FootPlanting.Ground ground=(x,z)->x>0 ? drop : 0;
         for(int action=1;action<=3;action++) for(int offset:new int[]{0,3,6}) {
             FootPlanting feet=new FootPlanting(); AttackPoseBlend blend=new AttackPoseBlend();
             double[][] previous=null;

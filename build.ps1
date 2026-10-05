@@ -3,21 +3,24 @@ param(
     [string]$LibraryDir = (Join-Path $PSScriptRoot '..\analysis\runtime-smoke\vs-freeze-diag\libraries'),
     [string]$ModDir = (Join-Path $PSScriptRoot '..\analysis\magic-compat\inputs'),
     [string]$MinecraftJar = (Join-Path $env:APPDATA 'PrismLauncher\libraries\net\minecraftforge\forge\1.20.1-47.4.10\forge-1.20.1-47.4.10-client.jar'),
-    [string]$OutputJar = (Join-Path $PSScriptRoot 'build\grand-explosion-0.3.2.jar')
+    [string]$MinecraftServerJar = (Join-Path $PSScriptRoot 'test-server\libraries\net\minecraftforge\forge\1.20.1-47.4.10\forge-1.20.1-47.4.10-server.jar'),
+    [string]$SrgMinecraftJar = (Join-Path $PSScriptRoot '..\analysis\build\.gradle-user-home\caches\fabric-loom\1.20.1\forge\1.20.1-47.4.2\minecraft-merged-srg-patched.jar'),
+    [string]$OutputJar = (Join-Path $PSScriptRoot 'build\grand-explosion-0.3.3.jar')
 )
 $ErrorActionPreference = 'Stop'
 & (Join-Path $PSScriptRoot 'generate-art.ps1')
 & (Join-Path $PSScriptRoot 'tools\generate_staff_model.ps1')
 & (Join-Path $PSScriptRoot 'tools\generate_armor_art.ps1')
+& (Join-Path $PSScriptRoot 'tools\generate_thunderstar_art.ps1')
 $classes = Join-Path $PSScriptRoot 'build\classes'
 $out = $OutputJar
 $argsPath = Join-Path $PSScriptRoot 'build\javac.args'
 New-Item -ItemType Directory -Path $classes -Force | Out-Null
 $jars = @(
     Get-Item -LiteralPath $MinecraftJar
-    Get-Item -LiteralPath (Join-Path $PSScriptRoot 'test-server\libraries\net\minecraftforge\forge\1.20.1-47.4.10\forge-1.20.1-47.4.10-server.jar')
+    Get-Item -LiteralPath $MinecraftServerJar
     # Runtime patch JARs omit unchanged vanilla classes. Resolve those from the SRG cache last.
-    Get-Item -LiteralPath (Join-Path $PSScriptRoot '..\analysis\build\.gradle-user-home\caches\fabric-loom\1.20.1\forge\1.20.1-47.4.2\minecraft-merged-srg-patched.jar')
+    Get-Item -LiteralPath $SrgMinecraftJar
     Get-ChildItem -LiteralPath $LibraryDir -Filter '*.jar' -Recurse -File | Where-Object { $_.Name -in @(
         'forge-1.20.1-47.4.10-universal.jar',
         'eventbus-6.0.5.jar',

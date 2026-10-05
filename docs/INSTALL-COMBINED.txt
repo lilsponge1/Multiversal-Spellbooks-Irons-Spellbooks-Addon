@@ -1,0 +1,21 @@
+MULTIVERSAL SPELLBOOKS COMBINED UPDATE
+
+File: multiversal-spellbooks-0.3.3-crimson-0.1.1-ignis-0.1.0-thunderstar-recall3.jar
+SHA-256: D74BFA26C913D2E3C540D81ED8A468D7F8A32817A169D9516543E275DCCBE4F0
+
+1. Stop the server and Minecraft clients. Back up the world and configs.
+2. Remove the previous combined addon JAR and any separate Grand Explosion,
+   Crimson Susanoo or Ignis Armor Compatibility JARs.
+3. Put this same combined JAR in the server and every matching client's mods folder.
+4. Keep normal modpack dependencies. This build requires Travel Optics 6.3.0+
+   and Cataclysm: Spellbooks 1.2.9 (below 1.3), plus existing Iron's/Cataclysm/
+   GeckoLib dependencies. Tested: MC 1.20.1, Forge 47.4.10, Iron's Spells 3.16.3.
+5. Omit diagnostic/bossEncounter/pursuit-trace JVM flags in normal play.
+6. Keep crimson_susanoo-server.toml friendlyFire=false for co-op protection.
+   damageMultiplier=0.5 halves existing saved direct damage bases.
+7. Check summon/recast, movement, combat, crafting and Thundercrash together.
+   The server owners handle the final two-player visual check.
+
+Existing item/spell registry IDs and config files are retained. The cuirass
+recipe example is inactive; it is available through the equipment tab or /give.
+Do not also install the standalone modules included inside this JAR.

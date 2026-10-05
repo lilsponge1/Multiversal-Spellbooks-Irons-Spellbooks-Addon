@@ -14,6 +14,9 @@ import io.redspace.ironsspellbooks.api.spells.CastSource;
 import io.redspace.ironsspellbooks.api.spells.CastType;
 import io.redspace.ironsspellbooks.api.spells.SpellRarity;
 import io.redspace.ironsspellbooks.api.spells.SchoolType;
+import io.redspace.ironsspellbooks.api.spells.ICastDataSerializable;
+import io.redspace.ironsspellbooks.capabilities.magic.RecastInstance;
+import io.redspace.ironsspellbooks.capabilities.magic.RecastResult;
 import io.redspace.ironsspellbooks.network.SyncManaPacket;
 import io.redspace.ironsspellbooks.setup.PacketDistributor;
 import net.minecraft.core.BlockPos;
@@ -57,6 +60,28 @@ public final class CrimsonSpell extends AbstractSpell {
     @Override public int getManaCost(int level) { return ServerConfig.INITIAL_MANA.get(); }
     @Override public int getSpellCooldown() { return ServerConfig.COOLDOWN.get() * 20; }
 
+    @Override public int getEffectiveCastTime(int level, LivingEntity caster) {
+        return caster != null && MagicData.getPlayerMagicData(caster).getPlayerRecasts().hasRecastForSpell(this)
+                ? 0 : super.getEffectiveCastTime(level, caster);
+    }
+
+    // Register the recall manually after manifestation; keeping getRecastCount at
+    // its default also preserves Iron's support for the initial consumable scroll.
+    private void enableRecall(ServerPlayer owner, int level, CastSource source) {
+        MagicData magic = MagicData.getPlayerMagicData(owner);
+        // Iron counts the initial summon as the first of the two total casts.
+        magic.getPlayerRecasts().addRecast(new RecastInstance(getSpellId(), level, 2,
+                ServerConfig.DURATION.get() * 20 + 40, source, null), magic);
+    }
+
+    @Override
+    public void onRecastFinished(ServerPlayer owner, RecastInstance instance,
+                                 RecastResult result, ICastDataSerializable castData) {
+        CrimsonEntity guardian = findActive(owner, owner.serverLevel());
+        if (guardian != null) guardian.dismiss("recall_" + result.name().toLowerCase(java.util.Locale.ROOT));
+        // The guardian owns cooldown application, including scroll summons.
+    }
+
     // Iron displays these on scrolls and spellbook entries. Config values are
     // synced to clients so these numbers follow the world's actual settings.
     @Override
@@ -71,7 +96,7 @@ public final class CrimsonSpell extends AbstractSpell {
 
     // Match the damage float used by the guardian, with compact tooltip precision.
     private static String formatDamage(double base, float power) {
-        return java.math.BigDecimal.valueOf((float) (base * power))
+        return java.math.BigDecimal.valueOf((float) (base * power * ServerConfig.DAMAGE_MULTIPLIER.get()))
                 .setScale(1, java.math.RoundingMode.HALF_UP).stripTrailingZeros().toPlainString();
     }
 
@@ -83,6 +108,14 @@ public final class CrimsonSpell extends AbstractSpell {
     @Override
     public void castSpell(Level level, int spellLevel, ServerPlayer player, CastSource source, boolean applyCooldown) {
         MagicData data = MagicData.getPlayerMagicData(player);
+        // An instant recall can finish a tick after expiry/death cleared its
+        // recast. Never turn that late completion into a fresh summon.
+        if (data.getPlayerCooldowns().isOnCooldown(this)) return;
+        if (data.getPlayerRecasts().hasRecastForSpell(this)) {
+            CrimsonEntity guardian = level instanceof ServerLevel serverLevel ? findActive(player, serverLevel) : null;
+            if (guardian != null && !guardian.isManifesting()) guardian.dismiss("voluntary");
+            return;
+        }
         float manaBeforeCast = data.getMana();
         // Iron's scroll source normally ignores mana. This ultimate charges every player cast.
         if (!source.consumesMana() && !CrimsonEntity.chargeMana(player, getManaCost(spellLevel))) return;
@@ -98,9 +131,11 @@ public final class CrimsonSpell extends AbstractSpell {
     @Override
     public boolean checkPreCastConditions(Level level, int spellLevel, LivingEntity caster, MagicData data) {
         if (!(caster instanceof ServerPlayer player) || !(level instanceof ServerLevel serverLevel)) return false;
+        CrimsonEntity active = findActive(player, serverLevel);
+        if (active != null) return !active.isManifesting() && data.getPlayerRecasts().hasRecastForSpell(this);
         return data.getMana() >= getManaCost(spellLevel)
                 && !data.getPlayerCooldowns().isOnCooldown(this)
-                && findActive(player, serverLevel) == null;
+                && active == null;
     }
 
     @Override
@@ -111,6 +146,7 @@ public final class CrimsonSpell extends AbstractSpell {
         if (guardian == null) return;
         guardian.activate();
         owner.getPersistentData().putBoolean(ACTIVE_READY, true);
+        enableRecall(owner, spellLevel, source);
         impact(serverLevel, guardian.position());
         CrimsonSusanoo.LOGGER.debug("Crimson Susanoo summoned for {} ({})", owner.getGameProfile().getName(), owner.getUUID());
     }
@@ -169,6 +205,7 @@ public final class CrimsonSpell extends AbstractSpell {
         if (guardian != null) {
             guardian.activate();
             owner.getPersistentData().putBoolean(ACTIVE_READY, true);
+            enableRecall(owner, 1, CastSource.SPELLBOOK);
         }
         return guardian;
     }
@@ -208,7 +245,8 @@ public final class CrimsonSpell extends AbstractSpell {
             return null;
         }
         UUID id = player.getPersistentData().getUUID(ACTIVE_ID);
-        if (level.getEntity(id) instanceof CrimsonEntity guardian && guardian.isAlive() && !guardian.isDismissing()) return guardian;
+        if (level.getEntity(id) instanceof CrimsonEntity guardian && guardian.isOwnedBy(player)
+                && guardian.isAlive() && !guardian.isDismissing()) return guardian;
         clearStaleSummon(player);
         return null;
     }
@@ -216,6 +254,11 @@ public final class CrimsonSpell extends AbstractSpell {
     public static void clearOwnerMarker(ServerPlayer player) {
         player.getPersistentData().remove(ACTIVE_ID);
         player.getPersistentData().remove(ACTIVE_READY);
+        var recasts = MagicData.getPlayerMagicData(player).getPlayerRecasts();
+        String spellId = CrimsonSusanoo.SPELL.get().getSpellId();
+        if (recasts.hasRecastForSpell(spellId)) {
+            recasts.removeRecast(recasts.getRecastInstance(spellId), RecastResult.USER_CANCEL);
+        }
     }
 
     private static void clearStaleSummon(ServerPlayer player) {

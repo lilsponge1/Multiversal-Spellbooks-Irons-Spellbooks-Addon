@@ -12,11 +12,25 @@ def sample(track,t):
     if isinstance(track,list): return track
     keys=sorted((float(k),v) for k,v in track.items())
     if t<=keys[0][0]: return keys[0][1]
-    for (a,x),(b,y) in zip(keys,keys[1:]):
+    for i,((a,x),(b,y)) in enumerate(zip(keys,keys[1:])):
         if t<=b:
             u=(t-a)/(b-a)
-            return tuple(p+(q-p)*u for p,q in zip(x,y))
+            result=[]
+            for axis,(p,q) in enumerate(zip(x,y)):
+                s=(q-p)/(b-a); m0=m1=0
+                if i>0:
+                    c,v=keys[i-1]; m0=tangent((p-v[axis])/(a-c),s,a-c,b-a)
+                if i+2<len(keys):
+                    c,v=keys[i+2]; m1=tangent(s,(v[axis]-q)/(c-b),b-a,c-b)
+                result.append((2*u**3-3*u**2+1)*p+(u**3-2*u**2+u)*(b-a)*m0
+                              +(-2*u**3+3*u**2)*q+(u**3-u**2)*(b-a)*m1)
+            return tuple(result)
     return keys[-1][1]
+
+def tangent(previous,next,previous_length,next_length):
+    if previous*next<=0:return 0
+    a=2*next_length+previous_length; b=next_length+2*previous_length
+    return (a+b)/(a/previous+b/next)
 
 def rotate(p,pivot,r):
     x,y,z=(p[i]-pivot[i] for i in range(3))
@@ -45,9 +59,9 @@ def blade_points():
     for i in range(49):
         t=i/48; width=.42*(1-.24*t)*min(1,(1-t)/.15)*16
         thick=.095*(1-t*.7)*16
-        center=(-(24+4*t*t),36+3*t,-(18+80*t))
+        center=(23-3*t,37+4*t*t,-(24+80*t))
         for dx,dy in ((-width/2,0),(0,thick),(width/2,0),(0,-thick)):
-            yield (center[0]+dx,center[1]+dy,center[2]),t
+            yield (center[0]-dy,center[1]-dx,center[2]),t
 
 def check():
     failed=False

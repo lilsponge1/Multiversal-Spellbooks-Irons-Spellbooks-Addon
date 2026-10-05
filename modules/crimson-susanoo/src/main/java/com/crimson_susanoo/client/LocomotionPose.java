@@ -39,6 +39,8 @@ final class LocomotionPose {
             rotation(target,"right_forearm", 8+2*stride+.4*breath, 0, 0);
             rotation(target,"left_hand", -1.2*stride, 0, 0);
             rotation(target,"right_hand", 42+1.5*stride+.7*breath, 0, 3.5);
+            // Same accepted counterbalance, reflected with the right-handed rig.
+            target.values().forEach(p -> { p[1] = -p[1]; p[2] = -p[2]; });
             // Move the upper torso only; foot contacts and lower-body geometry are unaffected.
             target.get("waist")[4] = (float)(.12*(1+breath));
             double blend = fresh ? 1-Math.exp(-dt/2) : 1;
