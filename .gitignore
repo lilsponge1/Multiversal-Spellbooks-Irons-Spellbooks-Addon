@@ -27,3 +27,4 @@
 **/*.pyc
 /.tools/
 !modules/crimson-susanoo/gradle/wrapper/gradle-wrapper.jar
+!modules/ignis-armor-compat/gradle/wrapper/gradle-wrapper.jar

@@ -42,7 +42,7 @@ public final class CrimsonModel extends GeoModel<CrimsonEntity> {
             arm[3] = arm[4] = arm[5] = 0;
         }
         float partial = state.getPartialTick();
-        double frame = entity.level().getGameTime() + partial;
+        double frame = entity.tickCount + partial;
         boolean active = !entity.isManifesting() && !entity.isDeadOrDying() && entity.getFade() == 0;
         var blend = poseBlends.computeIfAbsent(entity, ignored -> new AttackPoseBlend());
         var blended = blend.apply(frame, entity.getAction(), entity.getActionAnimationTick(partial), active, authored);
@@ -51,14 +51,14 @@ public final class CrimsonModel extends GeoModel<CrimsonEntity> {
         double z = Mth.lerp(partial, entity.zOld, entity.getZ());
         double yaw = Mth.rotLerp(partial, entity.yBodyRotO, entity.yBodyRot);
         footPlants.computeIfAbsent(entity, ignored -> new FootPlanting()).apply(frame,x,y,z,yaw,
-                entity.getAction(),active && entity.onGround() && !entity.isPassenger(),blended,(fx,fz) -> {
+                entity.getAction(),active && entity.isVisuallyGrounded() && !entity.isPassenger(),blended,(fx,fz) -> {
                     var hit = entity.level().clip(new ClipContext(new Vec3(fx,y+.6,fz),
                             new Vec3(fx,y-1.1,fz),ClipContext.Block.COLLIDER,ClipContext.Fluid.NONE,entity));
                     return hit.getType() == HitResult.Type.BLOCK ? hit.getLocation().y : y;
                 });
         locomotionPoses.computeIfAbsent(entity, ignored -> new LocomotionPose()).apply(frame,x,z,yaw,
                 entity.getId()*1.71,active && entity.getAction() == 0 && entity.hurtTime == 0
-                        && entity.onGround() && !entity.isPassenger(),blended);
+                        && entity.isVisuallyGrounded() && !entity.isPassenger(),blended);
         // Counterbalance can change arm translation and parent rotation. Apply
         // terrain weapon support last so both layers share the same final frame.
         FootPlanting.supportWeapon(blended);

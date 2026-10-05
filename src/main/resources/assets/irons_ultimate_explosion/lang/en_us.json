@@ -1,4 +1,7 @@
 {
+  "item.irons_ultimate_explosion.cuirass_of_the_thunderstar": "Cuirass of the Thunderstar",
+  "tooltip.irons_ultimate_explosion.thunderstar.perk": "Falling Star",
+  "tooltip.irons_ultimate_explosion.thunderstar.damage": "Thundercrash deals %s%% increased damage.",
   "spell.irons_ultimate_explosion.grand_explosion": "Grand Explosion",
   "spell.irons_ultimate_explosion.grand_explosion.guide": "Commit your remaining mana to a distant, devastating Fire blast. The power gained from mana has diminishing returns.",
   "item.irons_ultimate_explosion.cinderstar_staff": "Cinderstar Staff",

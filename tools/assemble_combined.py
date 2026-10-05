@@ -64,8 +64,9 @@ def merge_mods(inputs: list[dict[str, bytes]]) -> bytes:
         bodies.append(text[first_table.start():].strip())
         mods.extend(metadata["mods"])
     ids = [mod["modId"] for mod in mods]
-    if set(ids) != EXPECTED_IDS or len(ids) != len(EXPECTED_IDS):
-        raise ValueError(f"Expected exactly the two addon IDs, found {ids}")
+    expected = EXPECTED_IDS | ({"ignis_armor_compat"} if len(inputs) == 3 else set())
+    if set(ids) != expected or len(ids) != len(expected):
+        raise ValueError(f"Expected exactly {sorted(expected)}, found {ids}")
     header_text = "\n".join(f"{key}={json.dumps(value)}" for key, value in common.items())
     merged = header_text + "\n\n" + "\n\n".join(bodies) + "\n"
     actual = tomllib.loads(merged)
@@ -144,6 +145,8 @@ def merge_pack(inputs: list[dict[str, bytes]]) -> bytes:
         if {k: v for k, v in base["pack"].items() if k != "description"} != {k: v for k, v in other["pack"].items() if k != "description"}:
             raise ValueError("Incompatible resource pack metadata")
     base["pack"]["description"] = "Multiversal Spellbooks: Grand Explosion, Thundercrash and Crimson Susanoo"
+    if len(inputs) == 3:
+        base["pack"]["description"] += "; Ignis Armor Compatibility"
     return (json.dumps(base, indent=2) + "\n").encode("utf-8")
 
 
@@ -181,7 +184,7 @@ def assemble(paths: list[Path], output: Path) -> dict:
         "output": output.name,
         "sha256": digest(output.read_bytes()),
         "inputs": [{"file": path.name, "sha256": digest(path.read_bytes())} for path in paths],
-        "mod_ids": sorted(EXPECTED_IDS),
+        "mod_ids": sorted(mod["modId"] for mod in tomllib.loads(payload["META-INF/mods.toml"].decode())["mods"]),
         "unchanged_payload_entries": len(expected_hashes),
         "payload_sha256": expected_hashes,
         "shared_metadata": sorted(SHARED),
@@ -195,8 +198,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--grand-explosion", type=Path, required=True)
     parser.add_argument("--crimson", type=Path, required=True)
+    parser.add_argument("--ignis-armor", type=Path)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
-    result = assemble([args.grand_explosion, args.crimson], args.output)
-    print(f"Verified {result['unchanged_payload_entries']} unchanged payload entries; two mod IDs")
+    paths = [args.grand_explosion, args.crimson]
+    if args.ignis_armor:
+        paths.append(args.ignis_armor)
+    result = assemble(paths, args.output)
+    print(f"Verified {result['unchanged_payload_entries']} unchanged payload entries; {len(result['mod_ids'])} mod IDs")
     print(f"SHA256: {result['sha256']}")

@@ -22,8 +22,29 @@ try {
     $icon.Save($iconPath,[System.Drawing.Imaging.ImageFormat]::Png)
 } finally { $icon.Dispose() }
 
-# Original electricity projectile icon; no upstream or Destiny art is bundled.
+# Original generated artwork; the source survives every rebuild.
 $thunderPath = Join-Path $assets 'textures\gui\spell_icons\thundercrash.png'
+$sourcePath = Join-Path $PSScriptRoot 'art\thundercrash-icon.png'
+if (Test-Path -LiteralPath $sourcePath) {
+    $source = [System.Drawing.Image]::FromFile($sourcePath)
+    $thunder = [System.Drawing.Bitmap]::new(128,128)
+    $graphics = [System.Drawing.Graphics]::FromImage($thunder)
+    try {
+        $graphics.Clear([System.Drawing.Color]::Transparent)
+        $graphics.CompositingQuality = [System.Drawing.Drawing2D.CompositingQuality]::HighQuality
+        $graphics.InterpolationMode = [System.Drawing.Drawing2D.InterpolationMode]::HighQualityBicubic
+        $graphics.PixelOffsetMode = [System.Drawing.Drawing2D.PixelOffsetMode]::HighQuality
+        $scale = 118.0 / [Math]::Max($source.Width, $source.Height)
+        $width = [int][Math]::Round($source.Width * $scale)
+        $height = [int][Math]::Round($source.Height * $scale)
+        $rect = [System.Drawing.Rectangle]::new([int]((128-$width)/2),[int]((128-$height)/2),$width,$height)
+        $graphics.DrawImage($source,$rect)
+        $thunder.Save($thunderPath,[System.Drawing.Imaging.ImageFormat]::Png)
+    } finally { $graphics.Dispose(); $thunder.Dispose(); $source.Dispose() }
+    return
+}
+
+# Legacy fallback for checkouts without the artwork source.
 $thunder = [System.Drawing.Bitmap]::new(32,32)
 try {
     for ($y=0; $y -lt 32; $y++) { for ($x=0; $x -lt 32; $x++) {

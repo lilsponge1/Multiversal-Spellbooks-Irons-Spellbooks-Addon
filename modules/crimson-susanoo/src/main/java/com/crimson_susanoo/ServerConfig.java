@@ -17,6 +17,7 @@ public final class ServerConfig {
     public static final ForgeConfigSpec.DoubleValue GUARD_PERCENT;
     public static final ForgeConfigSpec.DoubleValue GUARD_MANA_PER_DAMAGE;
     public static final ForgeConfigSpec.DoubleValue CLEAVE_DAMAGE;
+    public static final ForgeConfigSpec.DoubleValue DAMAGE_MULTIPLIER;
     public static final ForgeConfigSpec.DoubleValue CLEAVE_COOLDOWN;
     public static final ForgeConfigSpec.DoubleValue CLEAVE_KNOCKBACK;
     public static final ForgeConfigSpec.DoubleValue CRESCENT_DAMAGE;
@@ -47,6 +48,8 @@ public final class ServerConfig {
                 .defineInRange("combatLeashDistance", 40.0, 4, 128);
         GUARD_PERCENT = BUILDER.defineInRange("guardDamageRedirectPercent", 0.25, 0, 1);
         GUARD_MANA_PER_DAMAGE = BUILDER.defineInRange("guardManaPerDamage", 0.5, 0, 100);
+        DAMAGE_MULTIPLIER = BUILDER.comment("Multiplier for all three direct attacks, after base damage and Fire Spell Power. Added in 0.1.1 so existing saved damage settings are also halved.")
+                .defineInRange("damageMultiplier", 0.5, 0, 10);
         CLEAVE_DAMAGE = BUILDER.defineInRange("cleaveDamage", 22.0, 0, 10000);
         CLEAVE_COOLDOWN = BUILDER.defineInRange("cleaveCooldownSeconds", 2.25, 0.05, 3600);
         CLEAVE_KNOCKBACK = BUILDER.comment("Ordinary Cleave knockback strength before target resistance. Lower values keep melee exchanges closer; previous releases used 1.0.")
@@ -60,7 +63,8 @@ public final class ServerConfig {
         SLASH_DAMAGE = BUILDER.defineInRange("wrathfulSlashDamage", 40.0, 0, 10000);
         SLASH_COOLDOWN = BUILDER.defineInRange("wrathfulSlashCooldownSeconds", 14.0, 0.05, 3600);
         SLASH_MANA = BUILDER.defineInRange("wrathfulSlashManaCost", 30, 0, 100000);
-        FRIENDLY_FIRE = BUILDER.define("friendlyFire", false);
+        FRIENDLY_FIRE = BUILDER.comment("False protects all players, tamed pets and player summons from guardian damage and retaliation, without requiring teams. True opts into friendly combat; player targets still obey server/team PvP rules.")
+                .define("friendlyFire", false);
         // Reserved for future opt-in terrain behavior; this release never edits blocks.
         BLOCK_GRIEFING = BUILDER.define("blockGriefing", false);
         BUILDER.pop();

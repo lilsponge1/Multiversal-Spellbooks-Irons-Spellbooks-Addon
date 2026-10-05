@@ -9,6 +9,33 @@ from assemble_combined import assemble, parse_manifest
 
 
 class IntegrationTest(unittest.TestCase):
+    def test_optional_armor_module_keeps_both_mixins(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            a, b, c, out = (root / name for name in ("a.jar", "b.jar", "c.jar", "out.jar"))
+            self.fixture(a, "irons_ultimate_explosion", {"test.mixins.json": b"{}"},
+                         b"Manifest-Version: 1.0\r\nMixinConfigs: test.mixins.json\r\n\r\n")
+            self.fixture(b, "crimson_susanoo")
+            self.fixture(c, "ignis_armor_compat", {"armor.mixins.json": b"{}"},
+                         b"Manifest-Version: 1.0\r\nMixinConfigs: armor.mixins.json\r\n\r\n")
+            report = assemble([a, b, c], out)
+            self.assertEqual(report["mod_ids"], ["crimson_susanoo", "ignis_armor_compat", "irons_ultimate_explosion"])
+            with zipfile.ZipFile(out) as jar:
+                self.assertEqual(parse_manifest(jar.read("META-INF/MANIFEST.MF"))["MixinConfigs"],
+                                 "test.mixins.json,armor.mixins.json")
+                self.assertEqual(jar.read("assets/ignis_armor_compat/original.txt"), b"original payload")
+
+    def test_unexpected_third_module_rejected(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            a, b, c, out = (root / name for name in ("a.jar", "b.jar", "c.jar", "out.jar"))
+            self.fixture(a, "irons_ultimate_explosion")
+            self.fixture(b, "crimson_susanoo")
+            self.fixture(c, "unrelated_module")
+            with self.assertRaisesRegex(ValueError, "Expected exactly"):
+                assemble([a, b, c], out)
+            self.assertFalse(out.exists())
+
     def fixture(self, path, mod_id, extra=None, manifest=None):
         files = {
             "META-INF/mods.toml": (

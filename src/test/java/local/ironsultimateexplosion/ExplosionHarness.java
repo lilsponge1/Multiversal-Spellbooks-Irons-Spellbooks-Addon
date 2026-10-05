@@ -62,6 +62,7 @@ public final class ExplosionHarness {
     private int audioTicks;
     private int audioDuration;
     public ExplosionHarness() {
+        new ThunderstarHarness();
         new ThundercrashHarness();
         MinecraftForge.EVENT_BUS.addListener(this::commands);
         MinecraftForge.EVENT_BUS.addListener(this::protectBlock);
@@ -79,6 +80,15 @@ public final class ExplosionHarness {
                     ItemStack book = new ItemStack(ItemRegistry.WIMPY_SPELL_BOOK.get());
                     ISpellContainerMutable spells = ISpellContainer.create(1, true, true).mutableCopy();
                     if (!spells.addSpell(ModSpells.GRAND_EXPLOSION.get(), 5, false)) return 0;
+                    ISpellContainer.set(book, spells.toImmutable());
+                    return ctx.getSource().m_230896_().m_150109_().m_36054_(book) ? 1 : 0;
+                  }));
+        event.getDispatcher().register(LiteralArgumentBuilder.<CommandSourceStack>literal("thundercrash_givebook")
+                .requires(source -> source.m_6761_(2))
+                .executes(ctx -> {
+                    ItemStack book = new ItemStack(ItemRegistry.WIMPY_SPELL_BOOK.get());
+                    ISpellContainerMutable spells = ISpellContainer.create(1, true, true).mutableCopy();
+                    if (!spells.addSpell(ModSpells.THUNDERCRASH.get(), 1, false)) return 0;
                     ISpellContainer.set(book, spells.toImmutable());
                     return ctx.getSource().m_230896_().m_150109_().m_36054_(book) ? 1 : 0;
                 }));

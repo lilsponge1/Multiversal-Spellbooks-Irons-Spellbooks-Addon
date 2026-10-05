@@ -159,12 +159,14 @@ public final class ThundercrashManager {
         // Cast visibility from the discharge, displaced just onto the clear side of its contact surface.
         Vec3 origin = point.m_82549_(center.m_82546_(point).m_82541_().m_82490_(0.02));
         AABB area = new AABB(point, point).m_82400_(s.radius);
+        // Check the actual chest slot once at impact; each target's existing falloff damage gets one multiplier.
+        double armorMultiplier = ThunderstarArmorItem.thundercrashMultiplier(s.player);
         for (Entity e : level.m_6249_(s.player, area, e -> e instanceof LivingEntity && canHit(s.player, e))) {
             Vec3 target = ThundercrashCollision.closest(e.m_20191_(), point);
             double distance = target.m_82546_(point).m_82553_();
             if (distance > s.radius) continue;
             if (e != hit.target() && level.m_45547_(new ClipContext(origin, e.m_20191_().m_82399_(), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, s.player)).m_6662_() != HitResult.Type.MISS) continue;
-            float damage = (float)(s.damage * (1 - (1 - s.edgeDamage) * distance / s.radius));
+            float damage = (float)(s.damage * (1 - (1 - s.edgeDamage) * distance / s.radius) * armorMultiplier);
             if (DamageSources.applyDamage(e, damage, ModSpells.THUNDERCRASH.get().getDamageSource(s.player))) {
                 LivingEntity living = (LivingEntity)e;
                 double dx = e.m_20185_() - origin.f_82479_, dz = e.m_20189_() - origin.f_82481_;

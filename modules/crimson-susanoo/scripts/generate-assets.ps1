@@ -181,6 +181,29 @@ $geometry = [ordered]@{
         bones = $bones
     })
 }
+# Correct Bedrock handedness for the complete rig. Preserve every motion by
+# reflecting its pose tracks below, including the planted combat stance.
+foreach ($bone in $bones) {
+    $bone.pivot[0] = -$bone.pivot[0]
+    if ($bone.rotation) { $bone.rotation[1] = -$bone.rotation[1]; $bone.rotation[2] = -$bone.rotation[2] }
+    foreach ($cube in $bone.cubes) {
+        $cube.origin[0] = -$cube.origin[0] - $cube.size[0]
+        if ($cube.pivot) { $cube.pivot[0] = -$cube.pivot[0] }
+        if ($cube.rotation) { $cube.rotation[1] = -$cube.rotation[1]; $cube.rotation[2] = -$cube.rotation[2] }
+    }
+}
+# Keep the palm around the tsuka; leave six more pixels before the guard.
+$sword.cubes[0].origin[2] -= 8
+$sword.cubes[0].size[2] += 8
+foreach ($cube in @($sword.cubes[2], $sword.cubes[3])) { $cube.origin[2] -= 6 }
+# Roll the weapon 90 degrees about its longitudinal axis, baking it into the
+# mesh so manifestation, wrist animation and attached effects share the roll.
+foreach ($cube in $sword.cubes) {
+    $x=$cube.origin[0]; $y=$cube.origin[1]; $sx=$cube.size[0]; $sy=$cube.size[1]
+    $cube.origin[0] = $sword.pivot[0] + $y - $sword.pivot[1]
+    $cube.origin[1] = $sword.pivot[1] - ($x + $sx - $sword.pivot[0])
+    $cube.size[0] = $sy; $cube.size[1] = $sx
+}
 Write-AssetJson (Join-Path $geoDir 'guardian.geo.json') $geometry
 
 $animations = [ordered]@{ format_version = '1.8.0'; animations = [ordered]@{} }
@@ -480,6 +503,12 @@ foreach ($name in @('cleave','slash')) {
             $shortening=36-20*[Math]::Cos($hip*[Math]::PI/180)-16*[Math]::Cos(($hip+$knee)*[Math]::PI/180)
             $leg.position[$key]=@(0,($liftHeight-$shortening),0)
         }
+    }
+}
+foreach ($clip in $animations.animations.Values) {
+    foreach ($bone in $clip.bones.Values) {
+        foreach ($vector in $bone.rotation.Values) { $vector[1] = -$vector[1]; $vector[2] = -$vector[2] }
+        foreach ($vector in $bone.position.Values) { $vector[0] = -$vector[0] }
     }
 }
 Write-AssetJson (Join-Path $animationDir 'guardian.animation.json') $animations

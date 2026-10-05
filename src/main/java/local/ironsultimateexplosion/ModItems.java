@@ -12,6 +12,8 @@ import net.minecraftforge.registries.RegistryObject;
 
 public final class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, GrandExplosionMod.ID);
+    public static final RegistryObject<Item> THUNDERSTAR_CUIRASS = ITEMS.register("cuirass_of_the_thunderstar", () ->
+            new ThunderstarArmorItem(new Item.Properties().m_41497_(com.gametechbc.traveloptics.init.TravelopticsItems.RARITY_AQUATIC)));
     public static final RegistryObject<Item> THUNDERCRASH_SCROLL = ITEMS.register("thundercrash_scroll", () ->
             new ThundercrashScrollItem(new Item.Properties().m_41487_(1)));
     public static final RegistryObject<Item> CINDERSTAR_STAFF = ITEMS.register("cinderstar_staff", () -> new CinderstarStaffItem(
@@ -28,6 +30,8 @@ public final class ModItems {
     public static final RegistryObject<Item> CINDERSTAR_BOOTS = ITEMS.register("cinderstar_boots", () ->
             new CinderstarArmorItem(net.minecraft.world.item.ArmorItem.Type.BOOTS, new Item.Properties()));
     static void fillCreativeTabs(net.minecraftforge.event.BuildCreativeModeTabContentsEvent event) {
+        if (event.getTab() == io.redspace.ironsspellbooks.registries.CreativeTabRegistry.EQUIPMENT_TAB.get())
+            event.accept(THUNDERSTAR_CUIRASS);
         if (event.getTab() == io.redspace.ironsspellbooks.registries.CreativeTabRegistry.SCROLLS_TAB.get())
             event.accept(THUNDERCRASH_SCROLL);
     }

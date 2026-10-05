@@ -39,7 +39,7 @@ foreach ($case in @(@('cleave','0.55'),@('slash','1.0'))) {
     $hits=0; $supportHits=0; $heights=@()
     . {
         for ($i=0; $i -le 192; $i++) {
-            $t=$i/192.0; $point=@(-(24+4*$t*$t),(36+3*$t),-(18+80*$t))
+            $t=$i/192.0; $point=@((23-3*$t),(37+4*$t*$t),-(24+80*$t))
             $point=Rotate-Point $point $sp $sr
             foreach ($transform in $ancestorTransforms) {
                 $point=Rotate-Point $point $transform.pivot $transform.rotation

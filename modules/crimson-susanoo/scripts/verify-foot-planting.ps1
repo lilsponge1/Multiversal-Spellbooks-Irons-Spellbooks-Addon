@@ -14,10 +14,27 @@ function Sample($track,[double]$time){
         if($time -le $b){
             $a=[double]::Parse($keys[$i-1].Name,$culture)
             $u=($time-$a)/($b-$a)
-            return @(0..2 | ForEach-Object { (1-$u)*$keys[$i-1].Value[$_] + $u*$keys[$i].Value[$_] })
+            return @(0..2 | ForEach-Object {
+                $axis=$_; $x=$keys[$i-1].Value[$axis]; $y=$keys[$i].Value[$axis]
+                $s=($y-$x)/($b-$a); $m0=0.0; $m1=0.0
+                if($i -gt 1){
+                    $p=[double]::Parse($keys[$i-2].Name,$culture); $h=$a-$p
+                    $m0=Tangent (($x-$keys[$i-2].Value[$axis])/$h) $s $h ($b-$a)
+                }
+                if($i+1 -lt $keys.Count){
+                    $n=[double]::Parse($keys[$i+1].Name,$culture); $h=$n-$b
+                    $m1=Tangent $s (($keys[$i+1].Value[$axis]-$y)/$h) ($b-$a) $h
+                }
+                (2*$u*$u*$u-3*$u*$u+1)*$x+($u*$u*$u-2*$u*$u+$u)*($b-$a)*$m0+(-2*$u*$u*$u+3*$u*$u)*$y+($u*$u*$u-$u*$u)*($b-$a)*$m1
+            })
         }
     }
     return $keys[-1].Value
+}
+function Tangent([double]$p,[double]$n,[double]$a,[double]$b){
+    if($p*$n -le 0){return 0}
+    $w1=2*$b+$a; $w2=$b+2*$a
+    return ($w1+$w2)/($w1/$p+$w2/$n)
 }
 $action=0
 foreach($name in @('cleave','crescent','slash')){

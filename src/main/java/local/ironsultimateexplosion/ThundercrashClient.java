@@ -25,6 +25,7 @@ public final class ThundercrashClient {
         int sequence, predictedAge, visualAge;
         long received = System.nanoTime();
         ThundercrashFlightSound sound;
+        ThundercrashCastSound castSound;
         boolean chargePlayed, launchPresented;
         final ArrayDeque<Vec3> history = new ArrayDeque<>();
         final ArrayDeque<Vec3> authoritativePath = new ArrayDeque<>();
@@ -35,6 +36,8 @@ public final class ThundercrashClient {
     public static void state(ThundercrashStatePacket p) {
         Minecraft mc = Minecraft.m_91087_(); ClientLevel level = mc.f_91073_;
         if (level == null || !p.dimension().equals(level.m_46472_().m_135782_().toString()) || !ThundercrashMovement.finite(p.position())) return;
+        // A completed impact cannot be resurrected by a late movement snapshot.
+        if (IMPACTS.contains(p.session())) return;
         Flight f = FLIGHTS.get(p.caster());
         if (f != null && (p.session() < f.packet.session() || p.session() == f.packet.session() && p.tick() < f.packet.tick())) return;
         if (p.phase() == ThundercrashState.END) { remove(p.caster()); return; }
@@ -42,6 +45,7 @@ public final class ThundercrashClient {
         byte oldPhase = f.packet.phase(); f.packet = p; f.received = System.nanoTime();
         f.sequence = Math.max(f.sequence, p.acceptedInput());
         f.entity = level.m_6815_(p.entity()) instanceof LivingEntity living && living.m_20148_().equals(p.caster()) ? living : null;
+        if (f.entity != null && f.entity.m_6084_()) syncSounds(f);
         if (p.phase() != ThundercrashState.CHARGE && f.entity != mc.f_91074_) {
             f.authoritativePath.addLast(p.previous()); f.authoritativePath.addLast(p.position());
             while (f.authoritativePath.size() > 8) f.authoritativePath.removeFirst();
@@ -96,10 +100,14 @@ public final class ThundercrashClient {
         if (level == null || !p.dimension().equals(level.m_46472_().m_135782_().toString()) || !IMPACTS.add(p.session())) return;
         if (IMPACTS.size() > 128) IMPACTS.remove(IMPACTS.iterator().next());
         Flight active = FLIGHTS.get(p.caster());
-        if (active != null && active.packet.session() == p.session()) remove(p.caster());
-        ThundercrashVisuals.impact(level, p);
+        boolean matching = active != null && active.packet.session() == p.session();
+        if (matching) stopSound(active);
+        // Stop charge/flight first, then queue impact independently of visual cleanup.
+        // An optional visual integration failing must not suppress the crash sound.
         level.m_7785_(p.position().f_82479_,p.position().f_82480_,p.position().f_82481_, ModSounds.IMPACT.get(), SoundSource.PLAYERS,
                 ThundercrashConfig.IMPACT_VOLUME.get().floatValue(), 1, false);
+        if (matching) remove(p.caster());
+        ThundercrashVisuals.impact(level, p);
     }
     @SubscribeEvent public static void tick(TickEvent.ClientTickEvent e) {
         if (e.phase != TickEvent.Phase.END) return;
@@ -118,21 +126,38 @@ public final class ThundercrashClient {
                 if (System.nanoTime() - f.received > 500_000_000L) remove(f.packet.caster()); continue;
             }
             f.entity = living; f.visualAge++;
-            if (!f.chargePlayed) {
-                f.chargePlayed = true;
-                if (f.packet.phase() == ThundercrashState.CHARGE) level.m_7785_(living.m_20185_(),living.m_20186_(),living.m_20189_(), ModSounds.CAST.get(), SoundSource.PLAYERS, ThundercrashConfig.CAST_VOLUME.get().floatValue(),1,false);
-            }
+            syncSounds(f);
             if (f.packet.phase() != ThundercrashState.CHARGE) {
                 if (living instanceof AbstractClientPlayer p) ThundercrashAnimations.start(p);
-                if (f.sound == null && System.nanoTime() - f.received < 1_000_000_000L) {
-                    f.sound = new ThundercrashFlightSound(living); mc.m_91106_().m_120367_(f.sound);
-                }
-                if (System.nanoTime() - f.received > 1_000_000_000L) stopSound(f);
             }
             ThundercrashVisuals.flight(level, f, mc.f_91074_.m_20182_());
         }
     }
-    private static void stopSound(Flight f) { if (f.sound != null) { f.sound.end(); Minecraft.m_91087_().m_91106_().m_120399_(f.sound); f.sound = null; } }
+    private static void syncSounds(Flight f) {
+        Minecraft mc = Minecraft.m_91087_();
+        if (f.packet.phase() == ThundercrashState.CHARGE) {
+            if (!f.chargePlayed) {
+                f.chargePlayed = true; f.castSound = new ThundercrashCastSound(f.entity);
+                mc.m_91106_().m_120367_(f.castSound);
+            }
+            return;
+        }
+        stopCastSound(f);
+        if (System.nanoTime() - f.received >= 1_000_000_000L) { stopSound(f); return; }
+        if (f.sound == null) {
+            f.sound = new ThundercrashFlightSound(f.entity);
+            mc.m_91106_().m_120367_(f.sound);
+        }
+    }
+    private static void stopCastSound(Flight f) {
+        if (f.castSound != null) {
+            f.castSound.end(); Minecraft.m_91087_().m_91106_().m_120399_(f.castSound); f.castSound = null;
+        }
+    }
+    private static void stopSound(Flight f) {
+        stopCastSound(f);
+        if (f.sound != null) { f.sound.end(); Minecraft.m_91087_().m_91106_().m_120399_(f.sound); f.sound = null; }
+    }
     private static void remove(UUID id) {
         Flight f = FLIGHTS.remove(id); if (f == null) return;
         stopSound(f); ThundercrashAnimations.stop(id);
