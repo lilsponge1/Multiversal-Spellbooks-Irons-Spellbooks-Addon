@@ -1,0 +1,17 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "omega_rush_flight": {
+      "loop": true,
+      "animation_length": 1,
+      "bones": {
+        "body": {"rotation": [90,0,0]},
+        "head": {"rotation": [-90,0,0]},
+        "rightArm": {"rotation": [-180,0,4]},
+        "leftArm": {"rotation": [-180,0,-4]},
+        "rightLeg": {"rotation": [0,0,2]},
+        "leftLeg": {"rotation": [0,0,-2]}
+      }
+    }
+  }
+}

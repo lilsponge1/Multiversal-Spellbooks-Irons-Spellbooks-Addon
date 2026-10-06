@@ -1,0 +1,13 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="All Rights Reserved"
+[[mods]]
+modId="omega_rush_test"
+version="0.1.0"
+displayName="Omega Rush Disposable Harness"
+[[dependencies.omega_rush_test]]
+modId="irons_omega_rush"
+mandatory=true
+versionRange="[0.1.0,)"
+ordering="AFTER"
+side="SERVER"

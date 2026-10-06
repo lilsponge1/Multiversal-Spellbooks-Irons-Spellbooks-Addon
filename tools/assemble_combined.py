@@ -14,6 +14,7 @@ from pathlib import Path, PurePosixPath
 
 SHARED = {"META-INF/mods.toml", "META-INF/MANIFEST.MF", "pack.mcmeta"}
 EXPECTED_IDS = {"irons_ultimate_explosion", "crimson_susanoo"}
+OPTIONAL_IDS = {"ignis_armor_compat", "irons_omega_rush"}
 FORBIDDEN_CLASSES = (
     "net/minecraft/", "net/minecraftforge/", "io/redspace/ironsspellbooks/",
     "com/github/L_Ender/cataclysm/", "software/bernie/geckolib/",
@@ -64,7 +65,7 @@ def merge_mods(inputs: list[dict[str, bytes]]) -> bytes:
         bodies.append(text[first_table.start():].strip())
         mods.extend(metadata["mods"])
     ids = [mod["modId"] for mod in mods]
-    expected = EXPECTED_IDS | ({"ignis_armor_compat"} if len(inputs) == 3 else set())
+    expected = EXPECTED_IDS | (set(ids) & OPTIONAL_IDS)
     if set(ids) != expected or len(ids) != len(expected):
         raise ValueError(f"Expected exactly {sorted(expected)}, found {ids}")
     header_text = "\n".join(f"{key}={json.dumps(value)}" for key, value in common.items())
@@ -145,8 +146,11 @@ def merge_pack(inputs: list[dict[str, bytes]]) -> bytes:
         if {k: v for k, v in base["pack"].items() if k != "description"} != {k: v for k, v in other["pack"].items() if k != "description"}:
             raise ValueError("Incompatible resource pack metadata")
     base["pack"]["description"] = "Multiversal Spellbooks: Grand Explosion, Thundercrash and Crimson Susanoo"
-    if len(inputs) == 3:
+    ids = {mod['modId'] for files in inputs for mod in tomllib.loads(files['META-INF/mods.toml'].decode('utf-8-sig'))['mods']}
+    if "ignis_armor_compat" in ids:
         base["pack"]["description"] += "; Ignis Armor Compatibility"
+    if "irons_omega_rush" in ids:
+        base["pack"]["description"] += "; Omega Rush"
     return (json.dumps(base, indent=2) + "\n").encode("utf-8")
 
 
@@ -196,14 +200,26 @@ def assemble(paths: list[Path], output: Path) -> dict:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--grand-explosion", type=Path, required=True)
-    parser.add_argument("--crimson", type=Path, required=True)
+    base_group = parser.add_mutually_exclusive_group(required=True)
+    base_group.add_argument("--grand-explosion", type=Path)
+    base_group.add_argument("--combined-base", type=Path, help="Preserve a previously accepted combined release and append Omega Rush")
+    parser.add_argument("--crimson", type=Path)
     parser.add_argument("--ignis-armor", type=Path)
+    parser.add_argument("--omega", type=Path)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
-    paths = [args.grand_explosion, args.crimson]
-    if args.ignis_armor:
-        paths.append(args.ignis_armor)
+    if args.combined_base:
+        if args.crimson or args.ignis_armor or not args.omega:
+            parser.error("--combined-base requires --omega and cannot be combined with --crimson or --ignis-armor")
+        paths = [args.combined_base]
+    else:
+        if not args.crimson:
+            parser.error("--grand-explosion requires --crimson")
+        paths = [args.grand_explosion, args.crimson]
+        if args.ignis_armor:
+            paths.append(args.ignis_armor)
+    if args.omega:
+        paths.append(args.omega)
     result = assemble(paths, args.output)
     print(f"Verified {result['unchanged_payload_entries']} unchanged payload entries; {len(result['mod_ids'])} mod IDs")
     print(f"SHA256: {result['sha256']}")

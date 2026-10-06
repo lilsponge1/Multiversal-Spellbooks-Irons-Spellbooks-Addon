@@ -2,8 +2,8 @@
 
 1. Accept the repository collaborator invitation and sign in to GitHub on your development PC.
 2. Create a feature branch from current `main`; use separate branches for each author's work.
-3. Keep Grand Explosion, Thundercrash, Thunderstar and Cinderstar source under root `src/`. Keep Crimson Susanoo under `modules/crimson-susanoo/` and Ignis enchanting compatibility under `modules/ignis-armor-compat/`. Use unique Java packages, resource paths, registry IDs and network channel names for future features.
-4. Build each changed feature independently, then assemble the combined release with `build-combined.ps1`. Do not compile the source trees together: the root project uses SRG names and the modules use ForgeGradle official mappings.
+3. Keep Grand Explosion, Thundercrash, Thunderstar and Cinderstar source under root `src/`. Keep Crimson Susanoo under `modules/crimson-susanoo/`, Ignis enchanting compatibility under `modules/ignis-armor-compat/`, and Omega Rush under `modules/omega-rush/`. Use unique Java packages, resource paths, registry IDs and network channel names for future features.
+4. Build each changed feature independently, then assemble the combined release with `build-combined.ps1`. Do not compile the source trees together: the root project and Omega Rush use SRG names; the other modules use ForgeGradle official mappings. `-CombinedBaseJar` appends Omega Rush to an accepted combined release while preserving all its existing payload bytes. The normal module-input mode also includes Omega Rush; pass `-OmegaJar ''` to reproduce the older assembly without it.
 5. Test the resulting same combined JAR on a disposable server and matching clients, then open a pull request with the changes and results. The repository owner reviews and merges it into `main`.
 
 A branch keeps unfinished work separate. The directory/package split keeps source ownership separate after merging. Only changes merged into the release branch appear in its combined JAR.

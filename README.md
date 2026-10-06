@@ -1,9 +1,10 @@
 # Multiversal Spellbooks addon
 
-Forge Minecraft 1.20.1 addon for Iron's Spells 'n Spellbooks. This update combines Grand Explosion **0.3.3**, Crimson Susanoo **0.1.1** and Ignis Armor Compatibility **0.1.0** into one JAR while retaining separate mod IDs, packages, resources and configs.
+Forge Minecraft 1.20.1 addon for Iron's Spells 'n Spellbooks. This update combines Grand Explosion **0.3.3**, Crimson Susanoo **0.1.1**, Ignis Armor Compatibility **0.1.0**, and Omega Rush **0.1.0** into one JAR while retaining separate mod IDs, packages, resources and configs.
 
 ## Latest changes
 
+- Omega Rush: guided rainbow flight, a broad horizontal explosion trail, forward-arm flying posture, charge-only car-drive audio, and about six bomb sounds per second. Craft its Legendary Nature scroll with Legendary Ink, Paper, and a Poisonous Potato.
 - Thundercrash: new lightning-gauntlet icon and charge/flight/impact audio synchronized to actual flight and collision.
 - Cuirass of the Thunderstar: refined ivory/gold/blue armor, one equipped spell slot, normal Travel Optics Riptide material attributes and a unique 20% Thundercrash impact bonus.
 - Crimson Susanoo: remote walking synchronization, smooth pose interpolation, corrected right-hand katana/grip, half outgoing direct damage by default, co-op damage/aggro protection and a second-cast recall with no extra mana.
@@ -15,17 +16,19 @@ See [release notes](RELEASE-0.3.3.md), [validation](INTEGRATION.md), [Thundersta
 
 Download the combined JAR from this update's GitHub release assets:
 
-`multiversal-spellbooks-0.3.3-crimson-0.1.1-ignis-0.1.0-thunderstar-recall3.jar`
+`multiversal-spellbooks-0.3.3-crimson-0.1.1-ignis-0.1.0-omega-0.1.0.jar`
 
-SHA-256: `D74BFA26C913D2E3C540D81ED8A468D7F8A32817A169D9516543E275DCCBE4F0`
+SHA-256: `0B698D1635ED84618BFE297CF0AC752A761B163A9DF88DCD866AFF88E4006DBB`
 
-Stop Minecraft and the server, back up the world/configs, and replace the older addon JAR with this **same file on the server and every client**. Remove separate Grand Explosion, Crimson Susanoo and Ignis compatibility JARs if present; their contents are already included. Keep normal modpack dependencies beside it. This build requires Travel Optics 6.3.0+ and Cataclysm: Spellbooks 1.2.9 (below 1.3), in addition to the existing Iron's/Cataclysm/GeckoLib dependencies. Testing used Forge 47.4.10 and Iron's Spells 3.16.3. Omit diagnostic JVM flags in normal play.
+Stop Minecraft and the server, back up the world/configs, and replace the older addon JAR with this **same file on the server and every client**. Remove separate Grand Explosion, Crimson Susanoo, Ignis compatibility, and Omega Rush JARs if present; their contents are already included. Keep normal modpack dependencies beside it. This build requires Travel Optics 6.3.0+ and Cataclysm: Spellbooks 1.2.9 (below 1.3), in addition to the existing Iron's/Cataclysm/GeckoLib dependencies. Testing used Forge 47.4.10 and Iron's Spells 3.16.3. Omit diagnostic JVM flags in normal play.
+
+Omega Rush keeps the spell ID `irons_omega_rush:omega_rush` and its existing configuration files. For worlds upgrading from the first standalone build, set `damageRadius = 4.05` in the world's `serverconfig/irons_omega_rush-server.toml`. See [Omega Rush](modules/omega-rush/README.md) and [integration validation](OMEGA-INTEGRATION.md).
 
 Existing item/spell IDs and config files remain valid. The new Susanoo `damageMultiplier=0.5` applies to saved older damage bases; keep `friendlyFire=false` for co-op protection. The server owners handle production installation and the final two-player visual check. See [installation checklist](docs/INSTALL-COMBINED.txt).
 
 ## Build and collaborate
 
-Root `src/` contains Grand Explosion, Thundercrash, Thunderstar and Cinderstar. Independent modules live under `modules/crimson-susanoo/` and `modules/ignis-armor-compat/`. See [CONTRIBUTING.md](CONTRIBUTING.md).
+Root `src/` contains Grand Explosion, Thundercrash, Thunderstar and Cinderstar. Independent modules live under `modules/crimson-susanoo/`, `modules/ignis-armor-compat/`, and `modules/omega-rush/`. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 Use Java 17. Build root `src/` with `build.ps1`; its defaults reference an existing development workspace, so supply `-JdkBin`, `-LibraryDir`, `-ModDir`, `-MinecraftJar`, `-MinecraftServerJar` and `-SrgMinecraftJar` for another machine. The script needs the matching Forge runtime and SRG Minecraft JARs plus the pack libraries. Root output defaults to `build/grand-explosion-0.3.3.jar`. `build-test.ps1` creates a separate disposable-world harness, excluded from production.
 
@@ -35,7 +38,13 @@ Build each module with its own Gradle wrapper (see its README), then assemble:
 ./build-combined.ps1 -GrandExplosionJar ./build/grand-explosion-0.3.3.jar
 ```
 
-Python 3.11+ is required for the packager; pass `-Python <python.exe>` if needed. `-BuildCrimson` and `-BuildIgnisArmor` build the modules first; `-Offline` requires cached Gradle dependencies. `-CrimsonJar`, `-IgnisArmorJar` and `-OutputJar` override inputs/output. Passing `-IgnisArmorJar ''` omits the optional compatibility module. Default output is `build/release/multiversal-spellbooks-0.3.3-crimson-0.1.1-ignis-0.1.0.jar`, with checksum and input/payload report. Existing output files are never overwritten. Only shared metadata is merged; third-party dependencies are never bundled.
+Build Omega Rush separately with `modules/omega-rush/build.ps1` before assembly, or pass `-BuildOmega`. To preserve all existing bytes in an accepted combined release and add only Omega Rush:
+
+```powershell
+./build-combined.ps1 -CombinedBaseJar ./path/to/accepted-multiversal.jar -BuildOmega
+```
+
+Python 3.11+ is required for the packager; pass `-Python <python.exe>` if needed. `-BuildCrimson` and `-BuildIgnisArmor` build the modules first; `-Offline` requires cached Gradle dependencies. `-CrimsonJar`, `-IgnisArmorJar`, `-OmegaJar`, and `-OutputJar` override inputs/output. In the module-input mode, passing `-IgnisArmorJar ''` or `-OmegaJar ''` omits that optional module. Default output is `build/release/multiversal-spellbooks-0.3.3-crimson-0.1.1-ignis-0.1.0-omega-0.1.0.jar`, with checksum and input/payload report. Existing output files are never overwritten. Only shared metadata is merged; third-party dependencies are never bundled.
 
 The published review artifact retains its tested filename and bytes. A fresh build can differ in archive metadata; validate and test a rebuilt release before deploying it.
 
