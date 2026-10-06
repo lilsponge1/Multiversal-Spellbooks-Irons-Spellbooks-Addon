@@ -1,14 +1,14 @@
 # Omega Rush verification
 
-## Omega Form 0.2.1 candidate
+## Omega Form 0.2.2 candidate
 
-The exact combined candidate passed **124 Form assertions plus 114 legacy Rush/compatibility assertions**, for **238 server checks** in the disposable copied pack. SHA-256: `A7E91B1FF3477EEC07DE30FB550F3276E34C5C9E19FCA889D3E0E1F61CB9DF1A`. Seven packager tests also passed, and the archive audit verified 240 preserved payload entries.
+The exact combined artifact passed **135 Form assertions plus 114 legacy Rush/compatibility assertions**, for **249 server checks** in the disposable copied pack. SHA-256: `08ACF74C03472305CCD5E7292F19769FD6E6BB6907925F4821F619DEFE225805`. The archive audit verified 240 preserved payload entries. Packager code is unchanged and its seven unit tests passed in the preceding revision.
 
-New checks exercise jump press edges and double-tap timing, single-jump normal gravity, both toggle states, uninterrupted upkeep and buffs, stale/wrong-session toggle rejection, short landing protection, hover-to-Rush-to-selected-mode handoffs, and packet round trips. Both spells' native icon resource getters locate PNGs packaged under Iron's correct HUD path. The existing equipment, mana, buffs, loot, cleanup, and combined compatibility cases still pass.
+The new native cast check verifies 200 mana charged once and a 200-tick Rush cooldown during Form. Other cases cover normal outside-Form cooldown, equipment reduction, unchanged Form cooldown, configurable transformed cooldown, zero native cooldown, and no cooldown rewrite when Form ends. Native pose-resource decoding and the full existing movement, equipment, buffs, loot and compatibility cases pass.
 
-Log: local `build/omega-form-toggle-validation.log`. A first sandboxed server launch could not create Java's localhost selector; the run with approved localhost access completed normally. No desktop control or live-game installation was used for this revision.
+The first added zero-cooldown assertion assumed Iron's removed its entry immediately. Its native code stores a zero-duration entry until its next cooldown tick; the fixture was corrected to inspect the duration. Production code was unchanged by that correction. Final log: `build/omega-form-flight-pose-validation.log`.
 
-Final in-game review of double-tap feel, the HUD/wheel icons, and the revised flex pose is pending. Form latency, body variants, shader/quality combinations and multiple-real-client presentation remain unverified. See [the review checkpoint](../../OMEGA-FORM.md). GitHub publication is pending.
+The user accepted 0.2.1 in game. Form now uses the unchanged Rush pose resource during enabled hover and shares its layer with Rush. The new hover presentation still needs visual review; background checks do not verify how it looks on a real client. No desktop control was used. GitHub publication remains pending. See [the review checkpoint](../../OMEGA-FORM.md).
 
 The remaining sections record earlier released Omega Rush development history.
 

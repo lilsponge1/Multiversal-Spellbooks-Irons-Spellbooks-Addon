@@ -165,10 +165,39 @@ public final class OmegaFormHarness {
             check("equipped_sword_source_cost",OmegaFormManager.active(p)&&magic.getMana()==800);OmegaFormManager.end(p,true);check("equipped_source_cooldown",magic.getPlayerCooldowns().isOnCooldown(spell));
             magic.getPlayerCooldowns().clearCooldowns();magic.setMana(199);OmegaFormManager.charge(p,30);spell.castSpell(level,1,p,CastSource.SWORD,false);check("mana_drop_during_charge_rejected",!OmegaFormManager.active(p)&&magic.getMana()==199);
             var flex=OmegaChargeAnimation.create(30);check("charge_flex_animation_valid",flex.isInfinite()&&flex.getPart("rightArm").bend.isEnabled()&&flex.getPart("leftArm").bend.isEnabled());
+            cooldownCases(level);
             lootCases(level);
             if(failed>0)throw new AssertionError("failed="+failed+" passed="+passed);
             System.out.println("OMEGA_FORM_TEST_COMPLETE assertions="+passed);
         }finally{OmegaConfig.REQUIRE_FORM.set(require);OmegaConfig.FORM_UPKEEP.set(upkeep);if(p!=null){OmegaManager.abort(p);OmegaFormManager.end(p,false);}for(Entity e:spawned)e.m_146870_();spawned.clear();}
+    }
+    private void cooldownCases(ServerLevel level)throws Exception{
+        var rush=ModSpells.OMEGA_RUSH.get();var form=ModSpells.OMEGA_FORM.get();var magic=MagicData.getPlayerMagicData(p);
+        var reductions=p.m_21051_(AttributeRegistry.COOLDOWN_REDUCTION.get());double priorReduction=reductions.m_22115_();
+        int normal=OmegaConfig.COOLDOWN.get(),transformed=OmegaConfig.FORM_RUSH_COOLDOWN.get();
+        try{
+            check("form_rush_default_ten_seconds",transformed==10);
+            OmegaConfig.COOLDOWN.set(120);OmegaConfig.FORM_RUSH_COOLDOWN.set(10);reductions.m_22100_(1);
+            OmegaFormManager.end(p,false);magic.getPlayerCooldowns().clearCooldowns();
+            MagicHelper.MAGIC_MANAGER.addCooldown(p,rush,CastSource.SPELLBOOK);
+            check("outside_form_rush_keeps_normal_cooldown",magic.getPlayerCooldowns().getSpellCooldowns().get(rush.getSpellId()).getSpellCooldown()==2400);
+            start();magic.getPlayerCooldowns().clearCooldowns();float mana=magic.getMana();
+            OmegaManager.charge(p,1,rush.getEffectiveCastTime(1,p));rush.castSpell(level,1,p,CastSource.SPELLBOOK,true);
+            check("native_form_rush_cooldown_200_ticks",magic.getPlayerCooldowns().getSpellCooldowns().get(rush.getSpellId()).getSpellCooldown()==200);
+            check("short_cooldown_preserves_rush_mana_and_launch",magic.getMana()==mana-200&&OmegaManager.owns(p));
+            OmegaFormManager.end(p,false);check("ending_form_does_not_rewrite_rush_cooldown",magic.getPlayerCooldowns().getSpellCooldowns().get(rush.getSpellId()).getSpellCooldown()==200);OmegaManager.abort(p);
+            start();magic.getPlayerCooldowns().clearCooldowns();reductions.m_22100_(1.5);
+            int original=io.redspace.ironsspellbooks.capabilities.magic.MagicManager.getEffectiveSpellCooldown(rush,p,CastSource.SPELLBOOK);
+            MagicHelper.MAGIC_MANAGER.addCooldown(p,rush,CastSource.SPELLBOOK);
+            int reduced=magic.getPlayerCooldowns().getSpellCooldowns().get(rush.getSpellId()).getSpellCooldown();
+            check("form_rush_honors_native_cooldown_reduction",reduced==Math.round(original/12.0)&&reduced<200);
+            reductions.m_22100_(1);MagicHelper.MAGIC_MANAGER.addCooldown(p,form,CastSource.SPELLBOOK);
+            check("form_own_cooldown_unchanged",magic.getPlayerCooldowns().getSpellCooldowns().get(form.getSpellId()).getSpellCooldown()==2400);
+            OmegaConfig.FORM_RUSH_COOLDOWN.set(15);MagicHelper.MAGIC_MANAGER.addCooldown(p,rush,CastSource.SPELLBOOK);
+            check("transformed_rush_cooldown_configurable",magic.getPlayerCooldowns().getSpellCooldowns().get(rush.getSpellId()).getSpellCooldown()==300);
+            OmegaConfig.COOLDOWN.set(0);MagicHelper.MAGIC_MANAGER.addCooldown(p,rush,CastSource.SPELLBOOK);
+            check("disabled_normal_cooldown_stays_zero",magic.getPlayerCooldowns().getSpellCooldowns().get(rush.getSpellId()).getSpellCooldown()==0);
+        }finally{OmegaManager.abort(p);OmegaFormManager.end(p,false);reductions.m_22100_(priorReduction);OmegaConfig.COOLDOWN.set(normal);OmegaConfig.FORM_RUSH_COOLDOWN.set(transformed);magic.getPlayerCooldowns().clearCooldowns();}
     }
     private void protocolCases()throws Exception{
         var type=OmegaFormInputPacket.class;var encode=type.getDeclaredMethod("encode",type,net.minecraft.network.FriendlyByteBuf.class);var decode=type.getDeclaredMethod("decode",net.minecraft.network.FriendlyByteBuf.class);encode.setAccessible(true);decode.setAccessible(true);

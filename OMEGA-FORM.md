@@ -1,6 +1,6 @@
 # Omega Form and the Flowery Scarf
 
-Omega Rush 0.2.1 adds a reusable Flowery Scarf and a sustained Omega Form transformation to the single Multiversal Spellbooks JAR. The other combined modules retain their existing payloads and versions.
+Omega Rush 0.2.2 adds a reusable Flowery Scarf and a sustained Omega Form transformation to the single Multiversal Spellbooks JAR. The other combined modules retain their existing payloads and versions.
 
 ## Obtain and equip
 
@@ -31,7 +31,9 @@ Cast Form again to dismiss it immediately for no additional mana. Removing the s
 
 ## Omega Rush interaction
 
-Omega Form is required to begin a new Omega Rush by default. Rush keeps its 200-mana cost, normal cooldown, seven-second flight, guided steering, 4.05-block explosion radius, horizontal spread, and approximately six bomb sounds per second. Its scroll recipe remains Legendary Ink + Paper + Poisonous Potato.
+Enabled Form flight uses Rush's horizontal, arms-forward animation. This changes rendering only; hover speeds, collision, aiming, and the double-tap toggle retain their current behavior. Disabling flight restores the normal pose. The shared animation stays active while either Form hover or Rush owns movement and clears on cleanup or resource reload.
+
+Omega Form is required to begin a new Omega Rush by default. Rush uses a **10-second base cooldown while Form is active**, with normal cooldown-reduction attributes and cast-source modifiers still applied. Outside Form, the existing 120-second cooldown remains (when standalone Rush is allowed). It keeps its 200-mana cost, seven-second flight, guided steering, 4.05-block explosion radius, horizontal spread, and approximately six bomb sounds per second. Its scroll recipe remains Legendary Ink + Paper + Poisonous Potato.
 
 Hover yields movement ownership to Rush, which captures Nature power once at launch. If Form runs out or the scarf is removed after launch, the committed Rush finishes with that captured power, while Form's other buffs end. If Form ends during Rush's charge, the charge is cancelled before its mana payment. Rush preserves the selected flight toggle: it returns to hovering only when Form remains active and flight was enabled; otherwise normal gravity and the existing first-landing protection apply. Jump taps during committed Rush do not toggle Form flight.
 
@@ -39,9 +41,9 @@ Hover yields movement ownership to Rush, which captures Nature power once at lau
 
 Form adds a cycling rainbow body tint, first-person hand tint, restrained aura, and fading snapshots of the posed player body and clothing. Full quality retains at most five snapshots per nearby caster, sampled every three ticks, fading within 0.75 seconds. Reduced quality uses two; minimal quality keeps the aura and tint without model echoes. Snapshots do not create entities, hitboxes, held items, armor renderers, shadows, or name tags. Invisibility, teleport, tracking changes, logout, and resource reload clear the relevant presentation state.
 
-The new `[omegaForm]` and `[floweryScarf]` sections of the existing server config expose mana, upkeep, cooldown, hover speeds, defensive values, Nature bonus, drop chances, and eligible boss IDs. `omegaRush.requireOmegaForm=true` enables the prerequisite; set it false to retain standalone Rush access. Client `presentation.afterImages` complements the existing particle quality, rainbow overlay, flashes, and sound settings.
+The new `[omegaForm]` and `[floweryScarf]` sections of the existing server config expose mana, upkeep, cooldown, hover speeds, defensive values, Nature bonus, drop chances, and eligible boss IDs. `omegaRush.requireOmegaForm=true` enables the prerequisite; set it false to retain standalone Rush access. `omegaRush.omegaFormCooldownSeconds=10` controls the shorter Rush cooldown independently of the normal `cooldownSeconds`. Client `presentation.afterImages` complements the existing particle quality, rainbow overlay, flashes, and sound settings.
 
-Network protocol **2** requires the matching combined JAR on every client and the server. Replace the older combined addon and remove any separate Omega Rush JAR; the module remains inside the one combined file. Existing Rush IDs and settings remain valid.
+Network protocol **3** requires the matching combined JAR on every client and the server. Replace the older combined addon and remove any separate Omega Rush JAR; the module remains inside the one combined file. Existing Rush IDs and settings remain valid.
 
 ## Development and verification
 
@@ -51,10 +53,12 @@ The disposable harness provides `omega_test` for legacy Rush behavior and `omega
 
 ## Review checkpoint
 
-The local 0.2.1 candidate is `build/release/multiversal-spellbooks-0.3.3-crimson-0.1.1-ignis-0.1.0-omega-0.2.1.jar`, SHA-256 `A7E91B1FF3477EEC07DE30FB550F3276E34C5C9E19FCA889D3E0E1F61CB9DF1A`. The exact candidate passed **124 Form assertions and 114 Rush/compatibility assertions**, for **238 server checks**, plus seven packager tests. New coverage includes single/held/slow jump presses, double-tap pairs, flight on/off with continuing buffs and upkeep, stale toggle rejection, landing protection, both Rush return modes, toggle packet round trips, and the actual native spell-icon getter resolving both packaged PNGs.
+The local 0.2.2 candidate is `build/release/multiversal-spellbooks-0.3.3-crimson-0.1.1-ignis-0.1.0-omega-0.2.2.jar`, SHA-256 `08ACF74C03472305CCD5E7292F19769FD6E6BB6907925F4821F619DEFE225805`. The exact artifact passed **135 Form assertions plus 114 Rush/compatibility assertions**, for **249 server checks**. The added cases exercise a native paid Rush with a 200-tick cooldown in Form, the unchanged cooldown outside Form, native cooldown reduction, unchanged Form cooldown, configurable transformed cooldown, zero base cooldown, and preservation of an already committed cooldown when Form ends. Existing mana, equipment, movement, double-tap, loot, cleanup, and pose-resource checks pass.
 
-The package audit verifies 240 preserved input payload entries, all four mod IDs, all three Mixin configurations and their classes, Curios dependency, scarf assets and tag, additive loot registration, sound resources, and exclusion of the development harness. Form and Rush now have distinct transparent 64×64 textures in Iron's native `textures/gui/spell_icons/` folder. The original scarf item and status-effect icons remain unchanged. See [icon assets and generation prompts](modules/omega-rush/ICON-ASSETS.md). Network protocol **3** requires the same candidate on server and every client.
+The archive audit confirms 240 preserved input payload entries, four mod IDs, three Mixin configurations, unchanged other module payloads, correct HUD icon paths, sound assets, and exclusion of development code. Packager code is unchanged; its seven unit checks passed in the preceding revision.
 
-The user accepted the earlier Form presentation. The flex revision, new HUD icons, and actual double-tap feel still need final in-game review. Background verification did not take desktop control. Native mana HUD synchronization, both body types, shaders, after-image quality, latency, and multiple-real-client presentation remain practical review limits; earlier Rush-only results do not prove those Form scenarios. The `omega_form_pose` command is a development-only extended-charge fixture, not the production 30-tick charge.
+The user reviewed 0.2.1 and reported that it works perfectly. The new Form flight uses the existing accepted Rush animation, but its application during hover still needs an in-game visual check. This revision used background tests and took no desktop control. Broader Form latency, shader/body/quality combinations and multiple-real-client visual checks remain unverified.
 
-**This candidate has not been published to GitHub.** Publication and a review request follow final review. Ask before desktop tests and use only the separate test profile. Production profiles and original saves have not been edited.
+The same JAR should be installed on the server and clients. Network protocol remains 3 because packet layouts did not change. The new server setting is automatically added without changing existing normal cooldown settings.
+
+**GitHub publication is pending final review.** Ask before desktop tests and use only the separate test profile. Production profiles and original saves have not been edited.

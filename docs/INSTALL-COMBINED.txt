@@ -1,8 +1,8 @@
 MULTIVERSAL SPELLBOOKS COMBINED UPDATE
 
-LOCAL CANDIDATE: final icon and flight-toggle review is pending; not yet published.
-File: multiversal-spellbooks-0.3.3-crimson-0.1.1-ignis-0.1.0-omega-0.2.1.jar
-SHA-256: A7E91B1FF3477EEC07DE30FB550F3276E34C5C9E19FCA889D3E0E1F61CB9DF1A
+LOCAL CANDIDATE: final Form flying-pose review is pending; not yet published.
+File: multiversal-spellbooks-0.3.3-crimson-0.1.1-ignis-0.1.0-omega-0.2.2.jar
+SHA-256: 08ACF74C03472305CCD5E7292F19769FD6E6BB6907925F4821F619DEFE225805
 
 1. Stop the server and Minecraft clients. Back up the world and configs.
 2. Remove the previous combined addon JAR and any separate Grand Explosion,
@@ -29,6 +29,9 @@ Select Omega Form in the spell wheel; cast again to dismiss it for free.
 Double-tap Space to toggle flight. Hold Space to rise and sneak to descend.
 A single jump stays normal; turning flight off keeps Form buffs and upkeep.
 Activation: 200 mana. Upkeep: 30 mana/second. Rush still costs 200 mana.
+Rush has a 10-second cooldown in Form, with normal equipment reductions.
+Form flight uses the arms-forward Rush pose; hover movement is unchanged.
+Server key: omegaRush.omegaFormCooldownSeconds = 10 (added automatically).
 Omega network protocol 3 requires the same candidate on server and clients.
 Existing Omega Rush configs retain their values. Set damageRadius = 4.05 in
 the world's serverconfig/irons_omega_rush-server.toml for the wider damage area.

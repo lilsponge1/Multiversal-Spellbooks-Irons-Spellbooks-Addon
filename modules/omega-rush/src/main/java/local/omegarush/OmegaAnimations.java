@@ -27,9 +27,14 @@ public final class OmegaAnimations {
         LAYERS.put(player.m_20148_(),layer); PLAYERS.put(player.m_20148_(),player);
     }
     static void stop(UUID id) {
+        var player=PLAYERS.get(id);
+        if(player!=null&&(OmegaClient.owns(player)||OmegaFormClient.owns(player)))return;
+        removeLayer(id);
+    }
+    private static void removeLayer(UUID id) {
         var layer=LAYERS.remove(id); var player=PLAYERS.remove(id);
         if(layer!=null) { layer.setAnimation(null); if(player!=null) PlayerAnimationAccess.getPlayerAnimLayer(player).removeLayer(layer); }
     }
-    static void clear() { for(UUID id:new ArrayList<>(LAYERS.keySet())) stop(id);for(UUID id:new ArrayList<>(CHARGES.keySet()))stopCharge(id); }
+    static void clear() { for(UUID id:new ArrayList<>(LAYERS.keySet())) removeLayer(id);for(UUID id:new ArrayList<>(CHARGES.keySet()))stopCharge(id); }
     private OmegaAnimations() {}
 }

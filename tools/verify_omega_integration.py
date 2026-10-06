@@ -32,7 +32,7 @@ def verify(base_path, omega_path, output_path):
     assert not any('omegarushtest' in name or 'omega_rush_test' in name for name in output)
     form_checks = []
     omega_metadata = next(m for m in metadata['mods'] if m['modId'] == 'irons_omega_rush')
-    if omega_metadata['version'] in ('0.2.0', '0.2.1'):
+    if omega_metadata['version'] in ('0.2.1', '0.2.2'):
         for name in ['OmegaFormSpell', 'FloweryScarf', 'OmegaChargeAnimation', 'OmegaGravity', 'OmegaEchoes', 'OmegaLoot']:
             assert 'local/omegarush/' + name + '.class' in output
         assert any(d['modId'] == 'curios' and d['mandatory'] for d in metadata['dependencies']['irons_omega_rush'])

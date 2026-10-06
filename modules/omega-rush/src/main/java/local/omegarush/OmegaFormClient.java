@@ -25,6 +25,7 @@ final class OmegaFormClient {
         f.entity=l.m_6815_(p.entity()) instanceof LivingEntity e&&e.m_20148_().equals(p.caster())?e:null;
         if(p.reset()){f.pending.clear();OmegaEchoes.clear(p.caster());if(f.entity==mc.f_91074_)f.toggle.reset(mc.f_91074_.f_108618_.f_108572_);}
         if(!p.hover()&&f.entity==mc.f_91074_&&!OmegaClient.owns(f.entity))f.entity.m_20242_(p.originalGravity());
+        if(!p.hover())OmegaAnimations.stop(p.caster());
         if(p.phase()!=0){stopSound(f);OmegaAnimations.stopCharge(p.caster());}
         while(!f.pending.isEmpty()&&f.pending.peekFirst().sequence()<=p.accepted())f.pending.removeFirst();
         f.steps=f.pending.size();Vec3 expected=p.position(),v=p.velocity();
@@ -61,12 +62,14 @@ final class OmegaFormClient {
             if(System.nanoTime()-f.received>2_000_000_000L){remove(f.packet.caster());continue;}
             var e=l.m_6815_(f.packet.entity());if(!(e instanceof LivingEntity living)||!living.m_20148_().equals(f.packet.caster()))continue;
             f.entity=living;f.age++;
+            if(f.packet.phase()==1&&f.packet.hover()&&living instanceof net.minecraft.client.player.AbstractClientPlayer player)OmegaAnimations.start(player);
+            else OmegaAnimations.stop(f.packet.caster());
             if(f.packet.phase()==0){if(living instanceof net.minecraft.client.player.AbstractClientPlayer player)OmegaAnimations.charge(player,f.packet.chargeTicks());if(f.sound==null){f.sound=new OmegaFlightSound(living);mc.m_91106_().m_120367_(f.sound);}}else{stopSound(f);OmegaAnimations.stopCharge(f.packet.caster());}
             if(!living.m_20145_())OmegaVisuals.form(l,living,f.packet.session(),f.age,f.packet.chargeTicks(),f.packet.phase()==1);
         }
     }
     private static void stopSound(Form f){if(f.sound!=null){f.sound.end();Minecraft.m_91087_().m_91106_().m_120399_(f.sound);f.sound=null;}}
-    static void remove(UUID id){Form f=FORMS.remove(id);if(f==null)return;stopSound(f);OmegaEchoes.clear(id);OmegaAnimations.stopCharge(id);
+    static void remove(UUID id){Form f=FORMS.remove(id);if(f==null)return;stopSound(f);OmegaEchoes.clear(id);OmegaAnimations.stopCharge(id);OmegaAnimations.stop(id);
         if(f.entity==Minecraft.m_91087_().f_91074_&&!OmegaClient.owns(f.entity))f.entity.m_20242_(f.packet.originalGravity());}
     static void clear(){for(UUID id:new ArrayList<>(FORMS.keySet()))remove(id);ENDED.clear();OmegaEchoes.clear();}
 }

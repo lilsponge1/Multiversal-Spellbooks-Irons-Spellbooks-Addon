@@ -3,6 +3,7 @@ import java.util.*;
 import io.redspace.ironsspellbooks.api.magic.*;
 import io.redspace.ironsspellbooks.api.spells.*;
 import io.redspace.ironsspellbooks.api.events.SpellPreCastEvent;
+import io.redspace.ironsspellbooks.api.events.SpellCooldownAddedEvent;
 import io.redspace.ironsspellbooks.capabilities.magic.RecastResult;
 import io.redspace.ironsspellbooks.registries.MobEffectRegistry;
 import io.redspace.ironsspellbooks.network.SyncManaPacket;
@@ -116,6 +117,12 @@ public final class OmegaFormManager {
     @SubscribeEvent public static void fall(LivingFallEvent e){if(owns(e.getEntity())||LANDINGS.remove(e.getEntity().m_20148_())!=null)e.setCanceled(true);}
     @SubscribeEvent public static void otherCast(SpellPreCastEvent e){
         if(active(e.getEntity())&&(e.getSpellId().contains("thundercrash")||e.getSpellId().contains("ascension")))e.setCanceled(true);
+    }
+    @SubscribeEvent(priority=EventPriority.HIGH) public static void rushCooldown(SpellCooldownAddedEvent.Pre e){
+        if(e.getSpell()!=ModSpells.OMEGA_RUSH.get()||!active(e.getEntity()))return;
+        int normal=OmegaConfig.COOLDOWN.get();
+        // Scale the native result to retain equipment/source reductions and its normal sync.
+        if(normal>0)e.setEffectiveCooldown(Math.max(0,(int)Math.round(e.getEffectiveCooldown()*(double)OmegaConfig.FORM_RUSH_COOLDOWN.get()/normal)));
     }
     @SubscribeEvent public static void logout(PlayerEvent.PlayerLoggedOutEvent e){if(e.getEntity() instanceof ServerPlayer p)end(p,true);}
     @SubscribeEvent public static void death(LivingDeathEvent e){if(e.getEntity() instanceof ServerPlayer p)end(p,true);}
