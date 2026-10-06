@@ -9,6 +9,41 @@ from assemble_combined import assemble, parse_manifest
 
 
 class IntegrationTest(unittest.TestCase):
+    def test_omega_and_armor_preserve_all_three_mixins_and_base_payload(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            a, b, c, d, base, fresh, appended = (root / name for name in
+                ("a.jar", "b.jar", "c.jar", "d.jar", "base.jar", "fresh.jar", "appended.jar"))
+            self.fixture(a, "irons_ultimate_explosion", {"root.mixins.json": b"{}"},
+                         b"Manifest-Version: 1.0\r\nMixinConfigs: root.mixins.json\r\n\r\n")
+            self.fixture(b, "crimson_susanoo")
+            self.fixture(c, "ignis_armor_compat", {"armor.mixins.json": b"{}"},
+                         b"Manifest-Version: 1.0\r\nMixinConfigs: armor.mixins.json\r\n\r\n")
+            self.fixture(d, "irons_omega_rush", {"omega.mixins.json": b"{}", "local/omegarush/OmegaMod.class": b"omega"},
+                         b"Manifest-Version: 1.0\r\nMixinConfigs: omega.mixins.json\r\n\r\n")
+            assemble([a, b, c], base)
+            report = assemble([base, d], appended)
+            assemble([a, b, c, d], fresh)
+            self.assertEqual(report["mod_ids"], ["crimson_susanoo", "ignis_armor_compat", "irons_omega_rush", "irons_ultimate_explosion"])
+            self.assertEqual(fresh.read_bytes(), appended.read_bytes())
+            with zipfile.ZipFile(appended) as jar:
+                self.assertEqual(parse_manifest(jar.read("META-INF/MANIFEST.MF"))["MixinConfigs"],
+                                 "root.mixins.json,armor.mixins.json,omega.mixins.json")
+                self.assertEqual(jar.read("local/omegarush/OmegaMod.class"), b"omega")
+                for mod in report["mod_ids"]:
+                    self.assertEqual(jar.read(f"assets/{mod}/original.txt"), b"original payload")
+            with self.assertRaisesRegex(ValueError, "Payload collision"):
+                assemble([appended, d], root / "duplicate.jar")
+
+    def test_omega_without_optional_armor(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            paths = [root / name for name in ("a.jar", "b.jar", "omega.jar")]
+            for path, mod in zip(paths, ["irons_ultimate_explosion", "crimson_susanoo", "irons_omega_rush"]):
+                self.fixture(path, mod)
+            report = assemble(paths, root / "out.jar")
+            self.assertEqual(report["mod_ids"], ["crimson_susanoo", "irons_omega_rush", "irons_ultimate_explosion"])
+
     def test_optional_armor_module_keeps_both_mixins(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

@@ -1,5 +1,13 @@
 # Changelog
 
+## Combined Omega Rush update
+
+- Added Omega Rush 0.1.0 to the existing combined JAR, preserving Grand Explosion, Thundercrash, Thunderstar, Crimson Susanoo, and Ignis compatibility payloads.
+- Seven seconds of guided flight with a short rainbow charge and a broad horizontal cone of delayed trail explosions. Legendary Nature scroll uses Poisonous Potato at the Scroll Forge.
+- Forward-arm flight posture, three intermixed animated rainbow explosions, 4.05-block damage radius, charge-only car-drive audio, and about six bomb sounds per second.
+- Independent source module and build script; package assembly supports either four separately compiled modules or appending Omega Rush to the previously accepted combined release.
+- Existing spell/item IDs, settings, and saved worlds retain their namespaces. Remove the separate Omega Rush JAR when installing this combined release.
+
 ## 0.3.2
 
 - Replaced only Thundercrash's impact recording with the corrected file supplied under the same filename. The cast and flight recordings, spell behavior, scroll crafting and command integration are unchanged.
