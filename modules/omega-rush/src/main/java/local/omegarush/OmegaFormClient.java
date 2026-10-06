@@ -7,7 +7,7 @@ import net.minecraft.world.phys.Vec3;
 final class OmegaFormClient {
     static final class Form {
         OmegaFormPacket packet;LivingEntity entity;Vec3 velocity;long received=System.nanoTime();int sequence,age,steps;
-        OmegaFlightSound sound;final ArrayDeque<OmegaFormInputPacket> pending=new ArrayDeque<>();
+        OmegaFlightSound sound;final OmegaFlightToggle toggle=new OmegaFlightToggle();final ArrayDeque<OmegaFormInputPacket> pending=new ArrayDeque<>();
         Form(OmegaFormPacket p){packet=p;velocity=p.velocity();age=p.age();sequence=Math.max(0,p.accepted());}
     }
     static final Map<UUID,Form> FORMS=new HashMap<>();
@@ -23,7 +23,8 @@ final class OmegaFormClient {
         if(f==null||p.session()!=f.packet.session()){remove(p.caster());f=new Form(p);FORMS.put(p.caster(),f);}
         boolean launched=f.packet.phase()==0&&p.phase()==1;f.packet=p;f.received=System.nanoTime();f.age=Math.max(f.age,p.age());f.sequence=Math.max(f.sequence,p.accepted());
         f.entity=l.m_6815_(p.entity()) instanceof LivingEntity e&&e.m_20148_().equals(p.caster())?e:null;
-        if(p.reset()){f.pending.clear();OmegaEchoes.clear(p.caster());}
+        if(p.reset()){f.pending.clear();OmegaEchoes.clear(p.caster());if(f.entity==mc.f_91074_)f.toggle.reset(mc.f_91074_.f_108618_.f_108572_);}
+        if(!p.hover()&&f.entity==mc.f_91074_&&!OmegaClient.owns(f.entity))f.entity.m_20242_(p.originalGravity());
         if(p.phase()!=0){stopSound(f);OmegaAnimations.stopCharge(p.caster());}
         while(!f.pending.isEmpty()&&f.pending.peekFirst().sequence()<=p.accepted())f.pending.removeFirst();
         f.steps=f.pending.size();Vec3 expected=p.position(),v=p.velocity();
@@ -37,9 +38,10 @@ final class OmegaFormClient {
         if(launched&&f.entity!=null)OmegaVisuals.formPulse(l,f.entity,p.session());
     }
     static boolean input(LocalPlayer p){
-        Form f=FORMS.get(p.m_20148_());if(f==null||f.packet.phase()!=1||OmegaClient.owns(p))return false;
+        Form f=FORMS.get(p.m_20148_());if(f==null||f.packet.phase()!=1)return false;
+        if(OmegaClient.owns(p)){f.toggle.reset(p.f_108618_.f_108572_);return false;}
         float up=(p.f_108618_.f_108572_?1:0)-(p.f_108618_.f_108573_?1:0);
-        var a=new OmegaFormInputPacket(f.packet.session(),++f.sequence,p.m_146908_(),p.m_146909_(),forward(p),strafe(p),up);
+        var a=new OmegaFormInputPacket(f.packet.session(),++f.sequence,p.m_146908_(),p.m_146909_(),forward(p),strafe(p),up,f.toggle.update(p.f_108618_.f_108572_,p.f_19797_));
         OmegaNetwork.formInput(a);if(f.packet.hover()&&f.pending.size()<4)f.pending.addLast(a);return owns(p);
     }
     private static float forward(LocalPlayer p){return (p.f_108618_.f_108568_?1:0)-(p.f_108618_.f_108569_?1:0);}

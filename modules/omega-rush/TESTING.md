@@ -1,10 +1,14 @@
 # Omega Rush verification
 
-## Omega Form 0.2.0 candidate
+## Omega Form 0.2.1 candidate
 
-The latest combined candidate passed **103 Form assertions plus 114 legacy Rush/compatibility assertions**, for **217 passing checks** in the disposable copied pack. Its SHA-256 is `7D7DAA0AA360A6FCEB6A245F872FA98A160CD3FB24160B59A575B1AEC8F87175`. The native charm equipment, spell-wheel selection, inscription rejection, equipped-item mana cost, free dismissal, cooldown, upkeep, owned absorption, stronger-effect preservation, hover/Rush handoffs, input validation, actual chest generation/reopening, and player-attributed nonduplicated boss drops are exercised.
+The exact combined candidate passed **124 Form assertions plus 114 legacy Rush/compatibility assertions**, for **238 server checks** in the disposable copied pack. SHA-256: `A7E91B1FF3477EEC07DE30FB550F3276E34C5C9E19FCA889D3E0E1F61CB9DF1A`. Seven packager tests also passed, and the archive audit verified 240 preserved payload entries.
 
-The flex animation is built and its native data construction passes, but its visible pose remains unverified. The user approved visuals before that revision. The latest native mana sender needs a live HUD recheck. Body variants, shader/quality combinations, Form latency, and multiple-real-client presentation are next-phase checks; do not treat previous Rush-only results below as proof of them. See [the review checkpoint](../../OMEGA-FORM.md) and local `build/omega-form-final-validation.log`. GitHub publication of 0.2.0 is pending.
+New checks exercise jump press edges and double-tap timing, single-jump normal gravity, both toggle states, uninterrupted upkeep and buffs, stale/wrong-session toggle rejection, short landing protection, hover-to-Rush-to-selected-mode handoffs, and packet round trips. Both spells' native icon resource getters locate PNGs packaged under Iron's correct HUD path. The existing equipment, mana, buffs, loot, cleanup, and combined compatibility cases still pass.
+
+Log: local `build/omega-form-toggle-validation.log`. A first sandboxed server launch could not create Java's localhost selector; the run with approved localhost access completed normally. No desktop control or live-game installation was used for this revision.
+
+Final in-game review of double-tap feel, the HUD/wheel icons, and the revised flex pose is pending. Form latency, body variants, shader/quality combinations and multiple-real-client presentation remain unverified. See [the review checkpoint](../../OMEGA-FORM.md). GitHub publication is pending.
 
 The remaining sections record earlier released Omega Rush development history.
 

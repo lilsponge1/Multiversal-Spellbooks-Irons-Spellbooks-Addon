@@ -62,7 +62,7 @@ The spell does not force a camera mode or enable a spin attack. Flight posture i
 
 Run `build.ps1` from PowerShell. Its parameters point to the existing local Java 17, Forge, Minecraft, and Iron's development runtimes; adjust them for another computer. Extracted assets are already included in the source resources. `tools/extract-assets.py` documents their derivation from the supplied sprite sheet.
 
-The module output is `build/omega-rush-0.2.0.jar`. Assemble it with the root `build-combined.ps1`; users install the combined output. Build parameters also accept matching Minecraft client/server and SRG JAR paths for another development environment.
+The module output is `build/omega-rush-0.2.1.jar`. Assemble it with the root `build-combined.ps1`; users install the combined output. Build parameters also accept matching Minecraft client/server and SRG JAR paths for another development environment.
 
 `build-test.ps1` builds the separate test harness. Run `omega_test` only in a disposable world: the harness creates synthetic players, targets, and test blocks. `omega_latency` and `omega_actor` are development-only commands for local latency and graphics checks.
 

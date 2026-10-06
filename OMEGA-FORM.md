@@ -1,6 +1,6 @@
 # Omega Form and the Flowery Scarf
 
-Omega Rush 0.2.0 adds a reusable Flowery Scarf and a sustained Omega Form transformation to the single Multiversal Spellbooks JAR. The other combined modules retain their existing payloads and versions.
+Omega Rush 0.2.1 adds a reusable Flowery Scarf and a sustained Omega Form transformation to the single Multiversal Spellbooks JAR. The other combined modules retain their existing payloads and versions.
 
 ## Obtain and equip
 
@@ -25,7 +25,7 @@ Select Omega Form in the normal spell wheel and cast it. The 1.5-second charge g
 | Hover speed | Six blocks/second horizontally; four vertically |
 | Cooldown | 120 seconds starting when Form ends |
 
-Jump to take off or rise; sneak to descend; ordinary movement keys steer horizontally. Releasing movement settles into a hover. Walking, riding, swimming, and climbing use their normal movement. Hovering does not change game mode, grant creative flight permissions, or bypass collision. Ordinary spellcasting remains available; incompatible flight controllers are blocked or end Form.
+Flight starts **off**. Double-tap the jump key (normally Space) within seven ticks, approximately 0.35 seconds, to toggle flight on or off. A single tap jumps normally; holding jump does not toggle repeatedly. While flight is on, hold jump to rise, sneak to descend, and use ordinary movement keys horizontally. Releasing movement settles into a hover. Toggling flight off restores normal gravity with short landing protection; the transformation, buffs, and upkeep continue. Riding, swimming, and climbing temporarily use normal movement. Hovering does not change game mode, grant creative flight permissions, or bypass collision. Ordinary spellcasting remains available; incompatible flight controllers are blocked or end Form.
 
 Cast Form again to dismiss it immediately for no additional mana. Removing the scarf, insufficient upkeep mana, death, logout, dimension changes, or clearing the Form status effect also ends it. Remaining Form-owned absorption and modifiers are removed while preserving unrelated effects. The shield does not refill through repeated updates or scarf swapping. Same-dimension teleports reset hover prediction and after-image history rather than ending the transformation.
 
@@ -33,7 +33,7 @@ Cast Form again to dismiss it immediately for no additional mana. Removing the s
 
 Omega Form is required to begin a new Omega Rush by default. Rush keeps its 200-mana cost, normal cooldown, seven-second flight, guided steering, 4.05-block explosion radius, horizontal spread, and approximately six bomb sounds per second. Its scroll recipe remains Legendary Ink + Paper + Poisonous Potato.
 
-Hover yields movement ownership to Rush, which captures Nature power once at launch. If Form runs out or the scarf is removed after launch, the committed Rush finishes with that captured power, while Form's other buffs end. If Form ends during Rush's charge, the charge is cancelled before its mana payment. Rush completion returns to hovering if Form is still active; otherwise normal gravity and the existing first-landing protection apply.
+Hover yields movement ownership to Rush, which captures Nature power once at launch. If Form runs out or the scarf is removed after launch, the committed Rush finishes with that captured power, while Form's other buffs end. If Form ends during Rush's charge, the charge is cancelled before its mana payment. Rush preserves the selected flight toggle: it returns to hovering only when Form remains active and flight was enabled; otherwise normal gravity and the existing first-landing protection apply. Jump taps during committed Rush do not toggle Form flight.
 
 ## Presentation and settings
 
@@ -51,12 +51,10 @@ The disposable harness provides `omega_test` for legacy Rush behavior and `omega
 
 ## Review checkpoint
 
-The locally prepared candidate is `build/release/multiversal-spellbooks-0.3.3-crimson-0.1.1-ignis-0.1.0-omega-0.2.0.jar`, SHA-256 `7D7DAA0AA360A6FCEB6A245F872FA98A160CD3FB24160B59A575B1AEC8F87175`. Its bytes match the `omega-form-e.jar` used by the copied-pack server for **103 Form assertions and 114 Rush/compatibility assertions**, all passing. The native equipped-item cast source, free recast, infinite status duration, late mana loss during charge, and construction of the flex animation are included in these checks.
+The local 0.2.1 candidate is `build/release/multiversal-spellbooks-0.3.3-crimson-0.1.1-ignis-0.1.0-omega-0.2.1.jar`, SHA-256 `A7E91B1FF3477EEC07DE30FB550F3276E34C5C9E19FCA889D3E0E1F61CB9DF1A`. The exact candidate passed **124 Form assertions and 114 Rush/compatibility assertions**, for **238 server checks**, plus seven packager tests. New coverage includes single/held/slow jump presses, double-tap pairs, flight on/off with continuing buffs and upkeep, stale toggle rejection, landing protection, both Rush return modes, toggle packet round trips, and the actual native spell-icon getter resolving both packaged PNGs.
 
-The package audit verifies 239 preserved input payload entries, all four mod IDs, all three Mixin configurations and their classes, Curios dependency, bound-scarf assets and tag, additive loot registration, sound resources, and exclusion of the development harness. Other module source trees were not changed. The original scarf PNG remains unchanged in the item, spell, and status icons.
+The package audit verifies 240 preserved input payload entries, all four mod IDs, all three Mixin configurations and their classes, Curios dependency, scarf assets and tag, additive loot registration, sound resources, and exclusion of the development harness. Form and Rush now have distinct transparent 64×64 textures in Iron's native `textures/gui/spell_icons/` folder. The original scarf item and status-effect icons remain unchanged. See [icon assets and generation prompts](modules/omega-rush/ICON-ASSETS.md). Network protocol **3** requires the same candidate on server and every client.
 
-The user reviewed the prior candidate's visuals and accepted them, then requested the new flex preparation pose. The revised pose has not yet been reviewed in game: computer control was stopped with the physical Escape key. A deprecated mana packet sender was also corrected in the latest candidate. **This candidate is not a published GitHub release.**
+The user accepted the earlier Form presentation. The flex revision, new HUD icons, and actual double-tap feel still need final in-game review. Background verification did not take desktop control. Native mana HUD synchronization, both body types, shaders, after-image quality, latency, and multiple-real-client presentation remain practical review limits; earlier Rush-only results do not prove those Form scenarios. The `omega_form_pose` command is a development-only extended-charge fixture, not the production 30-tick charge.
 
-The next phase needs in-game verification of the revised flex silhouette and its cleanup on activation/interruption, current mana HUD synchronization during upkeep, and local-to-remote presentation. Then check both body types, shader rendering on/off, and after-image quality settings. Dedicated latency and multiple-real-client visual checks remain unverified for Form; the earlier Rush results do not prove those new Form scenarios. The `omega_form_pose` development command can show an extended charge on a synthetic remote player; its 200-tick charge is a render fixture, not the production 30-tick default.
-
-Public release and PR creation remain after that review. Before resuming desktop testing, confirm the user's availability and use only the separate test profile. Production Minecraft profiles and original saves have not been edited by this implementation.
+**This candidate has not been published to GitHub.** Publication and a review request follow final review. Ask before desktop tests and use only the separate test profile. Production profiles and original saves have not been edited.

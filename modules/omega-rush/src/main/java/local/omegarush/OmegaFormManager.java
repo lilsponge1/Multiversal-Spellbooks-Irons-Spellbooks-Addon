@@ -19,10 +19,10 @@ public final class OmegaFormManager {
     public static final class DamageFrame {public final float before;public float nested;public DamageFrame(float before){this.before=before;}}
     static final class State {
         final ServerPlayer p; final long session; final String dimension; final int chargeTicks;
-        boolean active,hover; int age,sequence=-1,inputTick,packets;long receivedTick;
+        boolean active,hover,flightEnabled; int age,sequence=-1,inputTick,packets;long receivedTick,toggleTick=-1;
         float yaw,pitch,forward,strafe,vertical;Vec3 position,velocity=Vec3.f_82478_;OmegaFormBuffs buffs;CastSource source=CastSource.SPELLBOOK;
         State(ServerPlayer p,long s,int c){this.p=p;session=s;chargeTicks=c;dimension=OmegaManager.dimension(p);position=p.m_20182_();yaw=p.m_146908_();}
-        OmegaFormPacket packet(byte phase,boolean reset){return new OmegaFormPacket(p.m_20148_(),p.m_19879_(),dimension,session,tick,phase,hover,age,chargeTicks,sequence,p.m_20182_(),velocity,OmegaConfig.HOVER_SPEED.get()/20,OmegaConfig.HOVER_VERTICAL.get()/20,OmegaGravity.original(p),reset,phase==2&&!STATES.containsKey(p.m_20148_()));}
+        OmegaFormPacket packet(byte phase,boolean reset){return new OmegaFormPacket(p.m_20148_(),p.m_19879_(),dimension,session,tick,phase,hover,flightEnabled,age,chargeTicks,sequence,p.m_20182_(),velocity,OmegaConfig.HOVER_SPEED.get()/20,OmegaConfig.HOVER_VERTICAL.get()/20,OmegaGravity.original(p),reset,phase==2&&!STATES.containsKey(p.m_20148_()));}
     }
     private static final Map<UUID,State> STATES=new HashMap<>();
     private static final Map<UUID,Long> LANDINGS=new HashMap<>();
@@ -69,6 +69,15 @@ public final class OmegaFormManager {
         if(!Float.isFinite(a.yaw())||!Float.isFinite(a.pitch())||!Float.isFinite(a.forward())||!Float.isFinite(a.strafe())||!Float.isFinite(a.vertical())||Math.abs(a.yaw())>1e7||Math.abs(a.pitch())>90||Math.abs(a.forward())>1||Math.abs(a.strafe())>1||Math.abs(a.vertical())>1)return;
         if(s.inputTick!=(int)tick){s.inputTick=(int)tick;s.packets=0;}if(++s.packets>2)return;
         s.sequence=a.sequence();s.receivedTick=tick;s.yaw=a.yaw()%360;s.pitch=a.pitch();s.forward=a.forward();s.strafe=a.strafe();s.vertical=a.vertical();
+        if(a.toggleFlight()&&!OmegaManager.owns(p)&&s.toggleTick!=tick){
+            s.toggleTick=tick;s.flightEnabled=!s.flightEnabled;
+            if(!s.flightEnabled){
+                if(s.hover)LANDINGS.put(p.m_20148_(),tick+100);
+                s.hover=false;OmegaGravity.release(p,"form");
+                s.velocity=Vec3.f_82478_;s.position=p.m_20182_();
+            }
+            send(s,(byte)1,true);
+        }
     }
     @SubscribeEvent public static void tick(TickEvent.ServerTickEvent event){
         if(event.phase!=TickEvent.Phase.END)return;tick++;
@@ -87,8 +96,7 @@ public final class OmegaFormManager {
         s.buffs.tick();s.age++;if(tick%5==0)syncMana(p);
         if(OmegaManager.owns(p)){s.position=p.m_20182_();if(tick%10==0)send(s,(byte)1,false);return;}
         boolean blocked=p.m_20159_()||p.m_20069_()||p.m_20077_()||p.m_6147_()||p.m_5803_()||p.m_5833_();
-        boolean ground=p.m_20096_()||!p.m_9236_().m_45756_(p,p.m_20191_().m_82386_(0,-0.05,0));
-        boolean hover=!blocked&&(!ground||s.vertical>0);
+        boolean hover=s.flightEnabled&&!blocked;
         boolean changed=hover!=s.hover;s.hover=hover;
         if(hover){
             if(tick-s.receivedTick>40){end(p,true);return;}if(tick-s.receivedTick>20){s.forward=s.strafe=s.vertical=0;}

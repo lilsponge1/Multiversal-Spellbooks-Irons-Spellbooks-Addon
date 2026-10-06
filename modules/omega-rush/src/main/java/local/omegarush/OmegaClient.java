@@ -67,6 +67,7 @@ public final class OmegaClient {
     }
     public static boolean sendInput(LocalPlayer player) {
         Flight f=FLIGHTS.get(player.m_20148_()); if(f==null||f.packet.phase()!=OmegaState.FLIGHT) return OmegaFormClient.input(player);
+        OmegaFormClient.input(player); // Reset the tap pair while Rush owns movement.
         int sequence=++f.sequence; float yaw=player.m_146908_(),pitch=Math.max(-90,Math.min(90,player.m_146909_()));
         OmegaNetwork.input(new OmegaInputPacket(f.packet.session(),sequence,yaw,pitch,player.m_6144_()));
         f.prediction.sentInput(sequence,yaw,pitch); return true;

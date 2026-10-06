@@ -5,7 +5,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.*;
 import net.minecraftforge.network.simple.SimpleChannel;
 public final class OmegaNetwork {
-    private static final String VERSION="2";
+    private static final String VERSION="3";
     private static final SimpleChannel CHANNEL=NetworkRegistry.newSimpleChannel(new ResourceLocation(OmegaMod.ID,"flight"),()->VERSION,VERSION::equals,VERSION::equals);
     static void register() {
         CHANNEL.messageBuilder(OmegaInputPacket.class,0,NetworkDirection.PLAY_TO_SERVER).encoder(OmegaInputPacket::encode).decoder(OmegaInputPacket::decode).consumerNetworkThread(OmegaInputPacket::handle).add();

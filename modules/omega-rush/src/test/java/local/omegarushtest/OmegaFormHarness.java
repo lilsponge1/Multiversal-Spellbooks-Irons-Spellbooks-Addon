@@ -54,6 +54,21 @@ public final class OmegaFormHarness {
             OmegaManager.tick(new TickEvent.ServerTickEvent(TickEvent.Phase.END,()->true,p.f_8924_));
         }
     }
+    private void toggle()throws Exception{
+        long session=(long)field(state(),"session");
+        OmegaFormManager.input(p,new OmegaFormInputPacket(session,++sequence,0,0,0,0,0,true));steps(1,0,0);
+    }
+    private void tapCases(){
+        var tap=new OmegaFlightToggle();
+        check("single_press_no_toggle",!tap.update(true,10));
+        check("held_jump_no_toggle",!tap.update(true,11)&&!tap.update(true,12));
+        tap.update(false,13);check("double_press_toggles",tap.update(true,14));
+        tap.update(false,15);check("third_press_starts_new_pair",!tap.update(true,16));
+        tap.update(false,17);check("second_pair_toggles",tap.update(true,20));
+        tap.reset(false);tap.update(true,30);tap.update(false,31);check("slow_pair_does_not_toggle",!tap.update(true,38));
+        tap.reset(true);check("reset_held_jump_ignored",!tap.update(true,39));
+        tap.update(false,40);check("first_press_after_reset_normal",!tap.update(true,41));
+    }
     private void run(ServerLevel level)throws Exception{
         passed=failed=0;level.m_6325_(2,2);level.m_6325_(2,3);level.m_6325_(3,2);
         p=new ServerPlayer(level.m_7654_(),level,new GameProfile(UUID.randomUUID(),"OmegaFormTest"));p.f_8906_=FakePlayerFactory.get(level,new GameProfile(UUID.randomUUID(),"FormConn")).f_8906_;
@@ -65,6 +80,11 @@ public final class OmegaFormHarness {
         try{
             OmegaConfig.REQUIRE_FORM.set(true);
             var spell=ModSpells.OMEGA_FORM.get();var rush=ModSpells.OMEGA_RUSH.get();var magic=MagicData.getPlayerMagicData(p);
+            for(var iconSpell:List.of(spell,rush)){
+                var icon=iconSpell.getSpellIconResource();String path="assets/"+icon.m_135827_()+"/"+icon.m_135815_();
+                try(var stream=OmegaFormHarness.class.getClassLoader().getResourceAsStream(path)){check("native_hud_icon_"+iconSpell.getSpellName(),stream!=null&&Arrays.equals(stream.readNBytes(8),new byte[]{(byte)137,80,78,71,13,10,26,10}));}
+            }
+            tapCases();
             check("default_cost_upkeep_cooldown",spell.getManaCost(1)==200&&OmegaConfig.FORM_UPKEEP.get()==30&&spell.getSpellCooldown()==2400&&spell.getCastTime(1)==30);
             check("form_not_craftable_or_lootable",!spell.allowCrafting()&&!spell.allowLooting()&&spell.getMaxLevel()==1);
             check("no_scarf_no_form",!spell.canBeCastedBy(1,CastSource.SWORD,magic,p).isSuccess());
@@ -90,7 +110,16 @@ public final class OmegaFormHarness {
             float mana=magic.getMana();spell.castSpell(level,1,p,CastSource.SWORD,true);
             check("instant_free_dismissal",!OmegaFormManager.active(p)&&magic.getMana()==mana);check("cooldown_starts_on_end",magic.getPlayerCooldowns().isOnCooldown(spell));
             check("buffs_removed",p.m_6103_()==0&&Math.abs(nature.m_22135_()-1)<0.001&&Math.abs(p.m_21051_(Attributes.f_22281_).m_22135_()-1)<0.001);
-            start();p.m_6853_(false);steps(20,1,1);check("hover_moves_and_ascends",p.m_20189_()>36&&p.m_20186_()>123&&OmegaFormManager.owns(p)&&p.m_20068_());
+            start();p.m_6853_(false);steps(2,1,1);check("single_jump_keeps_normal_gravity",!OmegaFormManager.owns(p)&&!p.m_20068_());
+            float beforeToggle=magic.getMana();toggle();check("toggle_enables_flight",OmegaFormManager.owns(p)&&p.m_20068_());
+            toggle();check("toggle_disables_without_ending_form",!OmegaFormManager.owns(p)&&!p.m_20068_()&&OmegaFormManager.active(p)&&p.m_6103_()==16);
+            check("toggle_keeps_upkeep_no_activation_cost",Math.abs(magic.getMana()-(beforeToggle-3))<0.001);
+            var toggleFall=new LivingFallEvent(p,10,1);OmegaFormManager.fall(toggleFall);check("toggle_off_landing_protection",toggleFall.isCanceled());
+            long toggleSession=(long)field(state(),"session");int toggleAccepted=(int)field(state(),"sequence");
+            OmegaFormManager.input(p,new OmegaFormInputPacket(toggleSession,toggleAccepted,0,0,0,0,0,true));
+            OmegaFormManager.input(p,new OmegaFormInputPacket(toggleSession-1,toggleAccepted+1,0,0,0,0,0,true));
+            check("stale_toggle_cannot_enable_flight",!(boolean)field(state(),"flightEnabled"));
+            toggle();steps(20,1,1);check("hover_moves_and_ascends",p.m_20189_()>36&&p.m_20186_()>123&&OmegaFormManager.owns(p)&&p.m_20068_());
             double altitude=p.m_20186_();steps(10,0,0);check("release_hovers",Math.abs(p.m_20186_()-altitude)<0.01);steps(5,0,-1);check("sneak_descends",p.m_20186_()<altitude-0.9);
             var control=p.m_150110_();check("no_creative_abilities",!control.f_35935_&&!control.f_35936_);
             long session=(long)field(state(),"session");int accepted=(int)field(state(),"sequence");OmegaFormManager.input(p,new OmegaFormInputPacket(session,accepted+1,Float.NaN,0,1,0,1));check("invalid_input_rejected",(int)field(state(),"sequence")==accepted);
@@ -111,11 +140,16 @@ public final class OmegaFormHarness {
             start();var strength=ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation("minecraft","strength"));p.m_7292_(new MobEffectInstance(strength,100,1));steps(1,0,0);check("stronger_strength_wins",Math.abs(p.m_21051_(Attributes.f_22281_).m_22135_()-7)<0.01);
             OmegaFormManager.end(p,false);check("external_strength_preserved",p.m_21023_(strength)&&Math.abs(p.m_21051_(Attributes.f_22281_).m_22135_()-7)<0.01);p.m_21195_(strength);
             start();var resist=ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation("minecraft","resistance"));p.m_7292_(new MobEffectInstance(resist,100,3));var hurt=new LivingHurtEvent(p,rush.getDamageSource(p),10);OmegaFormManager.hurt(hurt);check("stronger_resistance_no_double_reduction",hurt.getAmount()==10);OmegaFormManager.end(p,false);check("external_resistance_preserved",p.m_21023_(resist));p.m_21195_(resist);
-            start();p.m_6853_(false);steps(2,1,1);OmegaFormManager.teleport(p);p.m_6034_(48,125,48);steps(1,0,0);check("teleport_preserves_form_and_resets_hover",OmegaFormManager.active(p)&&p.m_20185_()==48);
+            start();toggle();p.m_6853_(false);steps(2,1,1);OmegaFormManager.teleport(p);p.m_6034_(48,125,48);steps(1,0,0);check("teleport_preserves_form_and_resets_hover",OmegaFormManager.active(p)&&p.m_20185_()==48&&OmegaFormManager.owns(p));
             p.m_21195_(OmegaEffects.FORM.get());steps(1,0,0);check("milk_effect_removal_cleans_form",!OmegaFormManager.active(p)&&!p.m_20068_());
-            start();p.m_6853_(false);steps(2,0,1);check("rush_transition_active",OmegaManager.start(p,1,rush.getSpellPower(1,p)));
+            start();toggle();p.m_6853_(false);steps(2,0,1);check("rush_transition_active",OmegaManager.start(p,1,rush.getSpellPower(1,p)));
             var rs=((Map<?,?>)states.get(null)).get(p.m_20148_());OmegaManager.input(p,new OmegaInputPacket((long)field(rs,"session"),1,0,0,true));steps(1,0,0);
             check("rush_returns_to_hover",OmegaFormManager.active(p)&&OmegaFormManager.owns(p)&&p.m_20068_());OmegaFormManager.end(p,false);check("hover_end_restores_original_gravity",!p.m_20068_());
+            start();check("rush_from_flight_off",OmegaManager.start(p,1,rush.getSpellPower(1,p)));
+            rs=((Map<?,?>)states.get(null)).get(p.m_20148_());
+            OmegaFormManager.input(p,new OmegaFormInputPacket((long)field(state(),"session"),++sequence,0,0,0,0,0,true));check("rush_ignores_hover_toggle",!(boolean)field(state(),"flightEnabled"));
+            OmegaManager.input(p,new OmegaInputPacket((long)field(rs,"session"),1,0,0,true));steps(1,0,0);
+            check("rush_returns_to_flight_off",OmegaFormManager.active(p)&&!OmegaFormManager.owns(p)&&!p.m_20068_());
             start();p.m_6853_(false);steps(1,0,1);OmegaManager.start(p,1,rush.getSpellPower(1,p));magic.setMana(1);steps(1,0,0);
             check("depletion_during_rush_finishes_rush",!OmegaFormManager.active(p)&&OmegaManager.owns(p)&&p.m_20068_());OmegaManager.abort(p);check("depletion_rush_cleanup_gravity",!p.m_20068_());
             start();p.m_6853_(false);steps(1,0,1);OmegaManager.start(p,1,rush.getSpellPower(1,p));equip(false);steps(1,0,0);check("scarf_removed_during_rush_keeps_rush",!OmegaFormManager.active(p)&&OmegaManager.owns(p));OmegaManager.abort(p);
@@ -138,7 +172,11 @@ public final class OmegaFormHarness {
     }
     private void protocolCases()throws Exception{
         var type=OmegaFormInputPacket.class;var encode=type.getDeclaredMethod("encode",type,net.minecraft.network.FriendlyByteBuf.class);var decode=type.getDeclaredMethod("decode",net.minecraft.network.FriendlyByteBuf.class);encode.setAccessible(true);decode.setAccessible(true);
-        var buffer=new net.minecraft.network.FriendlyByteBuf(io.netty.buffer.Unpooled.buffer());try{var original=new OmegaFormInputPacket(7,4,50,20,0.5f,-1,1);encode.invoke(null,original,buffer);check("form_input_32_bytes",buffer.readableBytes()==32);check("form_input_round_trip",original.equals(decode.invoke(null,buffer)));buffer.clear();buffer.writeByte(1);boolean rejected=false;try{decode.invoke(null,buffer);}catch(java.lang.reflect.InvocationTargetException e){rejected=e.getCause() instanceof IllegalArgumentException;}check("malformed_form_input_rejected",rejected);}finally{buffer.release();}
+        var buffer=new net.minecraft.network.FriendlyByteBuf(io.netty.buffer.Unpooled.buffer());try{var original=new OmegaFormInputPacket(7,4,50,20,0.5f,-1,1,true);encode.invoke(null,original,buffer);check("form_input_33_bytes",buffer.readableBytes()==33);check("form_input_round_trip",original.equals(decode.invoke(null,buffer)));buffer.clear();buffer.writeByte(1);boolean rejected=false;try{decode.invoke(null,buffer);}catch(java.lang.reflect.InvocationTargetException e){rejected=e.getCause() instanceof IllegalArgumentException;}check("malformed_form_input_rejected",rejected);}finally{buffer.release();}
+        var packet=new OmegaFormPacket(p.m_20148_(),p.m_19879_(),p.m_9236_().m_46472_().m_135782_().toString(),7,10,(byte)1,true,true,3,30,4,p.m_20182_(),Vec3.f_82478_,0.3,0.2,false,true,false);
+        var stateEncode=OmegaFormPacket.class.getDeclaredMethod("encode",OmegaFormPacket.class,net.minecraft.network.FriendlyByteBuf.class);stateEncode.setAccessible(true);
+        var stateDecode=OmegaFormPacket.class.getDeclaredMethod("decode",net.minecraft.network.FriendlyByteBuf.class);stateDecode.setAccessible(true);
+        var stateBuffer=new net.minecraft.network.FriendlyByteBuf(io.netty.buffer.Unpooled.buffer());try{stateEncode.invoke(null,packet,stateBuffer);check("form_state_toggle_round_trip",packet.equals(stateDecode.invoke(null,stateBuffer)));}finally{stateBuffer.release();}
     }
     private void lootCases(ServerLevel level)throws Exception{
         check("drop_default_rates",OmegaConfig.BOSS_CHANCE.get()==0.05&&OmegaConfig.CHEST_CHANCE.get()==0.002);
