@@ -1,7 +1,9 @@
 MULTIVERSAL SPELLBOOKS COMBINED UPDATE
 
-File: multiversal-spellbooks-0.3.3-crimson-0.1.1-ignis-0.1.0-omega-0.1.0.jar
-SHA-256: 0B698D1635ED84618BFE297CF0AC752A761B163A9DF88DCD866AFF88E4006DBB
+RELEASE: Omega Form 0.2.2 — single combined JAR.
+Download: https://github.com/lilsponge1/Multiversal-Spellbooks-Irons-Spellbooks-Addon/releases/tag/v0.3.3-omega-form-0.2.2
+File: multiversal-spellbooks-0.3.3-crimson-0.1.1-ignis-0.1.0-omega-0.2.2.jar
+SHA-256: 08ACF74C03472305CCD5E7292F19769FD6E6BB6907925F4821F619DEFE225805
 
 1. Stop the server and Minecraft clients. Back up the world and configs.
 2. Remove the previous combined addon JAR and any separate Grand Explosion,
@@ -22,5 +24,15 @@ Do not also install the standalone modules included inside this JAR.
 
 Omega Rush: Legendary Ink + Paper + Poisonous Potato at the Scroll Forge.
 Operator scroll command: /createScroll irons_omega_rush:omega_rush 1
+Omega Form now requires the Flowery Scarf in a functional charm slot.
+Scarf test item: /give @s irons_omega_rush:flowery_scarf
+Select Omega Form in the spell wheel; cast again to dismiss it for free.
+Double-tap Space to toggle flight. Hold Space to rise and sneak to descend.
+A single jump stays normal; turning flight off keeps Form buffs and upkeep.
+Activation: 200 mana. Upkeep: 30 mana/second. Rush still costs 200 mana.
+Rush has a 10-second cooldown in Form, with normal equipment reductions.
+Form flight uses the arms-forward Rush pose; hover movement is unchanged.
+Server key: omegaRush.omegaFormCooldownSeconds = 10 (added automatically).
+Omega network protocol 3 requires the same release on server and clients.
 Existing Omega Rush configs retain their values. Set damageRadius = 4.05 in
 the world's serverconfig/irons_omega_rush-server.toml for the wider damage area.

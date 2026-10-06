@@ -1,5 +1,17 @@
 # Omega Rush verification
 
+## Omega Form 0.2.2 release
+
+The exact combined artifact passed **135 Form assertions plus 114 legacy Rush/compatibility assertions**, for **249 server checks** in the disposable copied pack. SHA-256: `08ACF74C03472305CCD5E7292F19769FD6E6BB6907925F4821F619DEFE225805`. The archive audit verified 240 preserved payload entries. Packager code is unchanged and its seven unit tests passed in the preceding revision.
+
+The new native cast check verifies 200 mana charged once and a 200-tick Rush cooldown during Form. Other cases cover normal outside-Form cooldown, equipment reduction, unchanged Form cooldown, configurable transformed cooldown, zero native cooldown, and no cooldown rewrite when Form ends. Native pose-resource decoding and the full existing movement, equipment, buffs, loot and compatibility cases pass.
+
+The first added zero-cooldown assertion assumed Iron's removed its entry immediately. Its native code stores a zero-duration entry until its next cooldown tick; the fixture was corrected to inspect the duration. Production code was unchanged by that correction. Final log: `build/omega-form-flight-pose-validation.log`.
+
+The user accepted 0.2.1 in game. Form now uses the unchanged Rush pose resource during enabled hover and shares its layer with Rush. The new hover presentation still needs visual review; background checks do not verify how it looks on a real client. No desktop control was used. Publication was authorized by the user on October 6, 2026. See [release verification](../../OMEGA-FORM.md).
+
+The remaining sections record earlier released Omega Rush development history.
+
 Validation date: October 5, 2026. All worlds and graphics profiles used here are disposable workspace copies. The live pack, Thundercrash source, Multiversal source/distribution, and GitHub were not modified.
 
 Subsequent repository integration packages this completed module in the single Multiversal Spellbooks JAR. The combined release passed 114 copied-pack server assertions. The exact-health fixture now suppresses Apothic Attributes critical chance only on its synthetic caster and verifies the recorded hit count, preserving production critical hits. See [combined integration validation](../../OMEGA-INTEGRATION.md). The standalone development history below describes earlier work before the authorized GitHub integration.

@@ -31,7 +31,7 @@ public final class OmegaHarness {
     private final List<Entity> spawned=new ArrayList<>();
     private ServerPlayer actor;
     private int poseTicks,posePulse;
-    public OmegaHarness() { MinecraftForge.EVENT_BUS.addListener(this::commands); MinecraftForge.EVENT_BUS.addListener(this::poseTick); new OmegaNetworkHarness(); }
+    public OmegaHarness() { MinecraftForge.EVENT_BUS.addListener(this::commands); MinecraftForge.EVENT_BUS.addListener(this::poseTick); new OmegaNetworkHarness();new OmegaFormHarness(); }
     private void poseTick(TickEvent.ServerTickEvent event) {
         if(event.phase!=TickEvent.Phase.END||poseTicks--<=0||actor==null||!OmegaManager.owns(actor)||poseTicks%3!=0) return;
         try {
@@ -99,6 +99,7 @@ public final class OmegaHarness {
     private void reset(ServerPlayer p) { OmegaManager.abort(p); p.m_6034_(0,120,0); p.m_146922_(0); p.m_146926_(0); p.m_20242_(false); }
     private void run(ServerLevel level) throws Exception {
         passed=0;
+        boolean requireForm=OmegaConfig.REQUIRE_FORM.get();OmegaConfig.REQUIRE_FORM.set(false);
         for(int x=-4;x<=9;x++) for(int z=-4;z<=9;z++) level.m_6325_(x,z);
         io.redspace.ironsspellbooks.api.config.SpellConfigManager.onDatapackSync(new OnDatapackSyncEvent(level.m_7654_().m_6846_(),null));
         ServerPlayer p=player(level,"OmegaTest",0,0);
@@ -114,6 +115,7 @@ public final class OmegaHarness {
             mathCases(); resourceCases(); forgeCases(level,p,spell); movementCases(level,p); lifecycleCases(level,p); extraCases(level,p); damageCases(level,p); paidCast(level,p,spell); coexistenceCases(level,p);
             System.out.println("OMEGA_TEST_COMPLETE assertions="+passed);
         } finally {
+            OmegaConfig.REQUIRE_FORM.set(requireForm);
             for(Entity entity:spawned) { if(entity instanceof ServerPlayer player) OmegaManager.abort(player); entity.m_146870_(); }
             spawned.clear();
             for(int x=-3;x<=3;x++) for(int y=119;y<=124;y++) place(level,x,y,6,false);

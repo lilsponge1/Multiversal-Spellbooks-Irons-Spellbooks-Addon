@@ -20,7 +20,7 @@ final class OmegaState {
     OmegaState(ServerPlayer p,long session,float damage,int chargeTicks) {
         player=p; this.session=session; this.damage=Math.max(0,Math.min(10000,damage));
         this.chargeTicks=Math.max(1,chargeTicks); duration=OmegaConfig.DURATION.get();
-        dimension=OmegaManager.dimension(p); originalGravity=p.m_20068_();
+        dimension=OmegaManager.dimension(p); originalGravity=OmegaGravity.original(p);
         position=previous=p.m_20182_(); yaw=p.m_146908_(); pitch=p.m_146909_();
         speed=OmegaConfig.SPEED.get(); steering=OmegaConfig.STEERING.get();
         radius=OmegaConfig.RADIUS.get(); spacing=OmegaConfig.SPACING.get();

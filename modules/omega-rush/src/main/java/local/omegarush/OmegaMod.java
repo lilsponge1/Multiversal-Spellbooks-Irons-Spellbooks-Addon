@@ -16,9 +16,14 @@ public final class OmegaMod {
         ModSpells.SPELLS.register(bus);
         OmegaParticles.TYPES.register(bus);
         OmegaSounds.SOUNDS.register(bus);
+        OmegaItems.ITEMS.register(bus);
+        OmegaEffects.EFFECTS.register(bus);
+        OmegaLoot.SERIALIZERS.register(bus);
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, OmegaConfig.SERVER);
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, OmegaConfig.CLIENT);
         MinecraftForge.EVENT_BUS.register(OmegaManager.class);
+        MinecraftForge.EVENT_BUS.register(OmegaFormManager.class);
+        MinecraftForge.EVENT_BUS.register(OmegaLoot.class);
         OmegaNetwork.register();
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
             OmegaClient.register();
