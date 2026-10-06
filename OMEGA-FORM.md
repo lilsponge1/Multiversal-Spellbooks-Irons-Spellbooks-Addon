@@ -51,9 +51,9 @@ Build the Omega module independently, then assemble it with the root packager. W
 
 The disposable harness provides `omega_test` for legacy Rush behavior and `omega_form_test` for equipment, casting, buffs, hover transitions, networking validation, and actual loot generation. Never install `omega-rush-test.jar` on the production server or clients.
 
-## Review checkpoint
+## Release verification
 
-The local 0.2.2 candidate is `build/release/multiversal-spellbooks-0.3.3-crimson-0.1.1-ignis-0.1.0-omega-0.2.2.jar`, SHA-256 `08ACF74C03472305CCD5E7292F19769FD6E6BB6907925F4821F619DEFE225805`. The exact artifact passed **135 Form assertions plus 114 Rush/compatibility assertions**, for **249 server checks**. The added cases exercise a native paid Rush with a 200-tick cooldown in Form, the unchanged cooldown outside Form, native cooldown reduction, unchanged Form cooldown, configurable transformed cooldown, zero base cooldown, and preservation of an already committed cooldown when Form ends. Existing mana, equipment, movement, double-tap, loot, cleanup, and pose-resource checks pass.
+The 0.2.2 release artifact is `build/release/multiversal-spellbooks-0.3.3-crimson-0.1.1-ignis-0.1.0-omega-0.2.2.jar`, SHA-256 `08ACF74C03472305CCD5E7292F19769FD6E6BB6907925F4821F619DEFE225805`. The exact artifact passed **135 Form assertions plus 114 Rush/compatibility assertions**, for **249 server checks**. The added cases exercise a native paid Rush with a 200-tick cooldown in Form, the unchanged cooldown outside Form, native cooldown reduction, unchanged Form cooldown, configurable transformed cooldown, zero base cooldown, and preservation of an already committed cooldown when Form ends. Existing mana, equipment, movement, double-tap, loot, cleanup, and pose-resource checks pass.
 
 The archive audit confirms 240 preserved input payload entries, four mod IDs, three Mixin configurations, unchanged other module payloads, correct HUD icon paths, sound assets, and exclusion of development code. Packager code is unchanged; its seven unit checks passed in the preceding revision.
 
@@ -61,4 +61,4 @@ The user reviewed 0.2.1 and reported that it works perfectly. The new Form fligh
 
 The same JAR should be installed on the server and clients. Network protocol remains 3 because packet layouts did not change. The new server setting is automatically added without changing existing normal cooldown settings.
 
-**GitHub publication is pending final review.** Ask before desktop tests and use only the separate test profile. Production profiles and original saves have not been edited.
+The user authorized publication of this artifact on October 6, 2026. [GitHub release](https://github.com/lilsponge1/Multiversal-Spellbooks-Irons-Spellbooks-Addon/releases/tag/v0.3.3-omega-form-0.2.2). The new hover-pose visual check remains a recorded validation limit. Ask before desktop tests and use only the separate test profile. Production profiles and original saves have not been edited.

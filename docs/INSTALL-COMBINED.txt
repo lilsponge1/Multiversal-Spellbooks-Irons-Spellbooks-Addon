@@ -1,6 +1,7 @@
 MULTIVERSAL SPELLBOOKS COMBINED UPDATE
 
-LOCAL CANDIDATE: final Form flying-pose review is pending; not yet published.
+RELEASE: Omega Form 0.2.2 — single combined JAR.
+Download: https://github.com/lilsponge1/Multiversal-Spellbooks-Irons-Spellbooks-Addon/releases/tag/v0.3.3-omega-form-0.2.2
 File: multiversal-spellbooks-0.3.3-crimson-0.1.1-ignis-0.1.0-omega-0.2.2.jar
 SHA-256: 08ACF74C03472305CCD5E7292F19769FD6E6BB6907925F4821F619DEFE225805
 
@@ -32,6 +33,6 @@ Activation: 200 mana. Upkeep: 30 mana/second. Rush still costs 200 mana.
 Rush has a 10-second cooldown in Form, with normal equipment reductions.
 Form flight uses the arms-forward Rush pose; hover movement is unchanged.
 Server key: omegaRush.omegaFormCooldownSeconds = 10 (added automatically).
-Omega network protocol 3 requires the same candidate on server and clients.
+Omega network protocol 3 requires the same release on server and clients.
 Existing Omega Rush configs retain their values. Set damageRadius = 4.05 in
 the world's serverconfig/irons_omega_rush-server.toml for the wider damage area.

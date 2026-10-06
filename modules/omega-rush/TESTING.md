@@ -1,6 +1,6 @@
 # Omega Rush verification
 
-## Omega Form 0.2.2 candidate
+## Omega Form 0.2.2 release
 
 The exact combined artifact passed **135 Form assertions plus 114 legacy Rush/compatibility assertions**, for **249 server checks** in the disposable copied pack. SHA-256: `08ACF74C03472305CCD5E7292F19769FD6E6BB6907925F4821F619DEFE225805`. The archive audit verified 240 preserved payload entries. Packager code is unchanged and its seven unit tests passed in the preceding revision.
 
@@ -8,7 +8,7 @@ The new native cast check verifies 200 mana charged once and a 200-tick Rush coo
 
 The first added zero-cooldown assertion assumed Iron's removed its entry immediately. Its native code stores a zero-duration entry until its next cooldown tick; the fixture was corrected to inspect the duration. Production code was unchanged by that correction. Final log: `build/omega-form-flight-pose-validation.log`.
 
-The user accepted 0.2.1 in game. Form now uses the unchanged Rush pose resource during enabled hover and shares its layer with Rush. The new hover presentation still needs visual review; background checks do not verify how it looks on a real client. No desktop control was used. GitHub publication remains pending. See [the review checkpoint](../../OMEGA-FORM.md).
+The user accepted 0.2.1 in game. Form now uses the unchanged Rush pose resource during enabled hover and shares its layer with Rush. The new hover presentation still needs visual review; background checks do not verify how it looks on a real client. No desktop control was used. Publication was authorized by the user on October 6, 2026. See [release verification](../../OMEGA-FORM.md).
 
 The remaining sections record earlier released Omega Rush development history.
 

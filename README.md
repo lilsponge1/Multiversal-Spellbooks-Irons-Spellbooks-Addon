@@ -17,11 +17,11 @@ See [Omega Form and its review checkpoint](OMEGA-FORM.md), [earlier release note
 
 ## Install
 
-Omega Form 0.2.2 is currently a local candidate awaiting the final Form flying-pose review. Its combined artifact is prepared under `build/release/`; this update has not yet been published to GitHub. The earlier Omega Rush release remains available separately on GitHub.
+Download [Omega Form 0.2.2 — single combined JAR](https://github.com/lilsponge1/Multiversal-Spellbooks-Irons-Spellbooks-Addon/releases/tag/v0.3.3-omega-form-0.2.2). See [release notes](RELEASE-OMEGA-FORM.md) for the Flowery Scarf, double-tap flight, Form flying pose, and 10-second transformed Rush cooldown.
 
 `multiversal-spellbooks-0.3.3-crimson-0.1.1-ignis-0.1.0-omega-0.2.2.jar`
 
-Candidate SHA-256: `08ACF74C03472305CCD5E7292F19769FD6E6BB6907925F4821F619DEFE225805`
+Release SHA-256: `08ACF74C03472305CCD5E7292F19769FD6E6BB6907925F4821F619DEFE225805`
 
 Stop Minecraft and the server, back up the world/configs, and replace the older addon JAR with this **same file on the server and every client**. Remove separate Grand Explosion, Crimson Susanoo, Ignis compatibility, and Omega Rush JARs if present; their contents are already included. Keep normal modpack dependencies beside it. This build requires Travel Optics 6.3.0+ and Cataclysm: Spellbooks 1.2.9 (below 1.3), in addition to the existing Iron's/Cataclysm/GeckoLib dependencies. Testing used Forge 47.4.10 and Iron's Spells 3.16.3. Omit diagnostic JVM flags in normal play.
 

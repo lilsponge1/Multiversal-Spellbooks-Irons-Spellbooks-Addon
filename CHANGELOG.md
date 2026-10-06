@@ -1,5 +1,17 @@
 # Changelog
 
+## Omega Rush / Omega Form 0.2.2
+
+- Omega Rush has a 10-second base cooldown during Form, retaining Iron's equipment reductions and native cooldown synchronization. Added `omegaRush.omegaFormCooldownSeconds`; the normal outside-Form cooldown stays unchanged.
+- Enabled Form hover now uses Rush's horizontal, arms-forward pose without changing hover movement. Shared animation cleanup preserves a pose still needed by either controller.
+- The exact combined JAR passed 135 Form and 114 Rush/compatibility assertions. Published as one combined release artifact with a checksum and installation notes.
+
+## Omega Rush / Omega Form 0.2.1
+
+- Replaced automatic takeoff with a quick double-tap jump toggle, keeping normal single jumps and the selected mode across Rush handoffs.
+- Added flower and rainbow explosion HUD icons at Iron's native spell-icon resource paths.
+- Updated the Omega network to protocol 3. The user reviewed the revision in game and accepted it.
+
 ## Omega Rush 0.2.0: Omega Form and the Flowery Scarf
 
 - Added a visible charm-slot scarf with a locked, equipment-only Omega Form spell. Rare player-attributed boss drops are 5%; generated chest loot is 0.2%, without extra nested or co-op rolls.
