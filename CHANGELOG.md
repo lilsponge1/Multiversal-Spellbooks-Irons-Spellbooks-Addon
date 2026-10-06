@@ -1,5 +1,14 @@
 # Changelog
 
+## Omega Rush 0.2.0: Omega Form and the Flowery Scarf
+
+- Added a visible charm-slot scarf with a locked, equipment-only Omega Form spell. Rare player-attributed boss drops are 5%; generated chest loot is 0.2%, without extra nested or co-op rolls.
+- Added 200-mana activation, 30-mana-per-second sustain, native free dismissal, and a 120-second cooldown on ending.
+- Added automatic hover, one-time eight-heart absorption, Resistance III/Strength I equivalents that preserve stronger effects, and a 25% Nature attribute bonus.
+- Added shared hover/Rush gravity ownership, a configurable Form prerequisite, safe continuation of committed Rush after Form expiry, rainbow body/hand tint, and bounded posed-mesh after-images.
+- Replaced crossed-hands preparation with a bent-elbow power-up flex. Existing sound files remain unchanged.
+- Updated the Omega network to protocol 2 and kept the single-JAR distribution.
+
 ## Combined Omega Rush update
 
 - Added Omega Rush 0.1.0 to the existing combined JAR, preserving Grand Explosion, Thundercrash, Thunderstar, Crimson Susanoo, and Ignis compatibility payloads.

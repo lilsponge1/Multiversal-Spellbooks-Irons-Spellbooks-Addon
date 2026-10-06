@@ -10,6 +10,14 @@ public final class OmegaAnimations {
     private static final ResourceLocation ID=new ResourceLocation(OmegaMod.ID,"omega_rush_flight");
     private static final Map<UUID,ModifierLayer<KeyframeAnimationPlayer>> LAYERS=new HashMap<>();
     private static final Map<UUID,AbstractClientPlayer> PLAYERS=new HashMap<>();
+    private static final Map<UUID,ModifierLayer<KeyframeAnimationPlayer>> CHARGES=new HashMap<>();
+    private static final Map<UUID,AbstractClientPlayer> CHARGE_PLAYERS=new HashMap<>();
+    static void charge(AbstractClientPlayer p,int duration){
+        if(CHARGES.containsKey(p.m_20148_()))return;var layer=new ModifierLayer<KeyframeAnimationPlayer>();
+        layer.setAnimation(new KeyframeAnimationPlayer(OmegaChargeAnimation.create(duration)));
+        PlayerAnimationAccess.getPlayerAnimLayer(p).addAnimLayer(2600,layer);CHARGES.put(p.m_20148_(),layer);CHARGE_PLAYERS.put(p.m_20148_(),p);
+    }
+    static void stopCharge(UUID id){var layer=CHARGES.remove(id);var p=CHARGE_PLAYERS.remove(id);if(layer!=null){layer.setAnimation(null);if(p!=null)PlayerAnimationAccess.getPlayerAnimLayer(p).removeLayer(layer);}}
     static void start(AbstractClientPlayer player) {
         if(LAYERS.containsKey(player.m_20148_())) return;
         var data=PlayerAnimationRegistry.getAnimation(ID); if(data==null) return;
@@ -22,6 +30,6 @@ public final class OmegaAnimations {
         var layer=LAYERS.remove(id); var player=PLAYERS.remove(id);
         if(layer!=null) { layer.setAnimation(null); if(player!=null) PlayerAnimationAccess.getPlayerAnimLayer(player).removeLayer(layer); }
     }
-    static void clear() { for(UUID id:new ArrayList<>(LAYERS.keySet())) stop(id); }
+    static void clear() { for(UUID id:new ArrayList<>(LAYERS.keySet())) stop(id);for(UUID id:new ArrayList<>(CHARGES.keySet()))stopCharge(id); }
     private OmegaAnimations() {}
 }

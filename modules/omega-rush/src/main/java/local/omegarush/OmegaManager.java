@@ -34,6 +34,7 @@ public final class OmegaManager {
     }
     public static boolean owns(Entity e) { OmegaState s=STATES.get(e.m_20148_()); return s!=null&&!s.terminal&&s.phase==OmegaState.FLIGHT; }
     public static boolean eligible(ServerPlayer p) {
+        if(OmegaConfig.REQUIRE_FORM.get()&&!OmegaFormManager.active(p))return false;
         return !STATES.containsKey(p.m_20148_())&&p.m_6084_()&&!p.m_5833_()&&!p.m_20159_()&&!p.m_5803_()&&!p.m_21255_()
             &&!p.m_20069_()&&!p.m_20077_()&&!p.m_21209_()&&!p.m_21023_(MobEffectRegistry.ASCENSION.get())
             &&!p.getPersistentData().m_128441_("irons_ultimate_explosion.thundercrash.originalGravity");
@@ -43,12 +44,13 @@ public final class OmegaManager {
         OmegaState s=new OmegaState(p,nextSession++,0,duration); STATES.put(p.m_20148_(),s); broadcast(s,false);
     }
     public static boolean start(ServerPlayer p,int rank,float power) {
+        if(OmegaConfig.REQUIRE_FORM.get()&&!OmegaFormManager.active(p))return false;
         OmegaState old=STATES.get(p.m_20148_());
         if(old!=null&&old.phase!=OmegaState.CHARGE||old==null&&!eligible(p)) return false;
         if(!p.m_6084_()||p.m_5833_()||p.m_20159_()||p.m_5803_()||p.m_21255_()||p.m_20069_()||p.m_20077_()) { abort(p); return false; }
         OmegaState s=new OmegaState(p,old==null?nextSession++:old.session,power,old==null?OmegaConfig.CHARGE.get():old.chargeTicks);
         s.phase=OmegaState.FLIGHT;
-        p.getPersistentData().m_128379_(RECOVERY,s.originalGravity); p.m_20242_(true); p.m_183634_();
+        p.getPersistentData().m_128379_(RECOVERY,s.originalGravity); OmegaGravity.acquire(p,"rush");OmegaFormManager.pauseForRush(p); p.m_183634_();
         STATES.put(p.m_20148_(),s); TRAILS.put(s.session,new Trail(s)); LANDINGS.remove(p.m_20148_()); broadcast(s,false); return true;
     }
     public static void input(ServerPlayer p,OmegaInputPacket packet) {
@@ -126,7 +128,8 @@ public final class OmegaManager {
         if(s.terminal) return; s.terminal=true; STATES.remove(s.player.m_20148_(),s);
         ServerPlayer p=s.player; boolean flying=s.phase==OmegaState.FLIGHT; s.phase=OmegaState.END;
         if(flying) {
-            p.m_20242_(s.originalGravity); p.getPersistentData().m_128473_(RECOVERY); p.m_20256_(Vec3.f_82478_); p.m_183634_();
+            OmegaGravity.release(p,"rush"); p.getPersistentData().m_128473_(RECOVERY); p.m_20256_(Vec3.f_82478_); p.m_183634_();
+            OmegaFormManager.resumeAfterRush(p);
             if(protect&&p.m_6084_()) LANDINGS.put(p.m_20148_(),new Landing(dimension(p),tick+100));
         }
         if(clearTrail) clearTrails(p);
@@ -170,7 +173,7 @@ public final class OmegaManager {
         }
     }
     @SubscribeEvent public static void grounded(TickEvent.PlayerTickEvent e) { if(e.phase==TickEvent.Phase.END&&e.player instanceof ServerPlayer p&&!owns(p)&&p.m_20096_()) LANDINGS.remove(p.m_20148_()); }
-    @SubscribeEvent public static void otherCast(SpellPreCastEvent e) { if(owns(e.getEntity())) e.setCanceled(true); }
+    @SubscribeEvent public static void otherCast(SpellPreCastEvent e) { if(owns(e.getEntity())&&!(e.getSpellId().equals(ModSpells.OMEGA_FORM.get().getSpellId())&&OmegaFormManager.active(e.getEntity()))) e.setCanceled(true); }
     @SubscribeEvent public static void stopping(ServerStoppingEvent e) { for(OmegaState s:new ArrayList<>(STATES.values())) finish(s,false,true); TRAILS.clear(); LANDINGS.clear(); }
     private OmegaManager() {}
 }

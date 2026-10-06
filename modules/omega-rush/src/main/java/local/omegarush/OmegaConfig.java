@@ -10,6 +10,10 @@ public final class OmegaConfig {
     public static final ForgeConfigSpec.BooleanValue PVP, OVERLAY, FLASH;
     public static final ForgeConfigSpec.EnumValue<Quality> QUALITY;
     public static final ForgeConfigSpec.DoubleValue VOLUME;
+    public static final ForgeConfigSpec.IntValue FORM_MANA,FORM_CHARGE,FORM_COOLDOWN,FORM_RESISTANCE,FORM_STRENGTH,FORM_HEARTS;
+    public static final ForgeConfigSpec.DoubleValue FORM_UPKEEP,HOVER_SPEED,HOVER_VERTICAL,NATURE_BONUS,BOSS_CHANCE,CHEST_CHANCE;
+    public static final ForgeConfigSpec.BooleanValue REQUIRE_FORM,AFTERIMAGES;
+    public static final ForgeConfigSpec.ConfigValue<java.util.List<? extends String>> SCARF_BOSSES;
     static {
         var b = new ForgeConfigSpec.Builder();
         b.push("omegaRush");
@@ -24,12 +28,29 @@ public final class OmegaConfig {
         BASE_POWER = b.defineInRange("baseSpellPower",12,1,1000);
         POWER_PER_LEVEL = b.defineInRange("spellPowerPerLevel",3,0,1000);
         PVP = b.comment("Also respects server PvP, team rules and protection events.").define("pvpDamage",true);
+        REQUIRE_FORM=b.define("requireOmegaForm",true);
+        b.pop(); b.push("omegaForm");
+        FORM_MANA=b.defineInRange("manaCost",200,0,10000);
+        FORM_CHARGE=b.defineInRange("chargeTicks",30,1,200);
+        FORM_COOLDOWN=b.defineInRange("cooldownSeconds",120,0,3600);
+        FORM_UPKEEP=b.defineInRange("manaPerSecond",30.0,0.0,1000.0);
+        HOVER_SPEED=b.defineInRange("horizontalBlocksPerSecond",6.0,0.1,20.0);
+        HOVER_VERTICAL=b.defineInRange("verticalBlocksPerSecond",4.0,0.1,12.0);
+        FORM_RESISTANCE=b.defineInRange("resistanceLevel",3,0,4);
+        FORM_STRENGTH=b.defineInRange("strengthLevel",1,0,5);
+        FORM_HEARTS=b.defineInRange("absorptionHearts",8,0,40);
+        NATURE_BONUS=b.defineInRange("naturePowerBonus",0.25,0.0,5.0);
+        b.pop(); b.push("floweryScarf");
+        BOSS_CHANCE=b.defineInRange("bossDropChance",0.05,0.0,1.0);
+        CHEST_CHANCE=b.defineInRange("chestDropChance",0.002,0.0,1.0);
+        SCARF_BOSSES=b.defineListAllowEmpty("bosses",java.util.List.of("irons_spellbooks:dead_king","irons_spellbooks:fire_boss","cataclysm:ender_guardian","cataclysm:the_harbinger","cataclysm:the_leviathan","cataclysm:ancient_remnant","cataclysm:maledictus","cataclysm:scylla"),v->v instanceof String s&&net.minecraft.resources.ResourceLocation.m_135820_(s)!=null);
         b.pop(); SERVER = b.build();
         b = new ForgeConfigSpec.Builder(); b.push("presentation");
         QUALITY = b.defineEnum("particleQuality",Quality.FULL);
         OVERLAY = b.define("rainbowPlayerOverlay",true);
         FLASH = b.comment("Disable bright white burst accents; colored rings remain.").define("brightFlashes",true);
         VOLUME = b.defineInRange("soundVolume",0.7,0.0,2.0);
+        AFTERIMAGES=b.define("afterImages",true);
         b.pop(); CLIENT = b.build();
     }
     private OmegaConfig() {}

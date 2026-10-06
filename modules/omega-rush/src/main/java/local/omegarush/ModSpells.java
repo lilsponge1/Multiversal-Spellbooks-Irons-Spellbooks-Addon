@@ -5,5 +5,6 @@ import net.minecraftforge.registries.*;
 public final class ModSpells {
     public static final DeferredRegister<AbstractSpell> SPELLS = DeferredRegister.create(SpellRegistry.SPELL_REGISTRY_KEY,OmegaMod.ID);
     public static final RegistryObject<AbstractSpell> OMEGA_RUSH = SPELLS.register("omega_rush",OmegaSpell::new);
+    public static final RegistryObject<AbstractSpell> OMEGA_FORM = SPELLS.register("omega_form",OmegaFormSpell::new);
     private ModSpells() {}
 }

@@ -1,5 +1,13 @@
 # Omega Rush verification
 
+## Omega Form 0.2.0 candidate
+
+The latest combined candidate passed **103 Form assertions plus 114 legacy Rush/compatibility assertions**, for **217 passing checks** in the disposable copied pack. Its SHA-256 is `7D7DAA0AA360A6FCEB6A245F872FA98A160CD3FB24160B59A575B1AEC8F87175`. The native charm equipment, spell-wheel selection, inscription rejection, equipped-item mana cost, free dismissal, cooldown, upkeep, owned absorption, stronger-effect preservation, hover/Rush handoffs, input validation, actual chest generation/reopening, and player-attributed nonduplicated boss drops are exercised.
+
+The flex animation is built and its native data construction passes, but its visible pose remains unverified. The user approved visuals before that revision. The latest native mana sender needs a live HUD recheck. Body variants, shader/quality combinations, Form latency, and multiple-real-client presentation are next-phase checks; do not treat previous Rush-only results below as proof of them. See [the review checkpoint](../../OMEGA-FORM.md) and local `build/omega-form-final-validation.log`. GitHub publication of 0.2.0 is pending.
+
+The remaining sections record earlier released Omega Rush development history.
+
 Validation date: October 5, 2026. All worlds and graphics profiles used here are disposable workspace copies. The live pack, Thundercrash source, Multiversal source/distribution, and GitHub were not modified.
 
 Subsequent repository integration packages this completed module in the single Multiversal Spellbooks JAR. The combined release passed 114 copied-pack server assertions. The exact-health fixture now suppresses Apothic Attributes critical chance only on its synthetic caster and verifies the recorded hit count, preserving production critical hits. See [combined integration validation](../../OMEGA-INTEGRATION.md). The standalone development history below describes earlier work before the authorized GitHub integration.

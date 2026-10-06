@@ -63,6 +63,14 @@ public final class OmegaVisuals {
         Vec3 center=entity.m_20191_().m_82399_();
         frame(entity.m_20148_(),OmegaClient.FLIGHTS.get(entity.m_20148_()).packet.session(),center,1.2,0.13,OmegaConfig.FLASH.get(),1);
     }
+    public static void formPulse(ClientLevel l,LivingEntity e,long session){beginTick();frame(e.m_20148_(),session,e.m_20191_().m_82399_(),2.0,session*0.13,OmegaConfig.FLASH.get(),1);}
+    public static void form(ClientLevel l,LivingEntity e,long session,int age,int charge,boolean active){
+        if(e.m_20182_().m_82554_(Minecraft.m_91087_().f_91074_.m_20182_())>48)return;
+        Vec3 center=e.m_20191_().m_82399_();double radius=active?0.7:2.5*(1-Math.min(1,age/(double)Math.max(1,charge)))+0.3;
+        int n=OmegaConfig.QUALITY.get()==OmegaConfig.Quality.FULL?6:2;
+        for(int i=0;i<n;i++){double angle=age*0.16+i*Math.PI*2/n;Vec3 point=center.m_82520_(Math.cos(angle)*radius,Math.sin(angle*1.2)*radius*0.55,Math.sin(angle)*radius);
+            dust(l,point,active?new Vec3(0,0.02,0):center.m_82546_(point).m_82490_(0.14),i/(double)n+age/45.0,active?0.65f:0.9f);}
+    }
     public static void burst(ClientLevel l,OmegaBurstPacket p) {
         beginTick();
         if(p.position().m_82554_(Minecraft.m_91087_().f_91074_.m_20182_())>96) return;

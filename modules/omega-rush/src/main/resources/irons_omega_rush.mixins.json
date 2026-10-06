@@ -1,1 +1,1 @@
-{"required":true,"minVersion":"0.8","package":"local.omegarush.mixin","compatibilityLevel":"JAVA_17","mixins":["OmegaTravelMixin","OmegaConnectionMixin"],"client":["OmegaLocalPlayerMixin"],"injectors":{"defaultRequire":1}}
+{"required":true,"minVersion":"0.8","package":"local.omegarush.mixin","compatibilityLevel":"JAVA_17","mixins":["OmegaTravelMixin","OmegaConnectionMixin","OmegaAbsorptionMixin"],"client":["OmegaLocalPlayerMixin","OmegaArmMixin"],"injectors":{"defaultRequire":1}}

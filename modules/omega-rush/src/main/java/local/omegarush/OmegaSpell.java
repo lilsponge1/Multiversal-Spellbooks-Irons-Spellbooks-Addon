@@ -49,6 +49,10 @@ public final class OmegaSpell extends AbstractSpell {
         if(caster instanceof ServerPlayer p) OmegaManager.start(p,rank,getSpellPower(rank,caster));
         super.onCast(level,rank,caster,source,data);
     }
+    @Override public void castSpell(Level level,int rank,ServerPlayer p,CastSource source,boolean cooldown){
+        if(OmegaConfig.REQUIRE_FORM.get()&&!OmegaFormManager.active(p)){OmegaManager.cancelCharge(p);return;}
+        super.castSpell(level,rank,p,source,cooldown);
+    }
     @Override public void onServerCastComplete(Level level,int rank,LivingEntity caster,MagicData data,boolean interrupted) {
         if(interrupted&&caster instanceof ServerPlayer p) OmegaManager.cancelCharge(p);
         super.onServerCastComplete(level,rank,caster,data,interrupted);

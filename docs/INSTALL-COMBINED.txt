@@ -1,7 +1,8 @@
 MULTIVERSAL SPELLBOOKS COMBINED UPDATE
 
-File: multiversal-spellbooks-0.3.3-crimson-0.1.1-ignis-0.1.0-omega-0.1.0.jar
-SHA-256: 0B698D1635ED84618BFE297CF0AC752A761B163A9DF88DCD866AFF88E4006DBB
+LOCAL CANDIDATE: revised flex-pose visual review is pending; not yet published.
+File: multiversal-spellbooks-0.3.3-crimson-0.1.1-ignis-0.1.0-omega-0.2.0.jar
+SHA-256: 7D7DAA0AA360A6FCEB6A245F872FA98A160CD3FB24160B59A575B1AEC8F87175
 
 1. Stop the server and Minecraft clients. Back up the world and configs.
 2. Remove the previous combined addon JAR and any separate Grand Explosion,
@@ -22,5 +23,10 @@ Do not also install the standalone modules included inside this JAR.
 
 Omega Rush: Legendary Ink + Paper + Poisonous Potato at the Scroll Forge.
 Operator scroll command: /createScroll irons_omega_rush:omega_rush 1
+Omega Form now requires the Flowery Scarf in a functional charm slot.
+Scarf test item: /give @s irons_omega_rush:flowery_scarf
+Select Omega Form in the spell wheel; cast again to dismiss it for free.
+Activation: 200 mana. Upkeep: 30 mana/second. Rush still costs 200 mana.
+Omega network protocol 2 requires the same candidate on server and clients.
 Existing Omega Rush configs retain their values. Set damageRadius = 4.05 in
 the world's serverconfig/irons_omega_rush-server.toml for the wider damage area.

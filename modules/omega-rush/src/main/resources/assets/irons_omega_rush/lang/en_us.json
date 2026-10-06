@@ -4,5 +4,13 @@
   "ui.irons_omega_rush.damage": "Trail damage: %s",
   "ui.irons_omega_rush.duration": "Flight: %s seconds",
   "ui.irons_omega_rush.radius": "Explosion radius: %s blocks",
-  "message.irons_omega_rush.unavailable": "Omega Rush requires unobstructed player flight without another movement spell."
+  "message.irons_omega_rush.unavailable": "Omega Rush requires unobstructed player flight without another movement spell.",
+  "item.irons_omega_rush.flowery_scarf": "Flowery Scarf",
+  "spell.irons_omega_rush.omega_form": "Omega Form",
+  "tooltip.irons_omega_rush.scarf": "Wear in a charm slot to channel Omega Form. Cast again to dismiss.",
+  "message.irons_omega_rush.scarf_required": "Equip the Flowery Scarf in a charm slot.",
+  "message.irons_omega_rush.form_required": "Channel Omega Form before casting Omega Rush.",
+  "ui.irons_omega_rush.form_cost": "Activation: %s mana; upkeep: %s mana/second",
+  "ui.irons_omega_rush.form_buffs": "Resistance %s, %s absorption hearts, Strength %s, +%s%% Nature power",
+  "effect.irons_omega_rush.omega_form": "Omega Form"
 }
