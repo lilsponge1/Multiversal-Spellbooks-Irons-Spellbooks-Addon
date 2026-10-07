@@ -1,6 +1,6 @@
-# Omega Form transformation ritual — 0.2.4 preview
+# Omega Form transformation ritual — 0.2.4 release
 
-This local revision extends Form's casting sequence inside the single combined Multiversal Spellbooks JAR. The published 0.2.2 release is unchanged.
+This release extends Form's casting sequence inside the single combined Multiversal Spellbooks JAR. The published 0.2.2 release is unchanged.
 
 ## Sequence
 
@@ -29,12 +29,12 @@ A separate real Minecraft test client verified the bent-knee pose, physical rise
 
 Logs: local `build/ritual-final-server-validation.log` and `build/ritual-final-client-review.log`. These checks cover the requested sequence with shaders disabled; they do not certify arbitrary shaders or stress with several simultaneous real clients.
 
-No GitHub publication of 0.2.3 has been requested or performed.
+The ritual and completion-sound update are distributed together in [release 0.2.4](https://github.com/lilsponge1/Multiversal-Spellbooks-Irons-Spellbooks-Addon/releases/tag/v0.3.3-omega-form-0.2.4).
 
-Local combined preview: `build/release/multiversal-spellbooks-0.3.3-crimson-0.1.1-ignis-0.1.0-omega-0.2.4.jar`. SHA-256: `95602ECB3368691F1952DABBEE912A32C79D57DF4E3ED58130507C2025EDB878`.
+Combined release artifact: `build/release/multiversal-spellbooks-0.3.3-crimson-0.1.1-ignis-0.1.0-omega-0.2.4.jar`. SHA-256: `95602ECB3368691F1952DABBEE912A32C79D57DF4E3ED58130507C2025EDB878`.
 
 ## 0.2.4 completion sound
 
 The supplied `snd_firespell.wav` now plays once at successful Form absorption, at the same moment as the final flash and finishing effects. The existing nearby event reaches the caster and other nearby clients. Playback uses the Players sound category, existing sound-volume setting, original pitch and a 32-block spatial fade. Duplicate events are suppressed; the follow-up ring pulses do not repeat the clip. Cancellation or free dismissal does not trigger this success cue.
 
-The source WAV is unchanged. The converted mono 44.1 kHz Vorbis asset decodes to 56,271 frames (1.276 seconds). Compilation, archive verification and unchanged-existing-clip comparisons pass. Per the user's request, the new cue was **not live tested** and the earlier 279 gameplay checks were not rerun for this audio addition. Install the new combined preview on server and clients for the user's sound review. It has not been published to GitHub.
+The source WAV is unchanged. The converted mono 44.1 kHz Vorbis asset decodes to 56,271 frames (1.276 seconds). Compilation, archive verification and unchanged-existing-clip comparisons pass. Per the user's request, the new cue was **not live tested** and the earlier 279 gameplay checks were not rerun for this audio addition. Install the new combined release on server and clients for the user's sound review. Publication was authorized by the user; the new cue remains available for their live review.

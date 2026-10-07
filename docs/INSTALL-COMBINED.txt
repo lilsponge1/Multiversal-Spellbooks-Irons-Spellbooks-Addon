@@ -1,9 +1,9 @@
 MULTIVERSAL SPELLBOOKS COMBINED UPDATE
 
-RELEASE: Omega Form 0.2.2 — single combined JAR.
-Download: https://github.com/lilsponge1/Multiversal-Spellbooks-Irons-Spellbooks-Addon/releases/tag/v0.3.3-omega-form-0.2.2
-File: multiversal-spellbooks-0.3.3-crimson-0.1.1-ignis-0.1.0-omega-0.2.2.jar
-SHA-256: 08ACF74C03472305CCD5E7292F19769FD6E6BB6907925F4821F619DEFE225805
+RELEASE: Omega Form 0.2.4 — single combined JAR.
+Download: https://github.com/lilsponge1/Multiversal-Spellbooks-Irons-Spellbooks-Addon/releases/tag/v0.3.3-omega-form-0.2.4
+File: multiversal-spellbooks-0.3.3-crimson-0.1.1-ignis-0.1.0-omega-0.2.4.jar
+SHA-256: 95602ECB3368691F1952DABBEE912A32C79D57DF4E3ED58130507C2025EDB878
 
 1. Stop the server and Minecraft clients. Back up the world and configs.
 2. Remove the previous combined addon JAR and any separate Grand Explosion,
@@ -33,6 +33,14 @@ Activation: 200 mana. Upkeep: 30 mana/second. Rush still costs 200 mana.
 Rush has a 10-second cooldown in Form, with normal equipment reductions.
 Form flight uses the arms-forward Rush pose; hover movement is unchanged.
 Server key: omegaRush.omegaFormCooldownSeconds = 10 (added automatically).
-Omega network protocol 3 requires the same release on server and clients.
+Omega network protocol 4 requires the same release on server and clients.
 Existing Omega Rush configs retain their values. Set damageRadius = 4.05 in
 the world's serverconfig/irons_omega_rush-server.toml for the wider damage area.
+
+Transformation ritual: default 6.4 seconds, 3.5-block levitation, bent knee,
+six orbiting flowers and a final flash/halo with the supplied fire-spell cue.
+Car audio plays once at charge start. Flower pitches rise from 1.0 to 1.9.
+omegaForm.chargeTicks = 160 is the base clock, scaled to 128 effective ticks.
+Older short charge values migrate automatically. chargeLiftBlocks = 3.5.
+Update both server and clients: protocol 4 is incompatible with protocol 3.
+The final completion-sound addition was built/audited; live review is by the user.
