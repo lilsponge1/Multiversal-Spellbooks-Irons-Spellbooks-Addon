@@ -1,6 +1,6 @@
 # Omega Form and the Flowery Scarf
 
-Omega Rush 0.2.2 adds a reusable Flowery Scarf and a sustained Omega Form transformation to the single Multiversal Spellbooks JAR. The other combined modules retain their existing payloads and versions.
+Omega Rush 0.2.4 includes a reusable Flowery Scarf and a sustained Omega Form transformation to the single Multiversal Spellbooks JAR. The other combined modules retain their existing payloads and versions.
 
 ## Obtain and equip
 
@@ -14,7 +14,7 @@ Naturally generated chest loot has a **0.2% chance (one in 500)**. This includes
 
 ## Activate and control
 
-Select Omega Form in the normal spell wheel and cast it. The 1.5-second charge gathers colored energy while the player raises their arms into a bent-elbow flex. Car-drive audio plays only during this charge. Successful activation costs **200 mana**, and upkeep costs **30 mana per second** at normal TPS, whether grounded, hovering, or Rushing. Ordinary mana regeneration continues. There is no fixed Form duration.
+Select Omega Form in the normal spell wheel and cast it. The default 6.4-second ritual lifts the player 3.5 blocks into a bent-knee power-up pose, then summons six orbiting flowers and absorbs them with finishing effects. Car-drive audio plays once at the start, with separate flower and completion cues. See [ritual details](OMEGA-RITUAL.md). Successful activation costs **200 mana**, and upkeep costs **30 mana per second** at normal TPS, whether grounded, hovering, or Rushing. Ordinary mana regeneration continues. There is no fixed Form duration.
 
 | Benefit | Default |
 |---|---|
@@ -43,7 +43,7 @@ Form adds a cycling rainbow body tint, first-person hand tint, restrained aura, 
 
 The new `[omegaForm]` and `[floweryScarf]` sections of the existing server config expose mana, upkeep, cooldown, hover speeds, defensive values, Nature bonus, drop chances, and eligible boss IDs. `omegaRush.requireOmegaForm=true` enables the prerequisite; set it false to retain standalone Rush access. `omegaRush.omegaFormCooldownSeconds=10` controls the shorter Rush cooldown independently of the normal `cooldownSeconds`. Client `presentation.afterImages` complements the existing particle quality, rainbow overlay, flashes, and sound settings.
 
-Network protocol **3** requires the matching combined JAR on every client and the server. Replace the older combined addon and remove any separate Omega Rush JAR; the module remains inside the one combined file. Existing Rush IDs and settings remain valid.
+Network protocol **4** requires the matching combined JAR on every client and the server. Replace the older combined addon and remove any separate Omega Rush JAR; the module remains inside the one combined file. Existing Rush IDs and settings remain valid.
 
 ## Development and verification
 
@@ -51,7 +51,7 @@ Build the Omega module independently, then assemble it with the root packager. W
 
 The disposable harness provides `omega_test` for legacy Rush behavior and `omega_form_test` for equipment, casting, buffs, hover transitions, networking validation, and actual loot generation. Never install `omega-rush-test.jar` on the production server or clients.
 
-## Release verification
+## Earlier 0.2.2 verification
 
 The 0.2.2 release artifact is `build/release/multiversal-spellbooks-0.3.3-crimson-0.1.1-ignis-0.1.0-omega-0.2.2.jar`, SHA-256 `08ACF74C03472305CCD5E7292F19769FD6E6BB6907925F4821F619DEFE225805`. The exact artifact passed **135 Form assertions plus 114 Rush/compatibility assertions**, for **249 server checks**. The added cases exercise a native paid Rush with a 200-tick cooldown in Form, the unchanged cooldown outside Form, native cooldown reduction, unchanged Form cooldown, configurable transformed cooldown, zero base cooldown, and preservation of an already committed cooldown when Form ends. Existing mana, equipment, movement, double-tap, loot, cleanup, and pose-resource checks pass.
 

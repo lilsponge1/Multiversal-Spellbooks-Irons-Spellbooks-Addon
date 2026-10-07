@@ -3,7 +3,7 @@ loaderVersion="[47,)"
 license="All Rights Reserved"
 [[mods]]
 modId="irons_omega_rush"
-version="0.2.2"
+version="0.2.4"
 displayName="Omega Rush"
 authors="Sponge"
 description="Gather rainbow energy, steer through the sky, and leave a cascading wall of explosions."

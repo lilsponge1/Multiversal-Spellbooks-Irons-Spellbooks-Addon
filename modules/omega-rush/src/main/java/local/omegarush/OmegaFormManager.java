@@ -20,10 +20,11 @@ public final class OmegaFormManager {
     public static final class DamageFrame {public final float before;public float nested;public DamageFrame(float before){this.before=before;}}
     static final class State {
         final ServerPlayer p; final long session; final String dimension; final int chargeTicks;
-        boolean active,hover,flightEnabled; int age,sequence=-1,inputTick,packets;long receivedTick,toggleTick=-1;
+        boolean active,hover,flightEnabled; int age,flowers,sequence=-1,inputTick,packets;long receivedTick,toggleTick=-1;
+        final Vec3 chargeOrigin;double liftHeight;
         float yaw,pitch,forward,strafe,vertical;Vec3 position,velocity=Vec3.f_82478_;OmegaFormBuffs buffs;CastSource source=CastSource.SPELLBOOK;
-        State(ServerPlayer p,long s,int c){this.p=p;session=s;chargeTicks=c;dimension=OmegaManager.dimension(p);position=p.m_20182_();yaw=p.m_146908_();}
-        OmegaFormPacket packet(byte phase,boolean reset){return new OmegaFormPacket(p.m_20148_(),p.m_19879_(),dimension,session,tick,phase,hover,flightEnabled,age,chargeTicks,sequence,p.m_20182_(),velocity,OmegaConfig.HOVER_SPEED.get()/20,OmegaConfig.HOVER_VERTICAL.get()/20,OmegaGravity.original(p),reset,phase==2&&!STATES.containsKey(p.m_20148_()));}
+        State(ServerPlayer p,long s,int c){this.p=p;session=s;chargeTicks=c;dimension=OmegaManager.dimension(p);position=p.m_20182_();chargeOrigin=position;yaw=p.m_146908_();}
+        OmegaFormPacket packet(byte phase,boolean reset){return new OmegaFormPacket(p.m_20148_(),p.m_19879_(),dimension,session,tick,phase,hover,flightEnabled,age,chargeTicks,sequence,p.m_20182_(),velocity,OmegaConfig.HOVER_SPEED.get()/20,OmegaConfig.HOVER_VERTICAL.get()/20,OmegaGravity.original(p),reset,phase==2&&!STATES.containsKey(p.m_20148_()),chargeOrigin,liftHeight);}
     }
     private static final Map<UUID,State> STATES=new HashMap<>();
     private static final Map<UUID,Long> LANDINGS=new HashMap<>();
@@ -32,15 +33,26 @@ public final class OmegaFormManager {
         if(p.m_9236_().f_46443_)return Boolean.TRUE.equals(net.minecraftforge.fml.DistExecutor.unsafeCallWhenOn(net.minecraftforge.api.distmarker.Dist.CLIENT,()->()->OmegaFormClient.active(p)));
         State s=STATES.get(p.m_20148_());return s!=null&&s.active;
     }
-    public static boolean owns(Entity p){State s=STATES.get(p.m_20148_());return s!=null&&s.active&&s.hover&&!OmegaManager.owns(p);}
-    public static boolean eligible(ServerPlayer p){return FloweryScarf.equipped(p)&&!STATES.containsKey(p.m_20148_())&&p.m_6084_()&&!p.m_5833_()&&!OmegaManager.owns(p)&&!p.m_21023_(MobEffectRegistry.ASCENSION.get())&&!p.getPersistentData().m_128441_("irons_ultimate_explosion.thundercrash.originalGravity");}
+    public static boolean owns(Entity p){State s=STATES.get(p.m_20148_());return s!=null&&s.hover&&!OmegaManager.owns(p);}
+    public static boolean eligible(ServerPlayer p){return FloweryScarf.equipped(p)&&!STATES.containsKey(p.m_20148_())&&p.m_6084_()&&!blocked(p)&&!p.m_150110_().f_35935_&&!OmegaManager.owns(p)&&!p.m_21023_(MobEffectRegistry.ASCENSION.get())&&!p.getPersistentData().m_128441_("irons_ultimate_explosion.thundercrash.originalGravity");}
     public static boolean canActivate(ServerPlayer p){State s=STATES.get(p.m_20148_());return FloweryScarf.equipped(p)&&p.m_6084_()&&(s!=null&&!s.active||eligible(p));}
-    public static void charge(ServerPlayer p,int c){if(eligible(p)){State s=new State(p,next++,c);STATES.put(p.m_20148_(),s);send(s,(byte)0,false);}}
+    public static void charge(ServerPlayer p,int c){
+        if(!eligible(p)||blocked(p))return;State s=new State(p,next++,Math.max(OmegaFormRitual.MIN_TICKS,c));
+        s.liftHeight=Math.min(OmegaConfig.FORM_LIFT.get(),Math.max(0,p.m_9236_().m_151558_()-p.m_20191_().f_82292_-0.05));
+        Vec3 lift=new Vec3(0,s.liftHeight,0);
+        if(!OmegaCollision.safe(p.m_9236_(),p.m_20191_().m_82369_(lift)))return;
+        var hit=OmegaCollision.find(p.m_9236_(),p,lift,false);if(hit!=null)s.liftHeight=Math.max(0,s.liftHeight*hit.fraction()-0.015);
+        s.hover=true;STATES.put(p.m_20148_(),s);OmegaGravity.acquire(p,"form_charge");p.m_20256_(Vec3.f_82478_);send(s,(byte)0,true);
+    }
     public static boolean activate(ServerPlayer p,CastSource source){
         if(!canActivate(p))return false;State s=STATES.get(p.m_20148_());if(s==null){s=new State(p,next++,1);STATES.put(p.m_20148_(),s);}
+        boolean lifted=s.hover&&p.m_20186_()>s.chargeOrigin.f_82480_+0.1;
+        OmegaGravity.release(p,"form_charge");s.hover=false;s.velocity=Vec3.f_82478_;p.m_20256_(Vec3.f_82478_);
         s.active=true;s.age=0;s.source=source;s.buffs=new OmegaFormBuffs(p);s.receivedTick=tick;
         p.m_7292_(new net.minecraft.world.effect.MobEffectInstance(OmegaEffects.FORM.get(),-1,0,false,false,true));
-        LANDINGS.remove(p.m_20148_());send(s,(byte)1,false);return true;
+        if(lifted)LANDINGS.put(p.m_20148_(),tick+100);else LANDINGS.remove(p.m_20148_());
+        OmegaNetwork.ritual(p,new OmegaRitualEventPacket(p.m_20148_(),s.session,s.dimension,6,p.m_20191_().m_82399_()));
+        send(s,(byte)1,true);return true;
     }
     public static boolean pay(ServerPlayer p,float amount){
         if(!Float.isFinite(amount)||amount<0)return false;
@@ -51,12 +63,12 @@ public final class OmegaFormManager {
     public static void cancelCharge(ServerPlayer p){State s=STATES.get(p.m_20148_());if(s!=null&&!s.active)end(p,false);}
     public static void end(ServerPlayer p,boolean cooldown){
         State s=STATES.remove(p.m_20148_());if(s==null)return;
-        if(s.buffs!=null)s.buffs.close();OmegaGravity.release(p,"form");
+        if(s.buffs!=null)s.buffs.close();OmegaGravity.release(p,"form");OmegaGravity.release(p,"form_charge");
         p.m_21195_(OmegaEffects.FORM.get());
         if(s.hover&&!OmegaManager.owns(p))LANDINGS.put(p.m_20148_(),tick+100);
         s.hover=false;send(s,(byte)2,true);
         var magic=MagicData.getPlayerMagicData(p);
-        if(!OmegaManager.owns(p)){OmegaManager.cancelCharge(p);if(ModSpells.OMEGA_RUSH.get().getSpellId().equals(magic.getCastingSpellId()))magic.resetCastingState();}
+        if(!OmegaManager.owns(p)){OmegaManager.cancelCharge(p);if(ModSpells.OMEGA_RUSH.get().getSpellId().equals(magic.getCastingSpellId())||ModSpells.OMEGA_FORM.get().getSpellId().equals(magic.getCastingSpellId()))magic.resetCastingState();}
         if(s.active){
             var recasts=magic.getPlayerRecasts();if(recasts.hasRecastForSpell(ModSpells.OMEGA_FORM.get()))recasts.removeRecast(recasts.getRecastInstance(ModSpells.OMEGA_FORM.get().getSpellId()),RecastResult.USER_CANCEL);
             if(cooldown)MagicHelper.MAGIC_MANAGER.addCooldown(p,ModSpells.OMEGA_FORM.get(),s.source);
@@ -66,11 +78,11 @@ public final class OmegaFormManager {
     public static void pauseForRush(ServerPlayer p){State s=STATES.get(p.m_20148_());if(s!=null&&s.active){s.hover=false;OmegaGravity.release(p,"form");send(s,(byte)1,true);}}
     public static void resumeAfterRush(ServerPlayer p){State s=STATES.get(p.m_20148_());if(s!=null&&s.active){s.position=p.m_20182_();s.velocity=Vec3.f_82478_;s.receivedTick=tick;send(s,(byte)1,true);}}
     public static void input(ServerPlayer p,OmegaFormInputPacket a){
-        State s=STATES.get(p.m_20148_());if(s==null||!s.active||s.session!=a.session()||a.sequence()<=s.sequence||a.sequence()<0)return;
+        State s=STATES.get(p.m_20148_());if(s==null||s.session!=a.session()||a.sequence()<=s.sequence||a.sequence()<0)return;
         if(!Float.isFinite(a.yaw())||!Float.isFinite(a.pitch())||!Float.isFinite(a.forward())||!Float.isFinite(a.strafe())||!Float.isFinite(a.vertical())||Math.abs(a.yaw())>1e7||Math.abs(a.pitch())>90||Math.abs(a.forward())>1||Math.abs(a.strafe())>1||Math.abs(a.vertical())>1)return;
         if(s.inputTick!=(int)tick){s.inputTick=(int)tick;s.packets=0;}if(++s.packets>2)return;
         s.sequence=a.sequence();s.receivedTick=tick;s.yaw=a.yaw()%360;s.pitch=a.pitch();s.forward=a.forward();s.strafe=a.strafe();s.vertical=a.vertical();
-        if(a.toggleFlight()&&!OmegaManager.owns(p)&&s.toggleTick!=tick){
+        if(s.active&&a.toggleFlight()&&!OmegaManager.owns(p)&&s.toggleTick!=tick){
             s.toggleTick=tick;s.flightEnabled=!s.flightEnabled;
             if(!s.flightEnabled){
                 if(s.hover)LANDINGS.put(p.m_20148_(),tick+100);
@@ -90,7 +102,7 @@ public final class OmegaFormManager {
     private static void advance(State s){
         ServerPlayer p=s.p;
         if(!p.m_6084_()||p.m_213877_()||p.m_5833_()||!s.dimension.equals(OmegaManager.dimension(p))||!FloweryScarf.equipped(p)){end(p,true);return;}
-        if(!s.active){if(++s.age>s.chargeTicks+20)end(p,false);else if(tick%4==0)send(s,(byte)0,false);return;}
+        if(!s.active){chargeTick(s);return;}
         if(p.m_150110_().f_35935_||p.m_21023_(MobEffectRegistry.ASCENSION.get())||p.getPersistentData().m_128441_("irons_ultimate_explosion.thundercrash.originalGravity")){end(p,true);return;}
         if(!p.m_21023_(OmegaEffects.FORM.get())){end(p,true);return;}
         if(!pay(p,(float)(OmegaConfig.FORM_UPKEEP.get()/20))){end(p,true);return;}
@@ -110,12 +122,26 @@ public final class OmegaFormManager {
         }else{OmegaGravity.release(p,"form");s.velocity=Vec3.f_82478_;s.position=p.m_20182_();}
         if(changed||tick%2==0)send(s,(byte)1,changed);
     }
-    public static void teleport(ServerPlayer p){State s=STATES.get(p.m_20148_());if(s!=null&&s.active){s.hover=false;s.velocity=Vec3.f_82478_;s.receivedTick=tick;OmegaGravity.release(p,"form");send(s,(byte)1,true);}}
+    private static boolean blocked(ServerPlayer p){return p.m_20159_()||p.m_20069_()||p.m_20077_()||p.m_6147_()||p.m_5803_()||p.m_5833_();}
+    private static void chargeTick(State s){
+        ServerPlayer p=s.p;if(++s.age>s.chargeTicks+20||blocked(p)||p.m_150110_().f_35935_||p.m_21023_(MobEffectRegistry.ASCENSION.get())||p.getPersistentData().m_128441_("irons_ultimate_explosion.thundercrash.originalGravity")){end(p,false);return;}
+        Vec3 target=s.chargeOrigin.m_82520_(0,OmegaFormRitual.height(s.age,s.chargeTicks,s.liftHeight),0);
+        Vec3 before=p.m_20182_(),delta=target.m_82546_(before);
+        if(delta.m_82553_()>1||!OmegaCollision.safe(p.m_9236_(),p.m_20191_().m_82369_(delta))){end(p,false);return;}
+        p.m_146922_(s.yaw);p.m_146926_(s.pitch);p.m_6478_(MoverType.SELF,delta);p.m_183634_();
+        s.position=p.m_20182_();s.velocity=s.position.m_82546_(before);p.m_20256_(s.velocity);p.m_284548_().m_7726_().m_8385_(p);
+        int visible=OmegaFormRitual.count(s.age,s.chargeTicks);
+        while(s.flowers<visible){int i=s.flowers++;Vec3 at=p.m_20191_().m_82399_().m_82549_(OmegaFormRitual.offset(i,s.age,s.chargeTicks,s.yaw));OmegaNetwork.ritual(p,new OmegaRitualEventPacket(p.m_20148_(),s.session,s.dimension,i,at));}
+        if(tick%2==0)send(s,(byte)0,false);
+    }
+    public static void teleport(ServerPlayer p){State s=STATES.get(p.m_20148_());if(s!=null&&!s.active){end(p,false);return;}if(s!=null){s.hover=false;s.velocity=Vec3.f_82478_;s.receivedTick=tick;OmegaGravity.release(p,"form");send(s,(byte)1,true);}}
     private static void send(State s,byte phase,boolean reset){OmegaNetwork.form(s.p,s.packet(phase,reset));}
     public static void absorptionConsumed(LivingEntity p,float n){State s=STATES.get(p.m_20148_());if(s!=null&&s.buffs!=null)s.buffs.consumed(n);}
     @SubscribeEvent(priority=EventPriority.LOWEST) public static void hurt(LivingHurtEvent e){if(active(e.getEntity()))OmegaFormBuffs.resistance(e);}
     @SubscribeEvent public static void fall(LivingFallEvent e){if(owns(e.getEntity())||LANDINGS.remove(e.getEntity().m_20148_())!=null)e.setCanceled(true);}
     @SubscribeEvent public static void otherCast(SpellPreCastEvent e){
+        State s=STATES.get(e.getEntity().m_20148_());
+        if(s!=null&&!s.active&&!e.getSpellId().equals(ModSpells.OMEGA_FORM.get().getSpellId())){e.setCanceled(true);return;}
         if(active(e.getEntity())&&(e.getSpellId().contains("thundercrash")||e.getSpellId().contains("ascension")))e.setCanceled(true);
     }
     @SubscribeEvent(priority=EventPriority.HIGH) public static void rushCooldown(SpellCooldownAddedEvent.Pre e){

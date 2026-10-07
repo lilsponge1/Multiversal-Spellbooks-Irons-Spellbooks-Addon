@@ -26,7 +26,10 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 public final class OmegaFormHarness {
     private int passed,failed,sequence,poseTicks;private ServerPlayer p,poseActor;private final List<Entity> spawned=new ArrayList<>();
     public OmegaFormHarness(){MinecraftForge.EVENT_BUS.addListener(this::commands);MinecraftForge.EVENT_BUS.addListener(this::poseTick);}
-    private void poseTick(TickEvent.ServerTickEvent e){if(e.phase==TickEvent.Phase.END&&poseActor!=null&&--poseTicks<=0){OmegaFormManager.end(poseActor,false);poseActor.m_146870_();poseActor=null;}}
+    private void poseTick(TickEvent.ServerTickEvent e){if(e.phase==TickEvent.Phase.END&&poseActor!=null){
+        if(--poseTicks==80){System.out.println("OMEGA_RITUAL_POSE rise="+(poseActor.m_20186_()+60));OmegaFormManager.activate(poseActor,CastSource.SPELLBOOK);}
+        if(poseTicks<=0){OmegaFormManager.end(poseActor,false);poseActor.m_146870_();poseActor=null;}
+    }}
     private void commands(RegisterCommandsEvent e){
         e.getDispatcher().register(LiteralArgumentBuilder.<net.minecraft.commands.CommandSourceStack>literal("omega_form_test").requires(s->s.m_6761_(4)).executes(c->{try{run(c.getSource().m_81372_());return 1;}catch(Throwable error){System.out.println("OMEGA_FORM_TEST_FAIL "+error);error.printStackTrace();return 0;}}));
         e.getDispatcher().register(LiteralArgumentBuilder.<net.minecraft.commands.CommandSourceStack>literal("omega_form_pose").requires(s->s.m_6761_(4)).executes(c->{
@@ -35,8 +38,10 @@ public final class OmegaFormHarness {
             poseActor.m_6034_(0.5,-60,4.5);poseActor.m_146922_(180);poseActor.m_146926_(0);
             CuriosApi.getCuriosInventory(poseActor).ifPresent(inv->inv.setEquippedCurio("charm",0,OmegaItems.SCARF.get().m_7968_()));
             var info=new net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket(EnumSet.of(net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket.Action.ADD_PLAYER,net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket.Action.UPDATE_GAME_MODE),List.of(poseActor));
-            for(var viewer:level.m_7654_().m_6846_().m_11314_())viewer.f_8906_.m_9829_(info);level.m_7967_(poseActor);OmegaFormManager.charge(poseActor,200);poseTicks=225;
-            System.out.println("OMEGA_FORM_POSE render_only_extended_charge=true");return 1;
+            poseActor.m_21051_(AttributeRegistry.MAX_MANA.get()).m_22100_(2000);MagicData.getPlayerMagicData(poseActor).setMana(2000);
+            int duration=ModSpells.OMEGA_FORM.get().getEffectiveCastTime(1,poseActor);
+            for(var viewer:level.m_7654_().m_6846_().m_11314_())viewer.f_8906_.m_9829_(info);level.m_7967_(poseActor);OmegaFormManager.charge(poseActor,duration);poseTicks=duration+80;
+            System.out.println("OMEGA_RITUAL_POSE render_only_actor=true charge_ticks="+duration);return 1;
         }));
     }
     private void check(String name,boolean ok){if(!ok){failed++;System.out.println("OMEGA_FORM_TEST_ASSERT_FAIL "+name);}else{passed++;System.out.println("OMEGA_FORM_TEST_PASS "+name);}}
@@ -85,7 +90,7 @@ public final class OmegaFormHarness {
                 try(var stream=OmegaFormHarness.class.getClassLoader().getResourceAsStream(path)){check("native_hud_icon_"+iconSpell.getSpellName(),stream!=null&&Arrays.equals(stream.readNBytes(8),new byte[]{(byte)137,80,78,71,13,10,26,10}));}
             }
             tapCases();
-            check("default_cost_upkeep_cooldown",spell.getManaCost(1)==200&&OmegaConfig.FORM_UPKEEP.get()==30&&spell.getSpellCooldown()==2400&&spell.getCastTime(1)==30);
+            check("default_cost_upkeep_cooldown",spell.getManaCost(1)==200&&OmegaConfig.FORM_UPKEEP.get()==30&&spell.getSpellCooldown()==2400&&spell.getCastTime(1)==128);
             check("form_not_craftable_or_lootable",!spell.allowCrafting()&&!spell.allowLooting()&&spell.getMaxLevel()==1);
             check("no_scarf_no_form",!spell.canBeCastedBy(1,CastSource.SWORD,magic,p).isSuccess());
             check("no_form_no_rush",!OmegaManager.start(p,1,12));
@@ -164,12 +169,46 @@ public final class OmegaFormHarness {
             magic.getPlayerCooldowns().clearCooldowns();equip(true);magic.setMana(1000);OmegaFormManager.charge(p,30);spell.castSpell(level,1,p,CastSource.SWORD,false);
             check("equipped_sword_source_cost",OmegaFormManager.active(p)&&magic.getMana()==800);OmegaFormManager.end(p,true);check("equipped_source_cooldown",magic.getPlayerCooldowns().isOnCooldown(spell));
             magic.getPlayerCooldowns().clearCooldowns();magic.setMana(199);OmegaFormManager.charge(p,30);spell.castSpell(level,1,p,CastSource.SWORD,false);check("mana_drop_during_charge_rejected",!OmegaFormManager.active(p)&&magic.getMana()==199);
-            var flex=OmegaChargeAnimation.create(30);check("charge_flex_animation_valid",flex.isInfinite()&&flex.getPart("rightArm").bend.isEnabled()&&flex.getPart("leftArm").bend.isEnabled());
+            var flex=OmegaChargeAnimation.create(160);check("charge_knee_animation_valid",flex.isInfinite()&&flex.getPart("rightArm").bend.isEnabled()&&flex.getPart("leftArm").bend.isEnabled()&&flex.getPart("leftLeg").bend.isEnabled()&&flex.getPart("leftLeg").pitch.isEnabled());
+            ritualCases(level);
             cooldownCases(level);
             lootCases(level);
             if(failed>0)throw new AssertionError("failed="+failed+" passed="+passed);
             System.out.println("OMEGA_FORM_TEST_COMPLETE assertions="+passed);
         }finally{OmegaConfig.REQUIRE_FORM.set(require);OmegaConfig.FORM_UPKEEP.set(upkeep);if(p!=null){OmegaManager.abort(p);OmegaFormManager.end(p,false);}for(Entity e:spawned)e.m_146870_();spawned.clear();}
+    }
+    private void ritualCases(ServerLevel level)throws Exception{
+        var spell=ModSpells.OMEGA_FORM.get();var magic=MagicData.getPlayerMagicData(p);
+        OmegaManager.abort(p);OmegaFormManager.end(p,false);equip(true);p.m_6034_(32,120,32);p.m_6853_(true);p.m_20242_(false);magic.setMana(1000);magic.getPlayerCooldowns().clearCooldowns();
+        OmegaFormManager.charge(p,spell.getEffectiveCastTime(1,p));sequence=0;check("charge_owns_movement_and_gravity",OmegaFormManager.owns(p)&&p.m_20068_()&&!OmegaFormManager.active(p));
+        check("ritual_duration_20_percent_shorter",(int)field(state(),"chargeTicks")==128);
+        steps(30,0,0);check("charge_rises_3_5_before_flowers",Math.abs(p.m_20186_()-123.5)<0.01&&(int)field(state(),"flowers")==0);
+        check("charge_does_not_pay_early",magic.getMana()==1000&&p.m_6103_()==0);
+        double x=p.m_20185_(),z=p.m_20189_();steps(2,1,1);check("charge_horizontal_input_does_not_move",p.m_20185_()==x&&p.m_20189_()==z);
+        check("first_flower_at_32",(int)field(state(),"flowers")==1);
+        int[] arrivals={32,39,45,52,58,64};for(int i=1;i<6;i++){steps(arrivals[i]-arrivals[i-1],0,0);check("staggered_flower_"+(i+1),(int)field(state(),"flowers")==i+1);}
+        check("six_flower_pitches_ascending",OmegaFormRitual.pitch(0)==1.0f&&Math.abs(OmegaFormRitual.pitch(5)-1.9f)<0.001&&Math.abs(OmegaFormRitual.pitch(1)-OmegaFormRitual.pitch(0)-0.18f)<0.001);
+        check("all_six_remain_before_absorption",OmegaFormRitual.count(120,160)==6&&OmegaFormRitual.absorption(120,160)==0);
+        check("flower_ring_tall_and_rotates",OmegaFormRitual.offset(0,120,160,0).m_82554_(OmegaFormRitual.offset(0,126,160,0))>0.2);
+        check("flowers_converge_to_body",OmegaFormRitual.offset(0,157,160,0).m_82553_()<0.001&&OmegaFormRitual.scale(0,157,160)<0.001);
+        steps(64,0,0);spell.castSpell(level,1,p,CastSource.SPELLBOOK,false);
+        check("ritual_commits_once_at_end",OmegaFormManager.active(p)&&magic.getMana()==800);
+        check("ritual_returns_to_manual_toggle_and_gravity",!OmegaFormManager.owns(p)&&!p.m_20068_());
+        var fall=new LivingFallEvent(p,5,1);OmegaFormManager.fall(fall);check("ritual_finish_safe_landing",fall.isCanceled());
+        OmegaFormManager.end(p,false);magic.getPlayerCooldowns().clearCooldowns();p.m_6034_(32,120,32);p.m_6853_(true);magic.setMana(1000);
+        OmegaFormManager.charge(p,160);sequence=0;steps(50,0,0);OmegaFormManager.cancelCharge(p);
+        check("interrupted_ritual_has_no_cost_or_buffs",state()==null&&!p.m_20068_()&&magic.getMana()==1000&&p.m_6103_()==0);
+        p.m_6034_(32,120,32);p.m_6853_(true);OmegaFormManager.charge(p,160);sequence=0;steps(20,0,0);OmegaFormManager.teleport(p);
+        check("charge_teleport_cancels_and_restores",state()==null&&!p.m_20068_());
+        p.m_6034_(32,120,32);p.m_6853_(true);p.m_20242_(true);OmegaFormManager.charge(p,160);OmegaFormManager.cancelCharge(p);
+        check("charge_preserves_preexisting_no_gravity",p.m_20068_());p.m_20242_(false);
+        var roof=new net.minecraft.core.BlockPos(32,123,32);var before=level.m_8055_(roof);level.m_46597_(roof,net.minecraft.world.level.block.Blocks.f_50080_.m_49966_());
+        try{p.m_6034_(32.5,120,32.5);p.m_6853_(true);OmegaFormManager.charge(p,160);sequence=0;steps(40,0,0);check("charge_respects_low_ceiling",p.m_20191_().f_82292_<=123&&p.m_20186_()<121.3);OmegaFormManager.cancelCharge(p);}finally{level.m_46597_(roof,before);}
+        var sound=ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(OmegaMod.ID,"flower_appear"));check("flower_sound_registered",sound==OmegaSounds.FLOWER.get());
+        for(String id:List.of("poppy","orange_tulip","dandelion","blue_orchid","cornflower","allium"))check("native_flower_present_"+id,ForgeRegistries.ITEMS.containsKey(new ResourceLocation("minecraft",id)));
+        var packet=new OmegaRitualEventPacket(p.m_20148_(),14,level.m_46472_().m_135782_().toString(),6,p.m_20182_());
+        var encode=OmegaRitualEventPacket.class.getDeclaredMethod("encode",OmegaRitualEventPacket.class,net.minecraft.network.FriendlyByteBuf.class);var decode=OmegaRitualEventPacket.class.getDeclaredMethod("decode",net.minecraft.network.FriendlyByteBuf.class);encode.setAccessible(true);decode.setAccessible(true);
+        var buf=new net.minecraft.network.FriendlyByteBuf(io.netty.buffer.Unpooled.buffer());try{encode.invoke(null,packet,buf);check("ritual_event_round_trip",packet.equals(decode.invoke(null,buf)));}finally{buf.release();}
     }
     private void cooldownCases(ServerLevel level)throws Exception{
         var rush=ModSpells.OMEGA_RUSH.get();var form=ModSpells.OMEGA_FORM.get();var magic=MagicData.getPlayerMagicData(p);
@@ -202,7 +241,7 @@ public final class OmegaFormHarness {
     private void protocolCases()throws Exception{
         var type=OmegaFormInputPacket.class;var encode=type.getDeclaredMethod("encode",type,net.minecraft.network.FriendlyByteBuf.class);var decode=type.getDeclaredMethod("decode",net.minecraft.network.FriendlyByteBuf.class);encode.setAccessible(true);decode.setAccessible(true);
         var buffer=new net.minecraft.network.FriendlyByteBuf(io.netty.buffer.Unpooled.buffer());try{var original=new OmegaFormInputPacket(7,4,50,20,0.5f,-1,1,true);encode.invoke(null,original,buffer);check("form_input_33_bytes",buffer.readableBytes()==33);check("form_input_round_trip",original.equals(decode.invoke(null,buffer)));buffer.clear();buffer.writeByte(1);boolean rejected=false;try{decode.invoke(null,buffer);}catch(java.lang.reflect.InvocationTargetException e){rejected=e.getCause() instanceof IllegalArgumentException;}check("malformed_form_input_rejected",rejected);}finally{buffer.release();}
-        var packet=new OmegaFormPacket(p.m_20148_(),p.m_19879_(),p.m_9236_().m_46472_().m_135782_().toString(),7,10,(byte)1,true,true,3,30,4,p.m_20182_(),Vec3.f_82478_,0.3,0.2,false,true,false);
+        var packet=new OmegaFormPacket(p.m_20148_(),p.m_19879_(),p.m_9236_().m_46472_().m_135782_().toString(),7,10,(byte)1,true,true,3,160,4,p.m_20182_(),Vec3.f_82478_,0.3,0.2,false,true,false,p.m_20182_(),3.5);
         var stateEncode=OmegaFormPacket.class.getDeclaredMethod("encode",OmegaFormPacket.class,net.minecraft.network.FriendlyByteBuf.class);stateEncode.setAccessible(true);
         var stateDecode=OmegaFormPacket.class.getDeclaredMethod("decode",net.minecraft.network.FriendlyByteBuf.class);stateDecode.setAccessible(true);
         var stateBuffer=new net.minecraft.network.FriendlyByteBuf(io.netty.buffer.Unpooled.buffer());try{stateEncode.invoke(null,packet,stateBuffer);check("form_state_toggle_round_trip",packet.equals(stateDecode.invoke(null,stateBuffer)));}finally{stateBuffer.release();}

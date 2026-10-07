@@ -5,7 +5,7 @@ param(
     [string]$MinecraftJar = (Join-Path $env:APPDATA 'PrismLauncher\libraries\net\minecraftforge\forge\1.20.1-47.4.10\forge-1.20.1-47.4.10-client.jar'),
     [string]$MinecraftServerJar = (Join-Path $PSScriptRoot '..\..\..\irons-ultimate-explosion\test-server\libraries\net\minecraftforge\forge\1.20.1-47.4.10\forge-1.20.1-47.4.10-server.jar'),
     [string]$SrgMinecraftJar = (Join-Path $PSScriptRoot '..\..\..\analysis\build\.gradle-user-home\caches\fabric-loom\1.20.1\forge\1.20.1-47.4.2\minecraft-merged-srg-patched.jar'),
-    [string]$OutputJar = (Join-Path $PSScriptRoot 'build\omega-rush-0.2.2.jar')
+    [string]$OutputJar = (Join-Path $PSScriptRoot 'build\omega-rush-0.2.4.jar')
 )
 $ErrorActionPreference='Stop'
 $classes=Join-Path $PSScriptRoot 'build\classes'

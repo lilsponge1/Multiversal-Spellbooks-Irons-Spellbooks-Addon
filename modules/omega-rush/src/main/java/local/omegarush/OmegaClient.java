@@ -26,7 +26,7 @@ public final class OmegaClient {
         final OmegaPrediction prediction=new OmegaPrediction();
         Flight(OmegaStatePacket p) { packet=p; velocity=p.velocity(); predictedAge=p.age(); visualAge=p.age(); }
     }
-    static void register() { MinecraftForge.EVENT_BUS.register(OmegaClient.class);MinecraftForge.EVENT_BUS.register(OmegaEchoes.class); }
+    static void register() { MinecraftForge.EVENT_BUS.register(OmegaClient.class);MinecraftForge.EVENT_BUS.register(OmegaEchoes.class);MinecraftForge.EVENT_BUS.register(OmegaRitualEffects.class); }
     public static void state(OmegaStatePacket p) {
         Minecraft mc=Minecraft.m_91087_(); ClientLevel level=mc.f_91073_;
         if(level==null||mc.f_91074_==null||!p.dimension().equals(OmegaManager.dimension(mc.f_91074_))||!OmegaMovement.finite(p.position())||!OmegaMovement.finite(p.velocity())) return;
@@ -86,6 +86,7 @@ public final class OmegaClient {
         Minecraft mc=Minecraft.m_91087_(); ClientLevel level=mc.f_91073_;
         if(level==null||mc.f_91074_==null) { clear(); return; }
         OmegaVisuals.beginTick();
+        OmegaRitualEffects.tick();
         OmegaFormClient.tick();
         List<Flight> flights=new ArrayList<>(FLIGHTS.values());
         flights.sort(Comparator.comparingDouble(f->f.packet.position().m_82554_(mc.f_91074_.m_20182_())));
@@ -113,7 +114,7 @@ public final class OmegaClient {
             f.entity.m_20242_(f.packet.originalGravity()); f.entity.m_183634_(); f.entity.m_20256_(Vec3.f_82478_);
         }
     }
-    public static void clear() { for(UUID id:new ArrayList<>(FLIGHTS.keySet())) remove(id); BURSTS.clear(); ENDED.clear(); OmegaFormClient.clear();OmegaVisuals.clear(); OmegaAnimations.clear(); }
+    public static void clear() { for(UUID id:new ArrayList<>(FLIGHTS.keySet())) remove(id); BURSTS.clear(); ENDED.clear(); OmegaFormClient.clear();OmegaVisuals.clear(); OmegaAnimations.clear();OmegaRitualEffects.clear(); }
     @SubscribeEvent public static void logout(ClientPlayerNetworkEvent.LoggingOut e) { clear(); }
     @SubscribeEvent public static void unload(LevelEvent.Unload e) { if(e.getLevel() instanceof ClientLevel) clear(); }
     public static void reload(RegisterClientReloadListenersEvent e) {

@@ -13,15 +13,16 @@ final class OmegaFormClient {
     static final Map<UUID,Form> FORMS=new HashMap<>();
     private static final Map<UUID,Long> ENDED=new HashMap<>();
     static boolean active(Entity e){Form f=FORMS.get(e.m_20148_());return f!=null&&f.packet.phase()==1;}
-    static boolean owns(Entity e){Form f=FORMS.get(e.m_20148_());return f!=null&&f.packet.phase()==1&&f.packet.hover()&&!OmegaClient.owns(e);}
+    static boolean owns(Entity e){Form f=FORMS.get(e.m_20148_());return f!=null&&f.packet.phase()!=2&&f.packet.hover()&&!OmegaClient.owns(e);}
+    static boolean hovering(Entity e){Form f=FORMS.get(e.m_20148_());return f!=null&&f.packet.phase()==1&&owns(e);}
     static void state(OmegaFormPacket p){
         var mc=Minecraft.m_91087_();var l=mc.f_91073_;
-        if(l==null||mc.f_91074_==null||!p.dimension().equals(OmegaManager.dimension(mc.f_91074_))||!OmegaMovement.finite(p.position())||!OmegaMovement.finite(p.velocity())||!Double.isFinite(p.speed())||!Double.isFinite(p.rise())||p.speed()<=0||p.speed()>1||p.rise()<=0||p.rise()>0.6)return;
+        if(l==null||mc.f_91074_==null||!p.dimension().equals(OmegaManager.dimension(mc.f_91074_))||!OmegaMovement.finite(p.position())||!OmegaMovement.finite(p.velocity())||!OmegaMovement.finite(p.chargeOrigin())||!Double.isFinite(p.liftHeight())||p.liftHeight()<0||p.liftHeight()>8||!Double.isFinite(p.speed())||!Double.isFinite(p.rise())||p.speed()<=0||p.speed()>1||p.rise()<=0||p.rise()>0.6)return;
         Form f=FORMS.get(p.caster());if(f!=null&&(p.session()<f.packet.session()||p.session()==f.packet.session()&&p.tick()<f.packet.tick()))return;
         if(p.phase()==2){if(p.closed())ENDED.merge(p.caster(),p.session(),Math::max);remove(p.caster());return;}
         if(p.session()<=ENDED.getOrDefault(p.caster(),-1L))return;
         if(f==null||p.session()!=f.packet.session()){remove(p.caster());f=new Form(p);FORMS.put(p.caster(),f);}
-        boolean launched=f.packet.phase()==0&&p.phase()==1;f.packet=p;f.received=System.nanoTime();f.age=Math.max(f.age,p.age());f.sequence=Math.max(f.sequence,p.accepted());
+        boolean launched=f.packet.phase()==0&&p.phase()==1;f.packet=p;f.received=System.nanoTime();f.age=launched?p.age():Math.max(f.age,p.age());f.sequence=Math.max(f.sequence,p.accepted());
         f.entity=l.m_6815_(p.entity()) instanceof LivingEntity e&&e.m_20148_().equals(p.caster())?e:null;
         if(p.reset()){f.pending.clear();OmegaEchoes.clear(p.caster());if(f.entity==mc.f_91074_)f.toggle.reset(mc.f_91074_.f_108618_.f_108572_);}
         if(!p.hover()&&f.entity==mc.f_91074_&&!OmegaClient.owns(f.entity))f.entity.m_20242_(p.originalGravity());
@@ -36,10 +37,10 @@ final class OmegaFormClient {
             else f.entity.m_6478_(MoverType.SELF,correction);
         }
         f.velocity=v;
-        if(launched&&f.entity!=null)OmegaVisuals.formPulse(l,f.entity,p.session());
     }
     static boolean input(LocalPlayer p){
-        Form f=FORMS.get(p.m_20148_());if(f==null||f.packet.phase()!=1)return false;
+        Form f=FORMS.get(p.m_20148_());if(f==null)return false;
+        if(f.packet.phase()==0){OmegaNetwork.formInput(new OmegaFormInputPacket(f.packet.session(),++f.sequence,p.m_146908_(),p.m_146909_(),0,0,0));return owns(p);}
         if(OmegaClient.owns(p)){f.toggle.reset(p.f_108618_.f_108572_);return false;}
         float up=(p.f_108618_.f_108572_?1:0)-(p.f_108618_.f_108573_?1:0);
         var a=new OmegaFormInputPacket(f.packet.session(),++f.sequence,p.m_146908_(),p.m_146909_(),forward(p),strafe(p),up,f.toggle.update(p.f_108618_.f_108572_,p.f_19797_));
@@ -50,6 +51,13 @@ final class OmegaFormClient {
     static boolean travel(LivingEntity p){
         var mc=Minecraft.m_91087_();if(p!=mc.f_91074_||!owns(p))return false;Form f=FORMS.get(p.m_20148_());
         p.m_20242_(true);p.m_183634_();
+        if(f.packet.phase()==0){
+            if(System.nanoTime()-f.received>1_000_000_000L||f.steps++>=4){p.m_20256_(Vec3.f_82478_);return true;}
+            Vec3 target=f.packet.chargeOrigin().m_82520_(0,OmegaFormRitual.height(f.packet.age()+f.steps,f.packet.chargeTicks(),f.packet.liftHeight()),0);
+            Vec3 delta=target.m_82546_(p.m_20182_());
+            if(delta.m_82553_()<1&&OmegaCollision.safe(p.m_9236_(),p.m_20191_().m_82369_(delta)))p.m_6478_(MoverType.SELF,delta);
+            p.m_20256_(delta);return true;
+        }
         if(System.nanoTime()-f.received>1_000_000_000L||f.steps++>=4){p.m_20256_(Vec3.f_82478_);return true;}
         float up=(mc.f_91074_.f_108618_.f_108572_?1:0)-(mc.f_91074_.f_108618_.f_108573_?1:0);
         f.velocity=OmegaHover.step(f.velocity,p.m_146908_(),forward(mc.f_91074_),strafe(mc.f_91074_),up,f.packet.speed(),f.packet.rise());
@@ -64,8 +72,8 @@ final class OmegaFormClient {
             f.entity=living;f.age++;
             if(f.packet.phase()==1&&f.packet.hover()&&living instanceof net.minecraft.client.player.AbstractClientPlayer player)OmegaAnimations.start(player);
             else OmegaAnimations.stop(f.packet.caster());
-            if(f.packet.phase()==0){if(living instanceof net.minecraft.client.player.AbstractClientPlayer player)OmegaAnimations.charge(player,f.packet.chargeTicks());if(f.sound==null){f.sound=new OmegaFlightSound(living);mc.m_91106_().m_120367_(f.sound);}}else{stopSound(f);OmegaAnimations.stopCharge(f.packet.caster());}
-            if(!living.m_20145_())OmegaVisuals.form(l,living,f.packet.session(),f.age,f.packet.chargeTicks(),f.packet.phase()==1);
+            if(f.packet.phase()==0){if(living instanceof net.minecraft.client.player.AbstractClientPlayer player)OmegaAnimations.charge(player,f.packet.chargeTicks());if(f.sound==null&&f.packet.age()<=6){f.sound=new OmegaFlightSound(living,false);mc.m_91106_().m_120367_(f.sound);}}else{stopSound(f);OmegaAnimations.stopCharge(f.packet.caster());}
+            if(!living.m_20145_()&&f.packet.phase()==1)OmegaVisuals.form(l,living,f.packet.session(),f.age,f.packet.chargeTicks(),true);
         }
     }
     private static void stopSound(Form f){if(f.sound!=null){f.sound.end();Minecraft.m_91087_().m_91106_().m_120399_(f.sound);f.sound=null;}}

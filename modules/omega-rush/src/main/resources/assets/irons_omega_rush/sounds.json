@@ -2,6 +2,12 @@
   "car_drive": {
     "sounds": [{"name": "irons_omega_rush:snd_cardrive", "stream": true, "attenuation_distance": 32}]
   },
+  "flower_appear": {
+    "sounds": [{"name": "irons_omega_rush:snd_enemy_appear_quick", "attenuation_distance": 32}]
+  },
+  "form_finish": {
+    "sounds": [{"name": "irons_omega_rush:snd_firespell", "attenuation_distance": 32}]
+  },
   "bomb": {
     "sounds": [{"name": "irons_omega_rush:snd_bomb", "attenuation_distance": 32}]
   }

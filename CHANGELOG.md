@@ -1,5 +1,16 @@
 # Changelog
 
+## Omega Rush / Omega Form 0.2.4
+
+- Added the supplied fire-spell recording as a once-per-success cue for the caster and nearby players, synchronized with absorption and final effects.
+- Converted it to mono 44.1 kHz Ogg Vorbis and verified the combined package. Existing audio/gameplay is preserved; live testing of this final cue was left to the user as requested.
+
+## Omega Rush / Omega Form 0.2.3
+
+- Added a 3.5-block levitating, bent-knee transformation with six sequential Minecraft flowers, tilted orbit, inward absorption, nearby flash, halo and three finishing pulses.
+- Refined the sequence to 6.4 seconds by default, faster arrivals, one-shot car-drive audio, and flower pitches from 1.0 to 1.9 in 0.18 steps.
+- Added charge movement/gravity ownership and cleanup, effective-clock synchronization and protocol 4. The ritual passed 279 server checks and real caster/observer review.
+
 ## Omega Rush / Omega Form 0.2.2
 
 - Omega Rush has a 10-second base cooldown during Form, retaining Iron's equipment reductions and native cooldown synchronization. Added `omegaRush.omegaFormCooldownSeconds`; the normal outside-Form cooldown stays unchanged.

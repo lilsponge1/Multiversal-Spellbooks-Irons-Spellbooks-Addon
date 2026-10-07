@@ -1,8 +1,10 @@
 # Multiversal Spellbooks addon
 
-Forge Minecraft 1.20.1 addon for Iron's Spells 'n Spellbooks. This update combines Grand Explosion **0.3.3**, Crimson Susanoo **0.1.1**, Ignis Armor Compatibility **0.1.0**, and Omega Rush / Omega Form **0.2.2** into one JAR while retaining separate mod IDs, packages, resources and configs.
+Forge Minecraft 1.20.1 addon for Iron's Spells 'n Spellbooks. This update combines Grand Explosion **0.3.3**, Crimson Susanoo **0.1.1**, Ignis Armor Compatibility **0.1.0**, and Omega Rush / Omega Form **0.2.4** into one JAR while retaining separate mod IDs, packages, resources and configs.
 
 ## Latest changes
+
+- Omega Form ritual: a 6.4-second charge raises the player 3.5 blocks with a bent knee, summons six orbiting Minecraft flowers with rising-pitch cues, then absorbs them with a flash, halo, follow-up pulses and the supplied fire-spell finish sound. The car-drive clip plays once at charge start. See [ritual details](OMEGA-RITUAL.md).
 
 - Omega Form: a rare Flowery Scarf in the charm slot unlocks sustained rainbow transformation, hover flight, eight absorption hearts, Resistance III, Strength I, and +25% Nature power. Boss drops are 5%; generated chest loot is one in 500. See [Omega Form](OMEGA-FORM.md).
 - Omega Form flight now toggles with a quick double-tap of jump; single jumps remain normal. Form and Rush have dedicated flower and rainbow explosion HUD icons.
@@ -17,11 +19,11 @@ See [Omega Form and its review checkpoint](OMEGA-FORM.md), [earlier release note
 
 ## Install
 
-Download [Omega Form 0.2.2 — single combined JAR](https://github.com/lilsponge1/Multiversal-Spellbooks-Irons-Spellbooks-Addon/releases/tag/v0.3.3-omega-form-0.2.2). See [release notes](RELEASE-OMEGA-FORM.md) for the Flowery Scarf, double-tap flight, Form flying pose, and 10-second transformed Rush cooldown.
+Download [Omega Form 0.2.4 — single combined JAR](https://github.com/lilsponge1/Multiversal-Spellbooks-Irons-Spellbooks-Addon/releases/tag/v0.3.3-omega-form-0.2.4). See [release notes](RELEASE-OMEGA-RITUAL.md) for the six-flower ritual, new completion audio and installation instructions.
 
-`multiversal-spellbooks-0.3.3-crimson-0.1.1-ignis-0.1.0-omega-0.2.2.jar`
+`multiversal-spellbooks-0.3.3-crimson-0.1.1-ignis-0.1.0-omega-0.2.4.jar`
 
-Release SHA-256: `08ACF74C03472305CCD5E7292F19769FD6E6BB6907925F4821F619DEFE225805`
+Release SHA-256: `95602ECB3368691F1952DABBEE912A32C79D57DF4E3ED58130507C2025EDB878`
 
 Stop Minecraft and the server, back up the world/configs, and replace the older addon JAR with this **same file on the server and every client**. Remove separate Grand Explosion, Crimson Susanoo, Ignis compatibility, and Omega Rush JARs if present; their contents are already included. Keep normal modpack dependencies beside it. This build requires Travel Optics 6.3.0+ and Cataclysm: Spellbooks 1.2.9 (below 1.3), in addition to the existing Iron's/Cataclysm/GeckoLib dependencies. Testing used Forge 47.4.10 and Iron's Spells 3.16.3. Omit diagnostic JVM flags in normal play.
 
@@ -47,7 +49,7 @@ Build Omega Rush separately with `modules/omega-rush/build.ps1` before assembly,
 ./build-combined.ps1 -CombinedBaseJar ./path/to/accepted-multiversal.jar -BuildOmega
 ```
 
-Python 3.11+ is required for the packager; pass `-Python <python.exe>` if needed. `-BuildCrimson` and `-BuildIgnisArmor` build the modules first; `-Offline` requires cached Gradle dependencies. `-CrimsonJar`, `-IgnisArmorJar`, `-OmegaJar`, and `-OutputJar` override inputs/output. In the module-input mode, passing `-IgnisArmorJar ''` or `-OmegaJar ''` omits that optional module. Default output is `build/release/multiversal-spellbooks-0.3.3-crimson-0.1.1-ignis-0.1.0-omega-0.2.2.jar`, with checksum and input/payload report. Existing output files are never overwritten. Only shared metadata is merged; third-party dependencies are never bundled.
+Python 3.11+ is required for the packager; pass `-Python <python.exe>` if needed. `-BuildCrimson` and `-BuildIgnisArmor` build the modules first; `-Offline` requires cached Gradle dependencies. `-CrimsonJar`, `-IgnisArmorJar`, `-OmegaJar`, and `-OutputJar` override inputs/output. In the module-input mode, passing `-IgnisArmorJar ''` or `-OmegaJar ''` omits that optional module. Default output is `build/release/multiversal-spellbooks-0.3.3-crimson-0.1.1-ignis-0.1.0-omega-0.2.4.jar`, with checksum and input/payload report. Existing output files are never overwritten. Only shared metadata is merged; third-party dependencies are never bundled.
 
 The published review artifact retains its tested filename and bytes. A fresh build can differ in archive metadata; validate and test a rebuilt release before deploying it.
 

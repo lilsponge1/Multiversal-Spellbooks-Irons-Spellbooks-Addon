@@ -11,7 +11,7 @@ public final class OmegaConfig {
     public static final ForgeConfigSpec.EnumValue<Quality> QUALITY;
     public static final ForgeConfigSpec.DoubleValue VOLUME;
     public static final ForgeConfigSpec.IntValue FORM_MANA,FORM_CHARGE,FORM_COOLDOWN,FORM_RESISTANCE,FORM_STRENGTH,FORM_HEARTS;
-    public static final ForgeConfigSpec.DoubleValue FORM_UPKEEP,HOVER_SPEED,HOVER_VERTICAL,NATURE_BONUS,BOSS_CHANCE,CHEST_CHANCE;
+    public static final ForgeConfigSpec.DoubleValue FORM_UPKEEP,FORM_LIFT,HOVER_SPEED,HOVER_VERTICAL,NATURE_BONUS,BOSS_CHANCE,CHEST_CHANCE;
     public static final ForgeConfigSpec.BooleanValue REQUIRE_FORM,AFTERIMAGES;
     public static final ForgeConfigSpec.ConfigValue<java.util.List<? extends String>> SCARF_BOSSES;
     static {
@@ -32,7 +32,8 @@ public final class OmegaConfig {
         REQUIRE_FORM=b.define("requireOmegaForm",true);
         b.pop(); b.push("omegaForm");
         FORM_MANA=b.defineInRange("manaCost",200,0,10000);
-        FORM_CHARGE=b.defineInRange("chargeTicks",30,1,200);
+        FORM_CHARGE=b.comment("Base ritual clock before its 20% acceleration: 160 becomes 128 effective ticks (6.4 seconds). Casting-speed gear can reduce it to 96 ticks.").defineInRange("chargeTicks",160,160,400);
+        FORM_LIFT=b.defineInRange("chargeLiftBlocks",3.5,0.0,8.0);
         FORM_COOLDOWN=b.defineInRange("cooldownSeconds",120,0,3600);
         FORM_UPKEEP=b.defineInRange("manaPerSecond",30.0,0.0,1000.0);
         HOVER_SPEED=b.defineInRange("horizontalBlocksPerSecond",6.0,0.1,20.0);
