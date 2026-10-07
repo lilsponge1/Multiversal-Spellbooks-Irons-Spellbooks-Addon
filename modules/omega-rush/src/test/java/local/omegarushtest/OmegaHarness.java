@@ -31,7 +31,7 @@ public final class OmegaHarness {
     private final List<Entity> spawned=new ArrayList<>();
     private ServerPlayer actor;
     private int poseTicks,posePulse;
-    public OmegaHarness() { MinecraftForge.EVENT_BUS.addListener(this::commands); MinecraftForge.EVENT_BUS.addListener(this::poseTick); new OmegaNetworkHarness();new OmegaFormHarness(); }
+    public OmegaHarness() { MinecraftForge.EVENT_BUS.addListener(this::commands); MinecraftForge.EVENT_BUS.addListener(this::poseTick); new OmegaNetworkHarness();new OmegaFormHarness();net.minecraftforge.fml.DistExecutor.unsafeRunWhenOn(net.minecraftforge.api.distmarker.Dist.CLIENT,()->()->OmegaRitualClientHarness.register()); }
     private void poseTick(TickEvent.ServerTickEvent event) {
         if(event.phase!=TickEvent.Phase.END||poseTicks--<=0||actor==null||!OmegaManager.owns(actor)||poseTicks%3!=0) return;
         try {

@@ -28,7 +28,7 @@ public final class OmegaAnimations {
     }
     static void stop(UUID id) {
         var player=PLAYERS.get(id);
-        if(player!=null&&(OmegaClient.owns(player)||OmegaFormClient.owns(player)))return;
+        if(player!=null&&(OmegaClient.owns(player)||OmegaFormClient.hovering(player)))return;
         removeLayer(id);
     }
     private static void removeLayer(UUID id) {

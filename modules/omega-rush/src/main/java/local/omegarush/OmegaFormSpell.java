@@ -14,7 +14,7 @@ import net.minecraft.network.chat.*;
 import java.util.*;
 public final class OmegaFormSpell extends AbstractSpell {
     private static final DefaultConfig DEFAULT=new DefaultConfig().setMinRarity(SpellRarity.LEGENDARY).setSchoolResource(SchoolRegistry.NATURE_RESOURCE).setMaxLevel(1).setCooldownSeconds(120).setAllowCrafting(false).build();
-    public OmegaFormSpell(){baseManaCost=200;castTime=30;}
+    public OmegaFormSpell(){baseManaCost=200;castTime=128;}
     @Override public ResourceLocation getSpellResource(){return new ResourceLocation(OmegaMod.ID,"omega_form");}
     @Override public DefaultConfig getDefaultConfig(){return DEFAULT;}
     @Override public boolean allowLooting(){return false;}
@@ -23,8 +23,8 @@ public final class OmegaFormSpell extends AbstractSpell {
     @Override public CastType getCastType(){return CastType.LONG;}
     @Override public int getManaCost(int rank){return OmegaConfig.FORM_MANA.get();}
     @Override public int getSpellCooldown(){return OmegaConfig.FORM_COOLDOWN.get()*20;}
-    @Override public int getCastTime(int rank){return OmegaConfig.FORM_CHARGE.get();}
-    @Override public int getEffectiveCastTime(int rank,LivingEntity e){return OmegaFormManager.active(e)?0:super.getEffectiveCastTime(rank,e);}
+    @Override public int getCastTime(int rank){return Math.max(1,(int)Math.round(OmegaConfig.FORM_CHARGE.get()*0.8));}
+    @Override public int getEffectiveCastTime(int rank,LivingEntity e){return OmegaFormManager.active(e)?0:Math.max(OmegaFormRitual.MIN_TICKS,super.getEffectiveCastTime(rank,e));}
     @Override public AnimationHolder getCastStartAnimation(){return AnimationHolder.none();}
     @Override public CastResult canBeCastedBy(int rank,CastSource source,MagicData data,Player p){
         if(!FloweryScarf.equipped(p))return failure("message.irons_omega_rush.scarf_required");

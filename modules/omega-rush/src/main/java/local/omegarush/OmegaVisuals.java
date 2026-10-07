@@ -64,6 +64,16 @@ public final class OmegaVisuals {
         frame(entity.m_20148_(),OmegaClient.FLIGHTS.get(entity.m_20148_()).packet.session(),center,1.2,0.13,OmegaConfig.FLASH.get(),1);
     }
     public static void formPulse(ClientLevel l,LivingEntity e,long session){beginTick();frame(e.m_20148_(),session,e.m_20191_().m_82399_(),2.0,session*0.13,OmegaConfig.FLASH.get(),1);}
+    static void ritualFlash(ClientLevel l,OmegaRitualEventPacket p){
+        beginTick();frame(p.caster(),p.session(),p.position(),3.2,0.13,OmegaConfig.FLASH.get(),1);
+        int n=OmegaConfig.QUALITY.get()==OmegaConfig.Quality.FULL?36:12;
+        for(int i=0;i<n;i++){double a=i*Math.PI*2/n;dust(l,p.position(),new Vec3(Math.cos(a),Math.sin(a),Math.sin(a*2)).m_82490_(0.3),i/(double)n,1.2f);}
+    }
+    static void finishPulse(ClientLevel l,OmegaRitualEventPacket p,Vec3 at,int index){frame(p.caster(),p.session(),at,2.4+index*0.7,index/6.0,false,index%2==0?1:2);}
+    static void finishHalo(ClientLevel l,OmegaRitualEventPacket p,Vec3 at,int age){
+        int n=OmegaConfig.QUALITY.get()==OmegaConfig.Quality.FULL?6:2;
+        for(int i=0;i<n;i++){double a=age*0.18+i*Math.PI*2/n;Vec3 atRing=at.m_82520_(Math.cos(a)*1.15,Math.sin(a)*0.9,Math.sin(a)*0.3);dust(l,atRing,new Vec3(0,0.015,0),age/25.0+i/(double)n,1.25f);}
+    }
     public static void form(ClientLevel l,LivingEntity e,long session,int age,int charge,boolean active){
         if(e.m_20182_().m_82554_(Minecraft.m_91087_().f_91074_.m_20182_())>48)return;
         Vec3 center=e.m_20191_().m_82399_();double radius=active?0.7:2.5*(1-Math.min(1,age/(double)Math.max(1,charge)))+0.3;

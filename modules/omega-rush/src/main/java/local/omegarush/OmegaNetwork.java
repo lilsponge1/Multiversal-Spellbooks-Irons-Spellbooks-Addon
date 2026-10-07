@@ -5,7 +5,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.*;
 import net.minecraftforge.network.simple.SimpleChannel;
 public final class OmegaNetwork {
-    private static final String VERSION="3";
+    private static final String VERSION="4";
     private static final SimpleChannel CHANNEL=NetworkRegistry.newSimpleChannel(new ResourceLocation(OmegaMod.ID,"flight"),()->VERSION,VERSION::equals,VERSION::equals);
     static void register() {
         CHANNEL.messageBuilder(OmegaInputPacket.class,0,NetworkDirection.PLAY_TO_SERVER).encoder(OmegaInputPacket::encode).decoder(OmegaInputPacket::decode).consumerNetworkThread(OmegaInputPacket::handle).add();
@@ -13,11 +13,13 @@ public final class OmegaNetwork {
         CHANNEL.messageBuilder(OmegaBurstPacket.class,2,NetworkDirection.PLAY_TO_CLIENT).encoder(OmegaBurstPacket::encode).decoder(OmegaBurstPacket::decode).consumerNetworkThread(OmegaBurstPacket::handle).add();
         CHANNEL.messageBuilder(OmegaFormInputPacket.class,3,NetworkDirection.PLAY_TO_SERVER).encoder(OmegaFormInputPacket::encode).decoder(OmegaFormInputPacket::decode).consumerNetworkThread(OmegaFormInputPacket::handle).add();
         CHANNEL.messageBuilder(OmegaFormPacket.class,4,NetworkDirection.PLAY_TO_CLIENT).encoder(OmegaFormPacket::encode).decoder(OmegaFormPacket::decode).consumerNetworkThread(OmegaFormPacket::handle).add();
+        CHANNEL.messageBuilder(OmegaRitualEventPacket.class,5,NetworkDirection.PLAY_TO_CLIENT).encoder(OmegaRitualEventPacket::encode).decoder(OmegaRitualEventPacket::decode).consumerNetworkThread(OmegaRitualEventPacket::handle).add();
     }
     static void input(OmegaInputPacket p) { CHANNEL.sendToServer(p); }
     static void formInput(OmegaFormInputPacket p){CHANNEL.sendToServer(p);}
     static void form(ServerPlayer p,OmegaFormPacket packet){CHANNEL.send(PacketDistributor.TRACKING_ENTITY.with(()->p),packet);formTo(p,packet);}
     static void formTo(ServerPlayer p,OmegaFormPacket packet){if(p.f_8906_!=null)CHANNEL.send(PacketDistributor.PLAYER.with(()->p),packet);}
+    static void ritual(ServerPlayer p,OmegaRitualEventPacket packet){Vec3 c=packet.position();CHANNEL.send(PacketDistributor.NEAR.with(()->new PacketDistributor.TargetPoint(c.f_82479_,c.f_82480_,c.f_82481_,48,p.m_9236_().m_46472_())),packet);}
     static void state(ServerPlayer p,OmegaStatePacket packet) {
         CHANNEL.send(PacketDistributor.TRACKING_ENTITY.with(()->p),packet); stateTo(p,packet);
     }
