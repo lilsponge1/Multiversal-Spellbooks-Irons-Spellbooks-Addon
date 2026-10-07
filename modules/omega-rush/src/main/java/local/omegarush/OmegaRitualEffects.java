@@ -30,7 +30,10 @@ public final class OmegaRitualEffects {
         var mc=Minecraft.m_91087_();var l=mc.f_91073_;if(l==null||mc.f_91074_==null||!p.dimension().equals(OmegaManager.dimension(mc.f_91074_))||p.index()<0||p.index()>6||!OmegaMovement.finite(p.position())||p.position().m_82554_(mc.f_91074_.m_20182_())>50)return;
         String key=p.caster()+":"+p.session()+":"+p.index();if(!SEEN.add(key))return;while(SEEN.size()>512)SEEN.remove(SEEN.iterator().next());
         if(p.index()<6)l.m_7785_(p.position().f_82479_,p.position().f_82480_,p.position().f_82481_,OmegaSounds.FLOWER.get(),SoundSource.PLAYERS,OmegaConfig.VOLUME.get().floatValue(),OmegaFormRitual.pitch(p.index()),false);
-        else {flashTick=l.m_46467_();OmegaVisuals.ritualFlash(l,p);FINISHES.addLast(new Finish(p,flashTick));while(FINISHES.size()>64)FINISHES.removeFirst();}
+        else {
+            l.m_7785_(p.position().f_82479_,p.position().f_82480_,p.position().f_82481_,OmegaSounds.FORM_FINISH.get(),SoundSource.PLAYERS,OmegaConfig.VOLUME.get().floatValue(),1.0f,false);
+            flashTick=l.m_46467_();OmegaVisuals.ritualFlash(l,p);FINISHES.addLast(new Finish(p,flashTick));while(FINISHES.size()>64)FINISHES.removeFirst();
+        }
     }
     static void tick(){
         var mc=Minecraft.m_91087_();var l=mc.f_91073_;if(l==null){clear();return;}
