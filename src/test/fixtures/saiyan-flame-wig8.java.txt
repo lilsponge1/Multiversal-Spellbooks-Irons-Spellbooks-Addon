@@ -1,0 +1,46 @@
+// Frozen geometry from the native-reviewed wig8 build. Used only for offline vertex equivalence.
+
+    private static void flame(VertexConsumer out, Matrix4f matrix, double time, double radius, double height, float strength, int tier, Vec3 eye) {
+        int count = tier == 2 ? 10 : 8;
+        for (int i = 0; i < count; i++) {
+            double angle = i * Math.PI * 2 / count;
+            double phase = time * (tier == 2 ? .18 : .13) + i * 2.17;
+            double h = height * (.87 + .13 * Math.sin(phase * .6));
+            double flare = 1 + .09 * Math.sin(phase) + .045 * Math.sin(phase * 1.7);
+            double eyeRadius = Math.hypot(eye.f_82479_, eye.f_82481_);
+            double facing = eyeRadius < .001 ? 0 : (Math.cos(angle) * eye.f_82479_ + Math.sin(angle) * eye.f_82481_) / eyeRadius;
+            float openness = (float)(1 - .92 * Math.max(0, facing));
+            for (int row = 0; row < 9; row++) for (int column = 0; column < 4; column++) {
+                double t0 = row / 9.0, t1 = (row + 1) / 9.0;
+                double side0 = -1 + column * .5, side1 = side0 + .5;
+                flameVertex(out, matrix, angle, radius * flare, h, phase, t0, side0, strength * openness);
+                flameVertex(out, matrix, angle, radius * flare, h, phase, t0, side1, strength * openness);
+                flameVertex(out, matrix, angle, radius * flare, h, phase, t1, side1, strength * openness);
+                flameVertex(out, matrix, angle, radius * flare, h, phase, t1, side0, strength * openness);
+            }
+        }
+    }
+
+    private static void flameVertex(VertexConsumer out, Matrix4f matrix, double angle, double radius,
+            double height, double phase, double t, double side, float strength) {
+        // Rounded shoulders and traveling curls keep the silhouette broad below the tips.
+        double r = radius * (.75 + .25 * Math.sin(t * Math.PI) - .26 * t * t
+                + .10 * Math.sin(t * 9 - phase * 1.25) * Math.sin(t * Math.PI));
+        double curl = .29 * t * Math.sin(t * 8 - phase);
+        double width = radius * (.52 * Math.pow(1 - t, .7) + .02);
+        Vec3 point = new Vec3(Math.cos(angle) * r - Math.sin(angle) * (side * width + curl),
+                .035 + t * height, Math.sin(angle) * r + Math.cos(angle) * (side * width + curl));
+        float edge = (float)Math.pow(Math.max(0, Math.cos(side * Math.PI / 2)), 1.5);
+        float ends = (float)(Math.min(1, t * 9) * Math.min(1, (1 - t) * 7));
+        // Strong at the back and sides, nearly transparent directly in front of the body.
+        // This retains a visible gold silhouette even with Solas' squared particle alpha.
+        float alpha = .70f * strength * edge * ends;
+        float warm = (float)(.66 + .16 * t);
+        vertex(out, matrix, point, (float)((side + 1) / 2), (float)(1 - t), alpha, 1, warm, .035f + .07f * (float)t);
+    }
+
+    private static void vertex(VertexConsumer out, Matrix4f m, Vec3 p, float u, float v, float alpha, float red, float green, float blue) {
+        // PARTICLE uses Position, UV0, Color, UV2, unlike the entity format.
+        out.m_252986_(m, (float)p.f_82479_, (float)p.f_82480_, (float)p.f_82481_).m_7421_(u, v).m_85950_(red, green, blue, alpha)
+                .m_85969_(15728880).m_5752_();
+    }

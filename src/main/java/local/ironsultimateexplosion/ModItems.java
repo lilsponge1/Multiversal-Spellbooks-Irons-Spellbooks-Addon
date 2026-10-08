@@ -12,6 +12,8 @@ import net.minecraftforge.registries.RegistryObject;
 
 public final class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, GrandExplosionMod.ID);
+    public static final RegistryObject<Item> SAIYAN_BOOK = ITEMS.register("book_of_saiyan_ascension", SaiyanBook::new);
+    public static final RegistryObject<Item> SAIYAN_WIG = ITEMS.register("saiyan_wig", SaiyanWig::new);
     public static final RegistryObject<Item> THUNDERSTAR_CUIRASS = ITEMS.register("cuirass_of_the_thunderstar", () ->
             new ThunderstarArmorItem(new Item.Properties().m_41497_(com.gametechbc.traveloptics.init.TravelopticsItems.RARITY_AQUATIC)));
     public static final RegistryObject<Item> THUNDERCRASH_SCROLL = ITEMS.register("thundercrash_scroll", () ->
@@ -30,6 +32,8 @@ public final class ModItems {
     public static final RegistryObject<Item> CINDERSTAR_BOOTS = ITEMS.register("cinderstar_boots", () ->
             new CinderstarArmorItem(net.minecraft.world.item.ArmorItem.Type.BOOTS, new Item.Properties()));
     static void fillCreativeTabs(net.minecraftforge.event.BuildCreativeModeTabContentsEvent event) {
+        if (event.getTab() == io.redspace.ironsspellbooks.registries.CreativeTabRegistry.EQUIPMENT_TAB.get())
+            event.accept(SAIYAN_WIG);
         if (event.getTab() == io.redspace.ironsspellbooks.registries.CreativeTabRegistry.EQUIPMENT_TAB.get())
             event.accept(THUNDERSTAR_CUIRASS);
         if (event.getTab() == io.redspace.ironsspellbooks.registries.CreativeTabRegistry.SCROLLS_TAB.get())

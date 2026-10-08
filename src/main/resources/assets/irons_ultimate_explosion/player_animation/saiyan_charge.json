@@ -1,0 +1,85 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "saiyan_charge": {
+      "loop": true,
+      "animation_length": 0.6,
+      "bones": {
+        "body": {
+          "position": [
+            0,
+            -2.5,
+            0
+          ],
+          "rotation": {
+            "0.0": [
+              14,
+              0,
+              0
+            ],
+            ".3": [
+              17,
+              0,
+              0
+            ],
+            ".6": [
+              14,
+              0,
+              0
+            ]
+          }
+        },
+        "head": {
+          "position": [
+            0,
+            -2.5,
+            0
+          ],
+          "rotation": [
+            -18,
+            0,
+            0
+          ]
+        },
+        "right_arm": {
+          "position": [
+            0,
+            -2.5,
+            0
+          ],
+          "rotation": [
+            -52,
+            0,
+            35
+          ]
+        },
+        "left_arm": {
+          "position": [
+            0,
+            -2.5,
+            0
+          ],
+          "rotation": [
+            -52,
+            0,
+            -35
+          ]
+        },
+        "right_leg": {
+          "rotation": [
+            -24,
+            0,
+            18
+          ]
+        },
+        "left_leg": {
+          "rotation": [
+            -24,
+            0,
+            -18
+          ]
+        }
+      }
+    }
+  }
+}

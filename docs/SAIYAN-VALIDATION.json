@@ -1,0 +1,727 @@
+{
+  "artifact": "multiversal-spellbooks-0.3.4-saiyan-visuals-wig12.jar",
+  "sha256": "291CD5984ABA57152F29CD252D4A7990EA4B6B9B962137835A8B99D00327DA72",
+  "minecraft": "1.20.1",
+  "forge": "47.4.10",
+  "ironsSpellbooks": "3.16.3",
+  "packageVerified": true,
+  "generatedAssetsVerified": 11,
+  "iconMaster": "art/saiyan/saiyan_ascension_master.png",
+  "nativeIconPath": "assets/irons_ultimate_explosion/textures/gui/spell_icons/saiyan_ascension.png",
+  "serverRegression": {
+    "artifact": "multiversal-spellbooks-0.3.4-saiyan-visuals-wig1.jar",
+    "fixture": ".tools/saiyan-wig-server-check",
+    "passed": 155,
+    "failed": 0,
+    "wigAndControllerClassesUnchanged": [
+      "local/ironsultimateexplosion/SaiyanAnimations$Layer.class",
+      "local/ironsultimateexplosion/SaiyanAnimations.class",
+      "local/ironsultimateexplosion/SaiyanBook.class",
+      "local/ironsultimateexplosion/SaiyanConfig$Tier.class",
+      "local/ironsultimateexplosion/SaiyanInputPacket.class",
+      "local/ironsultimateexplosion/SaiyanManager$1.class",
+      "local/ironsultimateexplosion/SaiyanManager$Session.class",
+      "local/ironsultimateexplosion/SaiyanManager.class",
+      "local/ironsultimateexplosion/SaiyanRules$Drain.class",
+      "local/ironsultimateexplosion/SaiyanRules$Form.class",
+      "local/ironsultimateexplosion/SaiyanRules$Release.class",
+      "local/ironsultimateexplosion/SaiyanRules.class",
+      "local/ironsultimateexplosion/SaiyanSpell.class",
+      "local/ironsultimateexplosion/SaiyanStatePacket.class",
+      "local/ironsultimateexplosion/SaiyanWig.class"
+    ],
+    "cleanJvmShutdown": false,
+    "shutdownObservation": "All dimensions saved; non-daemon Ballistix blast workers required timeout termination.",
+    "configurationTuningNote": "Numeric drain defaults changed to 10/17 per second; controller and wig item behavior are unchanged. The 155-pass server run remains historical."
+  },
+  "clientIntegration": {
+    "artifact": "multiversal-spellbooks-0.3.4-saiyan-visuals-wig10.jar",
+    "fixture": ".tools/saiyan-prism-12",
+    "server": ".tools/saiyan-prism-10/server",
+    "worldReused": true,
+    "status": "completed",
+    "passed": 39,
+    "failed": 0,
+    "log": ".tools/saiyan-prism-12/client-automated-review.log",
+    "nativeCaptures": [
+      ".tools/saiyan-prism-12/screenshots/saiyan-after-power-down.png",
+      ".tools/saiyan-prism-12/screenshots/saiyan-base.png",
+      ".tools/saiyan-prism-12/screenshots/saiyan-hair-helmet.png",
+      ".tools/saiyan-prism-12/screenshots/saiyan-hair-low-angle.png",
+      ".tools/saiyan-prism-12/screenshots/saiyan-power-down-fade.png",
+      ".tools/saiyan-prism-12/screenshots/saiyan-power-down-hold.png",
+      ".tools/saiyan-prism-12/screenshots/saiyan-ssj1-burst.png",
+      ".tools/saiyan-prism-12/screenshots/saiyan-ssj1-charge.png",
+      ".tools/saiyan-prism-12/screenshots/saiyan-ssj1.png",
+      ".tools/saiyan-prism-12/screenshots/saiyan-ssj2-burst.png",
+      ".tools/saiyan-prism-12/screenshots/saiyan-ssj2-charge.png",
+      ".tools/saiyan-prism-12/screenshots/saiyan-ssj2-motion-246.png",
+      ".tools/saiyan-prism-12/screenshots/saiyan-ssj2-motion-250.png",
+      ".tools/saiyan-prism-12/screenshots/saiyan-ssj2-motion-254.png",
+      ".tools/saiyan-prism-12/screenshots/saiyan-ssj2-motion-258.png",
+      ".tools/saiyan-prism-12/screenshots/saiyan-ssj2-motion-262.png",
+      ".tools/saiyan-prism-12/screenshots/saiyan-ssj2-motion-266.png",
+      ".tools/saiyan-prism-12/screenshots/saiyan-ssj2.png"
+    ]
+  },
+  "previousClientIntegration": {
+    "artifact": "multiversal-spellbooks-0.3.4-saiyan-visuals-wig9.jar",
+    "fixture": ".tools/saiyan-prism-11",
+    "server": ".tools/saiyan-prism-10/server",
+    "worldReused": true,
+    "status": "completed",
+    "passed": 34,
+    "failed": 0,
+    "log": ".tools/saiyan-prism-11/client-automated-review.log",
+    "nativeCaptures": [
+      ".tools/saiyan-prism-11/screenshots/saiyan-after-power-down.png",
+      ".tools/saiyan-prism-11/screenshots/saiyan-base.png",
+      ".tools/saiyan-prism-11/screenshots/saiyan-power-down-fade.png",
+      ".tools/saiyan-prism-11/screenshots/saiyan-power-down-hold.png",
+      ".tools/saiyan-prism-11/screenshots/saiyan-ssj1-burst.png",
+      ".tools/saiyan-prism-11/screenshots/saiyan-ssj1-charge.png",
+      ".tools/saiyan-prism-11/screenshots/saiyan-ssj1.png",
+      ".tools/saiyan-prism-11/screenshots/saiyan-ssj2-burst.png",
+      ".tools/saiyan-prism-11/screenshots/saiyan-ssj2-charge.png",
+      ".tools/saiyan-prism-11/screenshots/saiyan-ssj2-motion-246.png",
+      ".tools/saiyan-prism-11/screenshots/saiyan-ssj2-motion-250.png",
+      ".tools/saiyan-prism-11/screenshots/saiyan-ssj2-motion-254.png",
+      ".tools/saiyan-prism-11/screenshots/saiyan-ssj2-motion-258.png",
+      ".tools/saiyan-prism-11/screenshots/saiyan-ssj2-motion-262.png",
+      ".tools/saiyan-prism-11/screenshots/saiyan-ssj2-motion-266.png",
+      ".tools/saiyan-prism-11/screenshots/saiyan-ssj2.png"
+    ]
+  },
+  "shaderReview": {
+    "shaderPack": "Solas Shader V3.7b.zip",
+    "oculus": "1.8.0",
+    "enabled": true,
+    "visualAcceptance": false,
+    "observation": "User accepted the aura; wig10 hair fix reviewed natively with Solas enabled. Revised hair awaits user review.",
+    "reviewShadowDistanceCap": 2,
+    "requestedReviewFramebuffer": [
+      1280,
+      720
+    ],
+    "renderStage": "AFTER_TRANSLUCENT_BLOCKS",
+    "depthTest": true,
+    "depthWrites": false,
+    "agentVisualReview": true,
+    "actualReviewFramebuffer": [
+      1280,
+      720
+    ],
+    "nativeObservations": {
+      "auraAboveHair": true,
+      "bodyVisible": true,
+      "horizonBandObserved": false,
+      "flareMotionFrames": 6,
+      "bodyVisibleDuringBurst": true
+    },
+    "motionPreview": "art/saiyan/review/ssj2_motion.png",
+    "latestNativeFixture": ".tools/saiyan-prism-11",
+    "auraUserAccepted": true
+  },
+  "audioReview": {
+    "source": "art/saiyan/audio-source.json",
+    "rawYellAcceptedByUser": true,
+    "backgroundRemoval": "Local normalized UVR-MDX-NET-Voc_FT separation, plus light residual denoising",
+    "sourceAudioUploaded": false,
+    "runtimeAudioSeparation": false,
+    "ssj1Seconds": 2.5,
+    "ssj2Seconds": 3,
+    "interiorSignalContinuous": true,
+    "cleanedYellAcceptance": false,
+    "preview": "art/saiyan/ssj2_charge_preview.ogg",
+    "regenerationObservation": "SSJ1 decoded regeneration identical; SSJ2 decoded RMS difference 4.93/32768, matching duration and continuity."
+  },
+  "prismReviewSession": {
+    "serverPid": 4080,
+    "prismInstance": "C:\\Users\\Dalton\\AppData\\Roaming\\PrismLauncher\\instances\\Saiyan Ascension Solas Review 2",
+    "server": "C:\\Users\\Dalton\\OneDrive\\Documents\\mod development\\thunderstar-cuirass\\.tools\\saiyan-prism-10\\server",
+    "address": "127.0.0.1:25579",
+    "manualInput": true,
+    "manualStats": true,
+    "offscreen": false,
+    "artifact": "multiversal-spellbooks-0.3.4-saiyan-visuals-wig12.jar",
+    "statsWatcherPid": 25132,
+    "clientPid": 17152,
+    "exitWatcherPid": 2044,
+    "status": "closed",
+    "worldReused": true,
+    "manualReviewPending": false,
+    "statsSummary": ".tools/saiyan-prism-15/stats-summary.json"
+  },
+  "performance": {
+    "previousCpuRenderSubmission": {
+      "fixture": ".tools/saiyan-prism-5",
+      "ssj2MeanMs": 0.4012,
+      "ssj2P95Ms": 0.6159
+    },
+    "gpuOrWholeGameFpsMeasured": false,
+    "multipleCastersMeasured": false,
+    "cpuRenderSubmission": {
+      "fixture": ".tools/saiyan-prism-12",
+      "phases": [
+        {
+          "phase": "startup",
+          "samples": 12,
+          "meanMs": 0.0262,
+          "p95Ms": 0.1115,
+          "maxMs": 0.1115
+        },
+        {
+          "phase": "form-0",
+          "samples": 756,
+          "meanMs": 0.0165,
+          "p95Ms": 0.0847,
+          "maxMs": 1.7971
+        },
+        {
+          "phase": "charge-1",
+          "samples": 288,
+          "meanMs": 0.1204,
+          "p95Ms": 0.1768,
+          "maxMs": 0.2737
+        },
+        {
+          "phase": "form-1",
+          "samples": 326,
+          "meanMs": 0.1151,
+          "p95Ms": 0.2108,
+          "maxMs": 0.3032
+        },
+        {
+          "phase": "charge-2",
+          "samples": 344,
+          "meanMs": 0.1316,
+          "p95Ms": 0.1784,
+          "maxMs": 0.2779
+        },
+        {
+          "phase": "form-2",
+          "samples": 602,
+          "meanMs": 0.1508,
+          "p95Ms": 0.2428,
+          "maxMs": 0.5308
+        }
+      ],
+      "scope": "CPU aura geometry and draw submission for one caster; not GPU time or whole-game FPS"
+    },
+    "latestMemoryObservation": {
+      "freePhysicalKiB": 12420616,
+      "freeCommitKiB": 12284316,
+      "liveHeapCleanupAttempted": false
+    },
+    "previousHairFixCpuRenderSubmission": {
+      "fixture": ".tools/saiyan-prism-11",
+      "phases": [
+        {
+          "phase": "startup",
+          "samples": 14,
+          "meanMs": 0.027,
+          "p95Ms": 0.1419,
+          "maxMs": 0.1419
+        },
+        {
+          "phase": "form-0",
+          "samples": 520,
+          "meanMs": 0.0271,
+          "p95Ms": 0.1072,
+          "maxMs": 2.8185
+        },
+        {
+          "phase": "charge-1",
+          "samples": 268,
+          "meanMs": 0.1337,
+          "p95Ms": 0.1962,
+          "maxMs": 0.539
+        },
+        {
+          "phase": "form-1",
+          "samples": 334,
+          "meanMs": 0.1247,
+          "p95Ms": 0.2259,
+          "maxMs": 0.3605
+        },
+        {
+          "phase": "charge-2",
+          "samples": 342,
+          "meanMs": 0.1688,
+          "p95Ms": 0.2428,
+          "maxMs": 0.4906
+        },
+        {
+          "phase": "form-2",
+          "samples": 600,
+          "meanMs": 0.1574,
+          "p95Ms": 0.2682,
+          "maxMs": 0.4358
+        }
+      ],
+      "scope": "CPU geometry and draw submission for one caster; not GPU time or whole-game FPS"
+    }
+  },
+  "failuresPreserved": [
+    {
+      "fixture": ".tools/saiyan-prism-4",
+      "issue": "WG1 native particle vertex order crash; corrected in WG3."
+    },
+    {
+      "fixture": ".tools/saiyan-prism-5",
+      "issue": "First attempt native Embeddium terrain allocation failure before spell checks; reduced shadow distance retry passed."
+    },
+    {
+      "fixture": ".tools/saiyan-prism-6",
+      "issue": "First connection disconnected before world login; test helper now records disconnect screen and retries."
+    },
+    {
+      "fixture": ".tools/saiyan-prism-6",
+      "issue": "Unrelated Penumbra intro blocked tests and exhausted native commit headroom; server native allocation failure. Intro skipped in next disposable server."
+    },
+    {
+      "fixture": ".tools/saiyan-prism-7",
+      "log": ".tools/saiyan-prism-7/client-native-memory-failure.log",
+      "issue": "Native Embeddium terrain allocation failure before spell assertions; retry uses test-only native display size override."
+    },
+    {
+      "fixture": ".tools/saiyan-prism-7",
+      "issue": "Test window injection initially required a static constructor handler; corrected. Log preserved separately."
+    },
+    {
+      "fixture": ".tools/saiyan-prism-7",
+      "issue": "Window constructor size was overridden by saved fullscreen option. Actual framebuffer 2560x1441; native C2 compiler allocation failure at test age 160 after SSJ1 captures. Native fullscreen option now disabled by test helper."
+    },
+    {
+      "fixture": ".tools/saiyan-prism-9",
+      "issue": "Eureka failed during shared vanilla registry initialization with ConcurrentModificationException. Next disposable server uses FML maxThreads=1."
+    },
+    {
+      "fixture": ".tools/saiyan-prism-10",
+      "issue": "Native allocation failure after the completed 34-pass visual review, during late live-heap cleanup.",
+      "log": ".tools/saiyan-prism-10/client-late-native-memory-failure.log"
+    }
+  ],
+  "clientGameplayReviewed": true,
+  "twoPlayerVisualsReviewed": false,
+  "productionInstalled": false,
+  "backgroundOptimization": {
+    "artifact": "multiversal-spellbooks-0.3.4-saiyan-visuals-wig9.jar",
+    "sha256": "9FD7F6284FD08E0C9FF513A891492C1A7E730267C86152A4D0ADD51005933431",
+    "baseArtifact": "multiversal-spellbooks-0.3.4-saiyan-visuals-wig8.jar",
+    "replacedClasses": [
+      "local/ironsultimateexplosion/SaiyanVisuals.class"
+    ],
+    "addedClasses": [
+      "local/ironsultimateexplosion/SaiyanVisuals$FlameRow.class"
+    ],
+    "otherPayloadEntriesByteIdentical": 169,
+    "geometryEquivalence": {
+      "cases": 90,
+      "verticesCompared": 116640,
+      "bitIdentical": true,
+      "oldTemporaryPositionObjects": 116640,
+      "newTemporaryPositionObjects": 0,
+      "oldCurveCalls": 1287360,
+      "newCurveCalls": 44640,
+      "scope": "Extracted Java geometry; raw float vertex values and ordering, not native rendering or FPS",
+      "curveCallReductionPercent": 96.53
+    },
+    "sourceCompiled": true,
+    "sourceSha256": "35FF6928E2C148F00901A94870F01CE6702839109060E4327003C2DD11A180F8",
+    "nativeReviewCompleted": true,
+    "productionInstalled": false,
+    "packageVerified": true,
+    "compilerProcessorLimit": 1,
+    "compilerMaxHeapMiB": 192,
+    "gameOrServerLaunched": true,
+    "furtherNativeReviewRequiresUserApproval": true,
+    "nativeReview": {
+      "artifact": "multiversal-spellbooks-0.3.4-saiyan-visuals-wig9.jar",
+      "fixture": ".tools/saiyan-prism-11",
+      "server": ".tools/saiyan-prism-10/server",
+      "worldReused": true,
+      "status": "completed",
+      "passed": 34,
+      "failed": 0,
+      "log": ".tools/saiyan-prism-11/client-automated-review.log",
+      "nativeCaptures": [
+        ".tools/saiyan-prism-11/screenshots/saiyan-after-power-down.png",
+        ".tools/saiyan-prism-11/screenshots/saiyan-base.png",
+        ".tools/saiyan-prism-11/screenshots/saiyan-power-down-fade.png",
+        ".tools/saiyan-prism-11/screenshots/saiyan-power-down-hold.png",
+        ".tools/saiyan-prism-11/screenshots/saiyan-ssj1-burst.png",
+        ".tools/saiyan-prism-11/screenshots/saiyan-ssj1-charge.png",
+        ".tools/saiyan-prism-11/screenshots/saiyan-ssj1.png",
+        ".tools/saiyan-prism-11/screenshots/saiyan-ssj2-burst.png",
+        ".tools/saiyan-prism-11/screenshots/saiyan-ssj2-charge.png",
+        ".tools/saiyan-prism-11/screenshots/saiyan-ssj2-motion-246.png",
+        ".tools/saiyan-prism-11/screenshots/saiyan-ssj2-motion-250.png",
+        ".tools/saiyan-prism-11/screenshots/saiyan-ssj2-motion-254.png",
+        ".tools/saiyan-prism-11/screenshots/saiyan-ssj2-motion-258.png",
+        ".tools/saiyan-prism-11/screenshots/saiyan-ssj2-motion-262.png",
+        ".tools/saiyan-prism-11/screenshots/saiyan-ssj2-motion-266.png",
+        ".tools/saiyan-prism-11/screenshots/saiyan-ssj2.png"
+      ]
+    },
+    "performanceMeasured": "CPU geometry and draw submission for one caster only"
+  },
+  "historicalClientIntegrations": [
+    {
+      "artifact": "multiversal-spellbooks-0.3.4-saiyan-visuals-wig7.jar",
+      "fixture": ".tools/saiyan-prism-8",
+      "passed": 34,
+      "failed": 0,
+      "observation": "Native 1280x720 review; taller curved aura and full gameplay pass, but pale sky band remained."
+    },
+    {
+      "artifact": "multiversal-spellbooks-0.3.4-saiyan-visuals-wig8.jar",
+      "fixture": ".tools/saiyan-prism-10",
+      "status": "completed",
+      "passed": 34,
+      "failed": 0,
+      "log": ".tools/saiyan-prism-10/client-automated-review.log",
+      "nativeCaptures": [
+        ".tools/saiyan-prism-10/screenshots/saiyan-after-power-down.png",
+        ".tools/saiyan-prism-10/screenshots/saiyan-base.png",
+        ".tools/saiyan-prism-10/screenshots/saiyan-power-down-fade.png",
+        ".tools/saiyan-prism-10/screenshots/saiyan-power-down-hold.png",
+        ".tools/saiyan-prism-10/screenshots/saiyan-ssj1-burst.png",
+        ".tools/saiyan-prism-10/screenshots/saiyan-ssj1-charge.png",
+        ".tools/saiyan-prism-10/screenshots/saiyan-ssj1.png",
+        ".tools/saiyan-prism-10/screenshots/saiyan-ssj2-burst.png",
+        ".tools/saiyan-prism-10/screenshots/saiyan-ssj2-charge.png",
+        ".tools/saiyan-prism-10/screenshots/saiyan-ssj2-motion-246.png",
+        ".tools/saiyan-prism-10/screenshots/saiyan-ssj2-motion-250.png",
+        ".tools/saiyan-prism-10/screenshots/saiyan-ssj2-motion-254.png",
+        ".tools/saiyan-prism-10/screenshots/saiyan-ssj2-motion-258.png",
+        ".tools/saiyan-prism-10/screenshots/saiyan-ssj2-motion-262.png",
+        ".tools/saiyan-prism-10/screenshots/saiyan-ssj2-motion-266.png",
+        ".tools/saiyan-prism-10/screenshots/saiyan-ssj2.png"
+      ]
+    }
+  ],
+  "previousPrismReviewSession": {
+    "instanceId": "Saiyan Ascension Solas Review 2",
+    "fixture": ".tools/saiyan-prism-10",
+    "address": "127.0.0.1:25579",
+    "manualReviewPending": false,
+    "desktopAuthorization": "Further desktop or server launches require prior user permission; background file edits and lightweight checks are authorized.",
+    "serverModInitializationThreads": 1,
+    "status": "closed",
+    "nextLaunchRequiresUserApproval": true,
+    "observation": "Review completed with 34 passes and native captures. Client later exhausted native memory during live heap cleanup; owned server and diagnostic helper stopped. User now requires notification and permission before further desktop/server testing."
+  },
+  "previousCpuRenderSubmission": {
+    "fixture": ".tools/saiyan-prism-10",
+    "phases": [
+      {
+        "phase": "startup",
+        "samples": 16,
+        "meanMs": 0.0329,
+        "p95Ms": 0.1258,
+        "maxMs": 0.1258
+      },
+      {
+        "phase": "form-0",
+        "samples": 460,
+        "meanMs": 0.0538,
+        "p95Ms": 0.3247,
+        "maxMs": 1.722
+      },
+      {
+        "phase": "charge-1",
+        "samples": 260,
+        "meanMs": 0.362,
+        "p95Ms": 0.5092,
+        "maxMs": 0.6285
+      },
+      {
+        "phase": "form-1",
+        "samples": 310,
+        "meanMs": 0.6067,
+        "p95Ms": 0.572,
+        "maxMs": 85.8218
+      },
+      {
+        "phase": "charge-2",
+        "samples": 330,
+        "meanMs": 0.3716,
+        "p95Ms": 0.5395,
+        "maxMs": 1.0328
+      },
+      {
+        "phase": "form-2",
+        "samples": 596,
+        "meanMs": 0.4346,
+        "p95Ms": 0.6994,
+        "maxMs": 4.9862
+      }
+    ]
+  },
+  "hairFix": {
+    "artifact": "multiversal-spellbooks-0.3.4-saiyan-visuals-wig10.jar",
+    "sha256": "E6E8547A375B3423D38725B0A11CE676B35C01301C72D6B6765E884D0A06DB1B",
+    "baseArtifact": "multiversal-spellbooks-0.3.4-saiyan-visuals-wig9.jar",
+    "replacedClasses": [
+      "local/ironsultimateexplosion/SaiyanWigRenderer.class"
+    ],
+    "addedClasses": [],
+    "otherPayloadEntriesByteIdentical": 170,
+    "hairGeometry": {
+      "passed": true,
+      "forms": 3,
+      "locksPerForm": 11,
+      "crossSections": 132,
+      "headOuterLayerTop": -8.5,
+      "lowestWigVertex": -8.55,
+      "helmetTop": -9.0,
+      "helmetLift": 0.75,
+      "geometryNote": "Quads linearly join cross sections above the head; the cap also clears the outer skin layer.",
+      "sourceSha256": "A2C21D34FC3B03549EDA15931B06CFCB6F4A59C864909E39E51BC3E2E4E77372"
+    },
+    "sourceCompiled": true,
+    "sourceSha256": "A2C21D34FC3B03549EDA15931B06CFCB6F4A59C864909E39E51BC3E2E4E77372",
+    "nativeReviewCompleted": false,
+    "productionInstalled": false,
+    "nativeReview": {
+      "artifact": "multiversal-spellbooks-0.3.4-saiyan-visuals-wig10.jar",
+      "fixture": ".tools/saiyan-prism-12",
+      "server": ".tools/saiyan-prism-10/server",
+      "worldReused": true,
+      "status": "completed",
+      "passed": 39,
+      "failed": 0,
+      "log": ".tools/saiyan-prism-12/client-automated-review.log",
+      "nativeCaptures": [
+        ".tools/saiyan-prism-12/screenshots/saiyan-after-power-down.png",
+        ".tools/saiyan-prism-12/screenshots/saiyan-base.png",
+        ".tools/saiyan-prism-12/screenshots/saiyan-hair-helmet.png",
+        ".tools/saiyan-prism-12/screenshots/saiyan-hair-low-angle.png",
+        ".tools/saiyan-prism-12/screenshots/saiyan-power-down-fade.png",
+        ".tools/saiyan-prism-12/screenshots/saiyan-power-down-hold.png",
+        ".tools/saiyan-prism-12/screenshots/saiyan-ssj1-burst.png",
+        ".tools/saiyan-prism-12/screenshots/saiyan-ssj1-charge.png",
+        ".tools/saiyan-prism-12/screenshots/saiyan-ssj1.png",
+        ".tools/saiyan-prism-12/screenshots/saiyan-ssj2-burst.png",
+        ".tools/saiyan-prism-12/screenshots/saiyan-ssj2-charge.png",
+        ".tools/saiyan-prism-12/screenshots/saiyan-ssj2-motion-246.png",
+        ".tools/saiyan-prism-12/screenshots/saiyan-ssj2-motion-250.png",
+        ".tools/saiyan-prism-12/screenshots/saiyan-ssj2-motion-254.png",
+        ".tools/saiyan-prism-12/screenshots/saiyan-ssj2-motion-258.png",
+        ".tools/saiyan-prism-12/screenshots/saiyan-ssj2-motion-262.png",
+        ".tools/saiyan-prism-12/screenshots/saiyan-ssj2-motion-266.png",
+        ".tools/saiyan-prism-12/screenshots/saiyan-ssj2.png"
+      ]
+    },
+    "agentVisualReview": true,
+    "nativeObservations": {
+      "faceClearInBase": true,
+      "faceClearInSSJ1": true,
+      "faceClearInSSJ2": true,
+      "tiltedHeadForeheadClear": true,
+      "standardHelmetClear": true
+    },
+    "userAcceptancePending": true
+  },
+  "historicalPrismReviewSessions": [
+    {
+      "artifact": "multiversal-spellbooks-0.3.4-saiyan-visuals-wig9.jar",
+      "fixture": ".tools/saiyan-prism-11",
+      "server": ".tools/saiyan-prism-10/server",
+      "worldReused": true,
+      "status": "closed",
+      "address": "127.0.0.1:25579",
+      "instanceId": "Saiyan Ascension Solas Review 2",
+      "desktopAuthorization": "User explicitly requested PC use and the same disposable server for functional and visual testing.",
+      "manualReviewPending": false,
+      "serverModInitializationThreads": 1,
+      "nextLaunchRequiresUserApproval": true,
+      "clientPid": 16004,
+      "serverPid": 15180,
+      "exitWatcherPid": 27312,
+      "castKey": "V",
+      "perspectiveKey": "F5",
+      "observation": "Closed through the native game shutdown API for the hair update. Server saved all dimensions; lingering workers required the existing runner timeout termination."
+    }
+  ],
+  "configurationTuning": {
+    "artifact": "multiversal-spellbooks-0.3.4-saiyan-visuals-wig12.jar",
+    "sha256": "291CD5984ABA57152F29CD252D4A7990EA4B6B9B962137835A8B99D00327DA72",
+    "baseArtifact": "multiversal-spellbooks-0.3.4-saiyan-visuals-wig11.jar",
+    "changedClasses": [
+      "local/ironsultimateexplosion/SaiyanConfig.class"
+    ],
+    "otherPayloadEntriesByteIdentical": 172,
+    "manaDrainPerSecond": {
+      "ssj1": 10,
+      "ssj2": 17
+    },
+    "manaDrainPerTenServerTicks": {
+      "ssj1": 5,
+      "ssj2": 8.5
+    },
+    "sourceCompiled": true,
+    "sourceSha256": "2233BC186D61A0BA52682CBA5E4F5AEC587B2A2D7000951A97C103940D23182C",
+    "nativeGameplayRerun": true,
+    "productionInstalled": false,
+    "disposableCopiesInstalled": true,
+    "serverConfig": ".tools/saiyan-prism-10/server/world/serverconfig/irons_ultimate_explosion-server.toml",
+    "serverConfigUpdated": true,
+    "installedLocations": [
+      "C:\\Users\\Dalton\\OneDrive\\Documents\\mod development\\thunderstar-cuirass\\.tools\\saiyan-prism-10\\server\\mods\\multiversal-spellbooks-0.3.4-saiyan-visuals-wig12.jar",
+      "C:\\Users\\Dalton\\AppData\\Roaming\\PrismLauncher\\instances\\Saiyan Ascension Solas Review 2\\minecraft\\mods\\multiversal-spellbooks-0.3.4-saiyan-visuals-wig12.jar"
+    ],
+    "nativeGameplayScope": "Live manual combat review in the disposable Prism/Solas modpack. Use the combat evidence and live results for observed coverage; this is not a repeat of the historical automated test suite."
+  },
+  "manualCombatReview": {
+    "artifact": "multiversal-spellbooks-0.3.4-saiyan-visuals-wig12.jar",
+    "fixture": ".tools/saiyan-prism-15",
+    "status": "manual_review_completed",
+    "userAcceptedBuild": true,
+    "shaderPack": "Solas Shader V3.7b.zip",
+    "forms": {
+      "BASE": {
+        "attributeSnapshots": 185,
+        "attributeFailures": 0,
+        "manaPayments": 4,
+        "manaFailures": 0,
+        "reductionChecks": 0,
+        "reductionFailures": 0,
+        "matchingFullStrengthHitExamples": [
+          1.0,
+          6.0
+        ],
+        "latestAttributes": {
+          "spellPower": {
+            "pass": true,
+            "actual": 1.0,
+            "expected": 1.0
+          },
+          "meleeDamage": {
+            "pass": true,
+            "actual": 1.0,
+            "expected": 1.0
+          },
+          "movementSpeed": {
+            "pass": true,
+            "actual": 0.10000000149011612,
+            "expected": 0.10000000149011612
+          },
+          "attackSpeed": {
+            "pass": true,
+            "actual": 4.0,
+            "expected": 4.0
+          },
+          "knockbackResistance": {
+            "pass": true,
+            "actual": 0.0,
+            "expected": 0.0
+          },
+          "manaRegen": {
+            "pass": true,
+            "actual": 1.0,
+            "expected": 1.0
+          }
+        },
+        "latestConfiguredDrain": 0.0
+      },
+      "SUPER_SAIYAN_1": {
+        "attributeSnapshots": 41,
+        "attributeFailures": 0,
+        "manaPayments": 85,
+        "manaFailures": 0,
+        "reductionChecks": 0,
+        "reductionFailures": 0,
+        "matchingFullStrengthHitExamples": [
+          1.25,
+          7.5
+        ],
+        "latestAttributes": {
+          "spellPower": {
+            "pass": true,
+            "actual": 1.2,
+            "expected": 1.2
+          },
+          "meleeDamage": {
+            "pass": true,
+            "actual": 1.25,
+            "expected": 1.25
+          },
+          "movementSpeed": {
+            "pass": true,
+            "actual": 0.017250000257045033,
+            "expected": 0.01725000025704503
+          },
+          "attackSpeed": {
+            "pass": true,
+            "actual": 4.6,
+            "expected": 4.6
+          },
+          "knockbackResistance": {
+            "pass": true,
+            "actual": 0.5,
+            "expected": 0.5
+          },
+          "manaRegen": {
+            "pass": true,
+            "actual": 0.5,
+            "expected": 0.5
+          }
+        },
+        "latestConfiguredDrain": 10.0
+      },
+      "SUPER_SAIYAN_2": {
+        "attributeSnapshots": 120,
+        "attributeFailures": 0,
+        "manaPayments": 238,
+        "manaFailures": 0,
+        "reductionChecks": 0,
+        "reductionFailures": 0,
+        "matchingFullStrengthHitExamples": [
+          1.4,
+          8.4
+        ],
+        "latestAttributes": {
+          "spellPower": {
+            "pass": true,
+            "actual": 1.35,
+            "expected": 1.35
+          },
+          "meleeDamage": {
+            "pass": true,
+            "actual": 1.4,
+            "expected": 1.4
+          },
+          "movementSpeed": {
+            "pass": true,
+            "actual": 0.12500000186264515,
+            "expected": 0.12500000186264515
+          },
+          "attackSpeed": {
+            "pass": true,
+            "actual": 5.0,
+            "expected": 5.0
+          },
+          "knockbackResistance": {
+            "pass": true,
+            "actual": 0.8,
+            "expected": 0.8
+          },
+          "manaRegen": {
+            "pass": true,
+            "actual": 0.25,
+            "expected": 0.25
+          }
+        },
+        "latestConfiguredDrain": 17.0
+      }
+    },
+    "liveSummary": ".tools/saiyan-prism-15/stats-summary.json",
+    "rawRecords": ".tools/saiyan-prism-15/stats.jsonl",
+    "incomingReductionObservedForBothForms": false,
+    "twoHumanClientsTested": false,
+    "wholeGameFpsMeasured": false,
+    "testManaCapacity": 1000
+  }
+}

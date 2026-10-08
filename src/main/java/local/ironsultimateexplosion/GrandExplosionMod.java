@@ -22,6 +22,7 @@ public final class GrandExplosionMod {
         MinecraftForge.EVENT_BUS.register(SpellEvents.class);
         MinecraftForge.EVENT_BUS.register(CraterManager.class);
         MinecraftForge.EVENT_BUS.register(ThundercrashManager.class);
+        MinecraftForge.EVENT_BUS.register(SaiyanManager.class);
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ExplosionConfig.SERVER);
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ExplosionConfig.CLIENT);
         ExplosionNetwork.register();
@@ -29,6 +30,9 @@ public final class GrandExplosionMod {
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
             ThundercrashClient.register();
             bus.addListener(ThundercrashClient::reload);
+            SaiyanClient.register();
+            bus.addListener(SaiyanClient::reload);
+            bus.addListener(SaiyanWigRenderer::setup);
         });
     }
 }

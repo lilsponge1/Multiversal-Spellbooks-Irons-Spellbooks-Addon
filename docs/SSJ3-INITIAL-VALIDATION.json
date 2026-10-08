@@ -1,0 +1,151 @@
+{
+  "artifact": "multiversal-spellbooks-0.3.5-saiyan-ssj3.jar",
+  "sha256": "FB9AC7EC025E274ACFBD44CC5B683EBF28A9A40848FD9FBABEF8473847A6F1F6",
+  "baseArtifact": "multiversal-spellbooks-0.3.4-saiyan-visuals-wig12.jar",
+  "baseSha256": "291CD5984ABA57152F29CD252D4A7990EA4B6B9B962137835A8B99D00327DA72",
+  "minecraft": "1.20.1",
+  "forge": "47.4.10",
+  "ironsSpellbooks": "3.16.3",
+  "sourceCompiledAgainstInstalledPack": true,
+  "packageVerified": true,
+  "networkProtocol": 5,
+  "serverRegression": {
+    "fixture": ".tools\\ssj3-server-check-3",
+    "startup": true,
+    "passed": 410,
+    "failed": 0,
+    "exit_code": 1,
+    "forced": true,
+    "testedArtifactContentEqualsRelease": true,
+    "worldSaved": true,
+    "checksPassed": true,
+    "cleanJvmShutdown": false,
+    "shutdownObservation": "World and server thread saved/stopped; the unchanged pack's non-daemon Ballistix Simple blast thread kept the JVM alive, so the runner terminated it after 90 seconds. The process exit is not reported as a clean shutdown.",
+    "coverage": [
+      "SSJ1/SSJ2 unchanged stats and 10/17 drain",
+      "SSJ3 exact 300-tick charge",
+      "SSJ3 bonuses replace prior modifiers",
+      "Deferred configurable fee and 30/sec upkeep",
+      "Native regeneration penalty and dynamic cap",
+      "Mana exhaustion directly to Base",
+      "Damage reduction and bypass tags",
+      "Maximum health/clamp, critical attribute, jump strength",
+      "Hold/cancel, equipment, death/logout/dimension cleanup",
+      "Repeated cycles do not stack modifiers",
+      "Native state and cosmetic packet round trips"
+    ]
+  },
+  "hairGeometry": {
+    "passed": true,
+    "oldFormsBitIdentical": true,
+    "cachedGeometry": true,
+    "wholeQuadClearance": true,
+    "thirdHeadQuads": 1824,
+    "thirdManeQuads": 2496,
+    "movingHeadSamples": 5616000,
+    "headRotations": "yaw -90..90, pitch -60..60",
+    "hairMotionStrengthTested": 2,
+    "chargeRevealTested": [
+      0,
+      0.5,
+      1
+    ],
+    "tailTipMaximumY": 20.202187,
+    "sourceSha256": "E11189E50594EF7C4F9E0B8799CE72F79565BF55DE07AF217242A878FDAF027C",
+    "rendererSha256": "4259F7EF9492CE5EF2D9614EEAADF4932260E7DE5473DD4988DF64127315E646",
+    "nativeRenderingTested": false
+  },
+  "auraGeometry": {
+    "thirdCases": 252,
+    "thirdVerticesChecked": 362880,
+    "thirdFiniteAndBounded": true,
+    "cases": 90,
+    "verticesCompared": 116640,
+    "bitIdentical": true,
+    "oldTemporaryPositionObjects": 116640,
+    "newTemporaryPositionObjects": 0,
+    "oldCurveCalls": 1287360,
+    "newCurveCalls": 44640,
+    "scope": "Extracted Java geometry; raw float vertex values and ordering, not native rendering or FPS",
+    "curveCallReductionPercent": 96.53
+  },
+  "audioAssets": {
+    "ssj3_charge": {
+      "durationSeconds": 15.0,
+      "peak": 0.819610595703125,
+      "sha256": "B7DFBAA7C6FDAA46A7E9D1A6B9B960347BCF5D3293FD036900EAB083220B25B1"
+    },
+    "ssj3_yell": {
+      "durationSeconds": 3.0,
+      "peak": 0.955902099609375,
+      "sha256": "DA06C9A49BA466187CD3560061387E108C61E84776B3F0615BFBA206E6B38DD9"
+    },
+    "ssj3_music": {
+      "durationSeconds": 5.0,
+      "peak": 0.643524169921875,
+      "sha256": "7B6FBAD8A2BC95A551EF9A94AAF477515136EB0C0BC9DE529EA68597DAD86198"
+    }
+  },
+  "unchangedPayloadEntries": 153,
+  "originalWigRecipePreserved": true,
+  "originalSpellIconPreserved": true,
+  "testHelpersPackaged": false,
+  "nativeSSJ3VisualReviewCompleted": false,
+  "nativeSSJ3AudioListeningCompleted": false,
+  "nativeSSJ3FpsOrGpuMeasurements": null,
+  "productionInstalled": false,
+  "visibleMinecraftOrPrismLaunched": true,
+  "manualReview": {
+    "status": "in_progress",
+    "fixture": ".tools/saiyan-prism-16",
+    "sameDisposableWorld": ".tools/saiyan-prism-10/server/world",
+    "prismInstance": "Saiyan Ascension Solas Review 2",
+    "address": "127.0.0.1:25579",
+    "shaderPack": "Solas Shader V3.7b.zip",
+    "passiveStats": ".tools/saiyan-prism-16/stats-summary.json",
+    "controls": "Manual casting and camera; no automatic movement or transformation inputs",
+    "visualAudioPerformanceAccepted": false
+  },
+  "remainingInGameReview": [
+    "SSJ3 hair and brow on actual skins, helmets and animated poses",
+    "Solas aura transparency, pillar and flash",
+    "Spoken line, sustained yell, music transition and nearby-player volume",
+    "Actual multiplayer appearance and client frame performance"
+  ],
+  "implementationCompromises": [
+    "Critical damage uses the installed shared Apothic attribute, affecting melee and spell criticals",
+    "Temporary brow samples the skin forehead; custom skin layouts need visual review",
+    "Uses compatible emissive/translucent waves instead of framebuffer refraction or dynamic world lighting"
+  ],
+  "earlierAttempts": [
+    {
+      "fixture": ".tools/ssj3-server-check-1",
+      "passed": 384,
+      "failed": 0,
+      "shutdownForced": true
+    },
+    {
+      "fixture": ".tools/ssj3-server-check-2",
+      "startup": false,
+      "reason": "Packet test helper initially shared a Java package with the release; fixed by separating the test package."
+    }
+  ],
+  "referenceMedia": {
+    "images (5) (ssj3).jfif": {
+      "path": "C:\\Users\\Dalton\\OneDrive\\Documents\\images (5) (ssj3).jfif",
+      "sha256": "5B693FE485BA561DFAA36B1E3F7C39D73D310D5911F24E72376539FBB1AEE5B7"
+    },
+    "images (ssj3).jfif": {
+      "path": "C:\\Users\\Dalton\\OneDrive\\Documents\\images (ssj3).jfif",
+      "sha256": "A1310FC1030A2F70BC4500A1E562B2CDB1215A30C061C62D387B7A3591DFE38D"
+    },
+    "Recording 2026-10-07 153943 (ssj3).mp4": {
+      "path": "C:\\Users\\Dalton\\OneDrive\\Documents\\Recording 2026-10-07 153943 (ssj3).mp4",
+      "sha256": "2DB3DC3E79FFC17BB83515155BC1D226B3D86A88FFC835ADBDE61D7D31847701"
+    },
+    "Recording 2026-10-07 154142 (ssj3 final).mp4": {
+      "path": "C:\\Users\\Dalton\\OneDrive\\Documents\\Recording 2026-10-07 154142 (ssj3 final).mp4",
+      "sha256": "1508B7126A9D6D1D8346759DC5C619FB94C0C0A4ADC05B0B84FB0B3170A38B45"
+    }
+  }
+}

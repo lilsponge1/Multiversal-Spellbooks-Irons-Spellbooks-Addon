@@ -1,0 +1,32 @@
+{
+  "source": "Recording 2026-10-05 183615 (ssj transformation).mp4",
+  "sourceSha256": "0646faa8a0ff41424b1fa2bdd477e6fb6fe2de2e703e1ce15492bfd81f4747fa",
+  "excerptSeconds": [
+    8.85,
+    10.65
+  ],
+  "backgroundEffectsRetained": false,
+  "samples": [
+    {
+      "name": "yell",
+      "seconds": 2.5,
+      "rate": 44100,
+      "minInterior100msRms": 0.11006372319046002,
+      "sha256": "9cf4d3fea4f333f51488950d67f8fed1ba40676d5619a723b4d52e67d9e758d7"
+    },
+    {
+      "name": "yell_2",
+      "seconds": 3.0,
+      "rate": 44100,
+      "minInterior100msRms": 0.12662154238086304,
+      "sha256": "85d3a0ee832608d49183e4a47865286d139e46becb0f813fc9b236fbd5aff0f8"
+    }
+  ],
+  "oggContainerSerialVariesOnRegeneration": true,
+  "backgroundRemoval": "Local normalized UVR-MDX-NET-Voc_FT inference plus light residual denoising",
+  "modelSha256": "534b2070fcc7df514b13ef660dc8cbb328679c2374d04354a5c42bb14ecce111",
+  "modelSource": "https://github.com/TRvlvr/model_repo/releases/tag/all_public_uvr_models",
+  "modelSettingsSource": "https://github.com/Anjok07/ultimatevocalremovergui",
+  "masterSha256": "11d5e7936667e74ac6ca128e4109ed281085431e2fe3f67b450ef8903d97c32e",
+  "isolatedAudioAcceptancePending": true
+}

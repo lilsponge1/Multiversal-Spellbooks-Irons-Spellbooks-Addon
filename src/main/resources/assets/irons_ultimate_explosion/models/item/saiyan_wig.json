@@ -1,0 +1,341 @@
+{
+  "textures": {
+    "hair": "minecraft:block/black_wool",
+    "particle": "minecraft:block/black_wool"
+  },
+  "elements": [
+    {
+      "from": [
+        3,
+        5,
+        3
+      ],
+      "to": [
+        13,
+        9,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#hair"
+        },
+        "south": {
+          "texture": "#hair"
+        },
+        "east": {
+          "texture": "#hair"
+        },
+        "west": {
+          "texture": "#hair"
+        },
+        "up": {
+          "texture": "#hair"
+        },
+        "down": {
+          "texture": "#hair"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        8,
+        7
+      ],
+      "to": [
+        8,
+        19,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#hair"
+        },
+        "south": {
+          "texture": "#hair"
+        },
+        "east": {
+          "texture": "#hair"
+        },
+        "west": {
+          "texture": "#hair"
+        },
+        "up": {
+          "texture": "#hair"
+        },
+        "down": {
+          "texture": "#hair"
+        }
+      },
+      "rotation": {
+        "origin": [
+          7,
+          8,
+          8.5
+        ],
+        "axis": "z",
+        "angle": -22.5
+      }
+    },
+    {
+      "from": [
+        10,
+        8,
+        8
+      ],
+      "to": [
+        12,
+        17,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#hair"
+        },
+        "south": {
+          "texture": "#hair"
+        },
+        "east": {
+          "texture": "#hair"
+        },
+        "west": {
+          "texture": "#hair"
+        },
+        "up": {
+          "texture": "#hair"
+        },
+        "down": {
+          "texture": "#hair"
+        }
+      },
+      "rotation": {
+        "origin": [
+          11,
+          8,
+          9.5
+        ],
+        "axis": "z",
+        "angle": 22.5
+      }
+    },
+    {
+      "from": [
+        3,
+        8,
+        9
+      ],
+      "to": [
+        5,
+        14,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#hair"
+        },
+        "south": {
+          "texture": "#hair"
+        },
+        "east": {
+          "texture": "#hair"
+        },
+        "west": {
+          "texture": "#hair"
+        },
+        "up": {
+          "texture": "#hair"
+        },
+        "down": {
+          "texture": "#hair"
+        }
+      },
+      "rotation": {
+        "origin": [
+          4,
+          8,
+          10.5
+        ],
+        "axis": "z",
+        "angle": -45
+      }
+    },
+    {
+      "from": [
+        12,
+        8,
+        10
+      ],
+      "to": [
+        14,
+        13,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#hair"
+        },
+        "south": {
+          "texture": "#hair"
+        },
+        "east": {
+          "texture": "#hair"
+        },
+        "west": {
+          "texture": "#hair"
+        },
+        "up": {
+          "texture": "#hair"
+        },
+        "down": {
+          "texture": "#hair"
+        }
+      },
+      "rotation": {
+        "origin": [
+          13,
+          8,
+          11.5
+        ],
+        "axis": "z",
+        "angle": 45
+      }
+    },
+    {
+      "from": [
+        5,
+        8,
+        12
+      ],
+      "to": [
+        7,
+        14,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#hair"
+        },
+        "south": {
+          "texture": "#hair"
+        },
+        "east": {
+          "texture": "#hair"
+        },
+        "west": {
+          "texture": "#hair"
+        },
+        "up": {
+          "texture": "#hair"
+        },
+        "down": {
+          "texture": "#hair"
+        }
+      },
+      "rotation": {
+        "origin": [
+          6,
+          8,
+          13.5
+        ],
+        "axis": "z",
+        "angle": -22.5
+      }
+    },
+    {
+      "from": [
+        9,
+        8,
+        11
+      ],
+      "to": [
+        11,
+        16,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#hair"
+        },
+        "south": {
+          "texture": "#hair"
+        },
+        "east": {
+          "texture": "#hair"
+        },
+        "west": {
+          "texture": "#hair"
+        },
+        "up": {
+          "texture": "#hair"
+        },
+        "down": {
+          "texture": "#hair"
+        }
+      },
+      "rotation": {
+        "origin": [
+          10,
+          8,
+          12.5
+        ],
+        "axis": "z",
+        "angle": 22.5
+      }
+    }
+  ],
+  "display": {
+    "gui": {
+      "rotation": [
+        25,
+        -30,
+        0
+      ],
+      "translation": [
+        0,
+        -2,
+        0
+      ],
+      "scale": [
+        0.62,
+        0.62,
+        0.62
+      ]
+    },
+    "ground": {
+      "translation": [
+        0,
+        3,
+        0
+      ],
+      "scale": [
+        0.35,
+        0.35,
+        0.35
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        -30,
+        0
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        75,
+        0,
+        0
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ]
+    }
+  }
+}

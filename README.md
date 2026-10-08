@@ -1,5 +1,9 @@
 # Multiversal Spellbooks addon
 
+## Ki School development
+
+This branch contains **Saiyan Ascension** (0.3.5 candidate), a craftable Curios Head wig with Super Saiyan I, II and III, synchronized aura/lightning, transformation audio and the connected SSJ3 mane. A dedicated **Ki** spell school is planned; Saiyan Ascension currently remains in **Lightning**. See [Ki School](KI-SCHOOL.md), [controls and stats](SAIYAN-ASCENSION.md) and [SSJ3 validation](SAIYAN-SSJ3.md).
+
 Forge Minecraft 1.20.1 addon for Iron's Spells 'n Spellbooks. This update combines Grand Explosion **0.3.3**, Crimson Susanoo **0.1.1**, Ignis Armor Compatibility **0.1.0**, and Omega Rush / Omega Form **0.2.4** into one JAR while retaining separate mod IDs, packages, resources and configs.
 
 ## Latest changes
@@ -35,12 +39,12 @@ Existing item/spell IDs and config files remain valid. The new Susanoo `damageMu
 
 Root `src/` contains Grand Explosion, Thundercrash, Thunderstar and Cinderstar. Independent modules live under `modules/crimson-susanoo/`, `modules/ignis-armor-compat/`, and `modules/omega-rush/`. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
-Use Java 17. Build root `src/` with `build.ps1`; its defaults reference an existing development workspace, so supply `-JdkBin`, `-LibraryDir`, `-ModDir`, `-MinecraftJar`, `-MinecraftServerJar` and `-SrgMinecraftJar` for another machine. The script needs the matching Forge runtime and SRG Minecraft JARs plus the pack libraries. Root output defaults to `build/grand-explosion-0.3.3.jar`. `build-test.ps1` creates a separate disposable-world harness, excluded from production.
+Use Java 17. Build root `src/` with `build.ps1`; its defaults reference an existing development workspace, so supply `-JdkBin`, `-LibraryDir`, `-ModDir`, `-MinecraftJar`, `-MinecraftServerJar` and `-SrgMinecraftJar` for another machine. The script needs the matching Forge runtime and SRG Minecraft JARs plus the pack libraries. Root output defaults to `build/grand-explosion-0.3.5.jar`. `build-test.ps1` creates a separate disposable-world harness, excluded from production.
 
 Build each module with its own Gradle wrapper (see its README), then assemble:
 
 ```powershell
-./build-combined.ps1 -GrandExplosionJar ./build/grand-explosion-0.3.3.jar
+./build-combined.ps1 -GrandExplosionJar ./build/grand-explosion-0.3.5.jar
 ```
 
 Build Omega Rush separately with `modules/omega-rush/build.ps1` before assembly, or pass `-BuildOmega`. To preserve all existing bytes in an accepted combined release and add only Omega Rush:
@@ -49,7 +53,7 @@ Build Omega Rush separately with `modules/omega-rush/build.ps1` before assembly,
 ./build-combined.ps1 -CombinedBaseJar ./path/to/accepted-multiversal.jar -BuildOmega
 ```
 
-Python 3.11+ is required for the packager; pass `-Python <python.exe>` if needed. `-BuildCrimson` and `-BuildIgnisArmor` build the modules first; `-Offline` requires cached Gradle dependencies. `-CrimsonJar`, `-IgnisArmorJar`, `-OmegaJar`, and `-OutputJar` override inputs/output. In the module-input mode, passing `-IgnisArmorJar ''` or `-OmegaJar ''` omits that optional module. Default output is `build/release/multiversal-spellbooks-0.3.3-crimson-0.1.1-ignis-0.1.0-omega-0.2.4.jar`, with checksum and input/payload report. Existing output files are never overwritten. Only shared metadata is merged; third-party dependencies are never bundled.
+Python 3.11+ is required for the packager; pass `-Python <python.exe>` if needed. `-BuildCrimson` and `-BuildIgnisArmor` build the modules first; `-Offline` requires cached Gradle dependencies. `-CrimsonJar`, `-IgnisArmorJar`, `-OmegaJar`, and `-OutputJar` override inputs/output. In the module-input mode, passing `-IgnisArmorJar ''` or `-OmegaJar ''` omits that optional module. Default output is `build/release/multiversal-spellbooks-0.3.5-crimson-0.1.1-ignis-0.1.0-omega-0.2.4.jar`, with checksum and input/payload report. Existing output files are never overwritten. Only shared metadata is merged; third-party dependencies are never bundled.
 
 The published review artifact retains its tested filename and bytes. A fresh build can differ in archive metadata; validate and test a rebuilt release before deploying it.
 

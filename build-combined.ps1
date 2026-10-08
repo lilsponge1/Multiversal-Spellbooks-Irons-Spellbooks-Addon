@@ -6,7 +6,7 @@ param(
     [string]$CrimsonJar = (Join-Path $PSScriptRoot 'modules/crimson-susanoo/dist/crimson_susanoo-0.1.1.jar'),
     [string]$IgnisArmorJar = (Join-Path $PSScriptRoot 'modules/ignis-armor-compat/dist/ignis_armor_compat-0.1.0.jar'),
     [string]$OmegaJar = (Join-Path $PSScriptRoot 'modules/omega-rush/build/omega-rush-0.2.4.jar'),
-    [string]$OutputJar = (Join-Path $PSScriptRoot 'build/release/multiversal-spellbooks-0.3.3-crimson-0.1.1-ignis-0.1.0-omega-0.2.4.jar'),
+    [string]$OutputJar = (Join-Path $PSScriptRoot 'build/release/multiversal-spellbooks-0.3.5-crimson-0.1.1-ignis-0.1.0-omega-0.2.4.jar'),
     [string]$Python = 'python',
     [switch]$BuildCrimson,
     [switch]$BuildIgnisArmor,

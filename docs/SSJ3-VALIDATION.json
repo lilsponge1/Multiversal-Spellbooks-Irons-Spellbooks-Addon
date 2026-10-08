@@ -1,0 +1,378 @@
+{
+  "artifact": "multiversal-spellbooks-0.3.5-saiyan-ssj3-hair4.jar",
+  "sha256": "8164908EA961477EEE436BB9E6299F0A58FF55020187A0149574CD0FB36BE7BD",
+  "baseArtifact": "multiversal-spellbooks-0.3.5-saiyan-ssj3-hair3.jar",
+  "baseSha256": "4F527C907E5635955C58D7835FCA752228621F55A4979791A0E9A51ECB547D23",
+  "minecraft": "1.20.1",
+  "forge": "47.4.10",
+  "ironsSpellbooks": "3.16.3",
+  "sourceCompiledAgainstInstalledPack": true,
+  "packageVerified": true,
+  "networkProtocol": 5,
+  "serverRegression": {
+    "fixture": ".tools\\ssj3-server-check-3",
+    "startup": true,
+    "passed": 410,
+    "failed": 0,
+    "exit_code": 1,
+    "forced": true,
+    "testedArtifactContentEqualsRelease": false,
+    "worldSaved": true,
+    "checksPassed": true,
+    "cleanJvmShutdown": false,
+    "shutdownObservation": "World and server thread saved/stopped; the unchanged pack's non-daemon Ballistix Simple blast thread kept the JVM alive, so the runner terminated it after 90 seconds. The process exit is not reported as a clean shutdown.",
+    "coverage": [
+      "SSJ1/SSJ2 unchanged stats and 10/17 drain",
+      "SSJ3 exact 300-tick charge",
+      "SSJ3 bonuses replace prior modifiers",
+      "Deferred configurable fee and 30/sec upkeep",
+      "Native regeneration penalty and dynamic cap",
+      "Mana exhaustion directly to Base",
+      "Damage reduction and bypass tags",
+      "Maximum health/clamp, critical attribute, jump strength",
+      "Hold/cancel, equipment, death/logout/dimension cleanup",
+      "Repeated cycles do not stack modifiers",
+      "Native state and cosmetic packet round trips"
+    ],
+    "artifact": "multiversal-spellbooks-0.3.5-saiyan-ssj3.jar",
+    "serverControllerAndStatsPayloadByteIdenticalInRevision": true
+  },
+  "hairGeometry": {
+    "passed": true,
+    "movingHeadSamples": 33965568,
+    "exactRootAnchors": 746496,
+    "maximumRootErrorPixels": 3.234067e-06,
+    "finiteUnitNormals": 19408896,
+    "headCollisionSamples": 0,
+    "bodyCollisionSamples": 0,
+    "oldFormsBitIdentical": true,
+    "cachedGeometry": true,
+    "wholeQuadClearance": true,
+    "headRotations": "yaw -90..90; pitch -90..90 including straight up/down",
+    "chargeRevealTested": [
+      0,
+      0.5,
+      1
+    ],
+    "hairMotionStrengthTested": 2,
+    "thirdHeadQuads": 2032,
+    "thirdManeQuads": 3328,
+    "nativeRenderingTested": false,
+    "sourceSha256": "ED24E95B3D4323263A3D6AA10743B196C7A8047BDCD431B5E1DC32703097BAE8",
+    "rendererSha256": "BB4CE01259BB3C41543D589713162A0B722920B862539BE2882E4100244E966C",
+    "deformationSha256": "FDA8143CA24F5DB8716E7A236B6DF2D4809F01F8471834D0188DADFA36B58CAD"
+  },
+  "auraGeometry": {
+    "thirdCases": 252,
+    "thirdVerticesChecked": 362880,
+    "thirdFiniteAndBounded": true,
+    "cases": 90,
+    "verticesCompared": 116640,
+    "bitIdentical": true,
+    "oldTemporaryPositionObjects": 116640,
+    "newTemporaryPositionObjects": 0,
+    "oldCurveCalls": 1287360,
+    "newCurveCalls": 44640,
+    "scope": "Extracted Java geometry; raw float vertex values and ordering, not native rendering or FPS",
+    "curveCallReductionPercent": 96.53
+  },
+  "audioAssets": {
+    "ssj3_charge": {
+      "durationSeconds": 15,
+      "peak": 0.82952880859375,
+      "sha256": "62B5BB2CA1265C6C9F03704F731D263F523D8FAFA8DC4B9DAC9EAC2D700A3952"
+    },
+    "ssj3_yell": {
+      "durationSeconds": 3.0,
+      "peak": 0.955902099609375,
+      "sha256": "DA06C9A49BA466187CD3560061387E108C61E84776B3F0615BFBA206E6B38DD9"
+    },
+    "ssj3_music": {
+      "durationSeconds": 10.0,
+      "peak": 0.6939697265625,
+      "sha256": "4D052FADA59EA34E13811EADF9AAEBCDFDAC14EC22F16F4C627395A76D0447E4"
+    }
+  },
+  "unchangedPayloadEntries": 177,
+  "originalWigRecipePreserved": true,
+  "originalSpellIconPreserved": true,
+  "testHelpersPackaged": false,
+  "nativeSSJ3VisualReviewCompleted": true,
+  "nativeSSJ3AudioListeningCompleted": false,
+  "nativeSSJ3FpsOrGpuMeasurements": null,
+  "productionInstalled": false,
+  "visibleMinecraftOrPrismLaunched": true,
+  "manualReview": {
+    "status": "background_verified_closed",
+    "fixture": ".tools/saiyan-prism-19",
+    "sameDisposableWorld": ".tools/saiyan-prism-10/server/world",
+    "prismInstance": "Saiyan Ascension Solas Review 2",
+    "address": "127.0.0.1:25579",
+    "shaderPack": "Solas Shader V3.7b.zip",
+    "passiveStats": ".tools/saiyan-prism-19/stats-summary.json",
+    "controls": "Hidden native client closed after review; no visible client was opened",
+    "visualAudioPerformanceAccepted": false,
+    "clientPid": 19528,
+    "serverPid": 5008
+  },
+  "remainingInGameReview": [
+    "User acceptance of connected mane following head movement",
+    "Human listening acceptance of the unchanged ten-second music",
+    "Actual two-human-client appearance and nearby-player volume",
+    "Whole-game FPS and GPU measurements under extended multiplayer load"
+  ],
+  "implementationCompromises": [
+    "Critical damage uses the installed shared Apothic attribute, affecting melee and spell criticals",
+    "Temporary brow samples the skin forehead; custom skin layouts need visual review",
+    "Uses compatible emissive/translucent waves instead of framebuffer refraction or dynamic world lighting"
+  ],
+  "earlierAttempts": [
+    {
+      "fixture": ".tools/ssj3-server-check-1",
+      "passed": 384,
+      "failed": 0,
+      "shutdownForced": true
+    },
+    {
+      "fixture": ".tools/ssj3-server-check-2",
+      "startup": false,
+      "reason": "Packet test helper initially shared a Java package with the release; fixed by separating the test package."
+    }
+  ],
+  "referenceMedia": {
+    "images (5) (ssj3).jfif": {
+      "path": "C:\\Users\\Dalton\\OneDrive\\Documents\\images (5) (ssj3).jfif",
+      "sha256": "5B693FE485BA561DFAA36B1E3F7C39D73D310D5911F24E72376539FBB1AEE5B7"
+    },
+    "images (ssj3).jfif": {
+      "path": "C:\\Users\\Dalton\\OneDrive\\Documents\\images (ssj3).jfif",
+      "sha256": "A1310FC1030A2F70BC4500A1E562B2CDB1215A30C061C62D387B7A3591DFE38D"
+    },
+    "Recording 2026-10-07 153943 (ssj3).mp4": {
+      "path": "C:\\Users\\Dalton\\OneDrive\\Documents\\Recording 2026-10-07 153943 (ssj3).mp4",
+      "sha256": "2DB3DC3E79FFC17BB83515155BC1D226B3D86A88FFC835ADBDE61D7D31847701"
+    },
+    "Recording 2026-10-07 154142 (ssj3 final).mp4": {
+      "path": "C:\\Users\\Dalton\\OneDrive\\Documents\\Recording 2026-10-07 154142 (ssj3 final).mp4",
+      "sha256": "1508B7126A9D6D1D8346759DC5C619FB94C0C0A4ADC05B0B84FB0B3170A38B45"
+    }
+  },
+  "previousRevisions": [
+    {
+      "artifact": "multiversal-spellbooks-0.3.5-saiyan-ssj3.jar",
+      "sha256": "FB9AC7EC025E274ACFBD44CC5B683EBF28A9A40848FD9FBABEF8473847A6F1F6",
+      "manualFixture": ".tools/saiyan-prism-16",
+      "hairRejectedByUser": true,
+      "observedIssue": "Short sideways crown read as a separate cap above a long curtain mane",
+      "generalAudioIssueResolvedByUser": true,
+      "remainingAudioRequest": "Remove leading wait before spoken line and competing charge layer"
+    },
+    {
+      "artifact": "multiversal-spellbooks-0.3.5-saiyan-ssj3-hair2.jar",
+      "sha256": "AC69741B9DC8DE8C76852E261BFB1154CED2BCA5174D723E579634F363B91D87",
+      "manualFixture": ".tools/saiyan-prism-17",
+      "hairRejectedByUser": true,
+      "observedIssue": "Mane extended too far behind the back",
+      "audioIssueReported": "Unwanted yell after final flash during music",
+      "remainingAudioRequest": "Instrumental completion excerpt lasting ten seconds"
+    },
+    {
+      "artifact": "multiversal-spellbooks-0.3.5-saiyan-ssj3-hair3.jar",
+      "sha256": "4F527C907E5635955C58D7835FCA752228621F55A4979791A0E9A51ECB547D23",
+      "fixture": ".tools/saiyan-prism-18",
+      "hairRejectedByUser": true,
+      "observedIssue": "Torso-space clearance detached mane roots when looking straight down",
+      "userScreenshot": "2026-10-07_17.07.53.png",
+      "earlierPoseCoverage": "Pitch only -60..60; did not cover the reported 90-degree downward view"
+    }
+  ],
+  "nativeSSJ3AudioSequenceVerified": true,
+  "visualAudioFix": {
+    "artifact": "multiversal-spellbooks-0.3.5-saiyan-ssj3-hair4.jar",
+    "sha256": "8164908EA961477EEE436BB9E6299F0A58FF55020187A0149574CD0FB36BE7BD",
+    "baseArtifact": "multiversal-spellbooks-0.3.5-saiyan-ssj3-hair3.jar",
+    "baseSha256": "4F527C907E5635955C58D7835FCA752228621F55A4979791A0E9A51ECB547D23",
+    "changedEntries": [
+      "local/ironsultimateexplosion/SaiyanHairMesh.class",
+      "local/ironsultimateexplosion/SaiyanWigRenderer.class"
+    ],
+    "addedEntries": [
+      "local/ironsultimateexplosion/SaiyanHairPose.class"
+    ],
+    "unchangedPayloadEntries": 177,
+    "statsRecipesAuraAndAllAudioUnchanged": true,
+    "hairGeometry": {
+      "passed": true,
+      "movingHeadSamples": 33965568,
+      "exactRootAnchors": 746496,
+      "maximumRootErrorPixels": 3.234067e-06,
+      "finiteUnitNormals": 19408896,
+      "headCollisionSamples": 0,
+      "bodyCollisionSamples": 0,
+      "oldFormsBitIdentical": true,
+      "cachedGeometry": true,
+      "wholeQuadClearance": true,
+      "headRotations": "yaw -90..90; pitch -90..90 including straight up/down",
+      "chargeRevealTested": [
+        0,
+        0.5,
+        1
+      ],
+      "hairMotionStrengthTested": 2,
+      "thirdHeadQuads": 2032,
+      "thirdManeQuads": 3328,
+      "nativeRenderingTested": false,
+      "sourceSha256": "ED24E95B3D4323263A3D6AA10743B196C7A8047BDCD431B5E1DC32703097BAE8",
+      "rendererSha256": "BB4CE01259BB3C41543D589713162A0B722920B862539BE2882E4100244E966C",
+      "deformationSha256": "FDA8143CA24F5DB8716E7A236B6DF2D4809F01F8471834D0188DADFA36B58CAD"
+    },
+    "nativeVisualReviewCompleted": true,
+    "productionInstalled": false,
+    "nativeReview": {
+      "fixture": ".tools/saiyan-prism-19",
+      "passed": 40,
+      "failed": 0,
+      "hiddenClient": true,
+      "clientOptionsRestored": true,
+      "shaderPack": "Solas Shader V3.7b.zip",
+      "captures": [
+        ".tools/saiyan-prism-19/screenshots/ssj3-hair4-charge-late.png",
+        ".tools/saiyan-prism-19/screenshots/ssj3-hair4-charge-start.png",
+        ".tools/saiyan-prism-19/screenshots/ssj3-hair4-down-turn.png",
+        ".tools/saiyan-prism-19/screenshots/ssj3-hair4-front.png",
+        ".tools/saiyan-prism-19/screenshots/ssj3-hair4-head-turn.png",
+        ".tools/saiyan-prism-19/screenshots/ssj3-hair4-helmet-down.png",
+        ".tools/saiyan-prism-19/screenshots/ssj3-hair4-helmet.png",
+        ".tools/saiyan-prism-19/screenshots/ssj3-hair4-look-down.png",
+        ".tools/saiyan-prism-19/screenshots/ssj3-hair4-look-up.png",
+        ".tools/saiyan-prism-19/screenshots/ssj3-hair4-rear.png",
+        ".tools/saiyan-prism-19/screenshots/ssj3-hair4-side.png",
+        ".tools/saiyan-prism-19/screenshots/ssj3-hair4-three-quarter.png",
+        ".tools/saiyan-prism-19/screenshots/ssj3-hair4-up-turn.png"
+      ],
+      "agentVisualReview": true,
+      "rootConnectionReviewedAtStraightDownPitch": true,
+      "upDownAndCombinedHeadTurnReviewed": true,
+      "faceAndStandardHelmetClearanceReviewed": true,
+      "userHairAcceptancePending": true,
+      "audioContentUnchangedFromHair3": true,
+      "wholeGameFpsAndGpuTested": false,
+      "cpuDeformation": {
+        "scope": "CPU deformation of one mane; excludes draw submission, crown, GPU and whole-game FPS",
+        "verticesPerFrame": 13312,
+        "cases": [
+          {
+            "yaw": 0,
+            "pitch": 0,
+            "samples": 150,
+            "averageMs": 1.293866,
+            "p95Ms": 1.6037,
+            "maxMs": 2.3784
+          },
+          {
+            "yaw": 0,
+            "pitch": 90,
+            "samples": 150,
+            "averageMs": 2.6802306666666667,
+            "p95Ms": 6.921,
+            "maxMs": 39.5024
+          },
+          {
+            "yaw": 75,
+            "pitch": -90,
+            "samples": 150,
+            "averageMs": 1.411136,
+            "p95Ms": 1.9157,
+            "maxMs": 2.5344
+          }
+        ]
+      },
+      "statsAtRecordTime": {
+        "snapshots": 67,
+        "manaPayments": 412,
+        "reductionChecks": 0,
+        "failedChecks": 0,
+        "observedForms": [
+          "BASE",
+          "SUPER_SAIYAN_1",
+          "SUPER_SAIYAN_2",
+          "SUPER_SAIYAN_3"
+        ]
+      },
+      "worldSaved": true
+    }
+  },
+  "nativeClientReview": {
+    "fixture": ".tools/saiyan-prism-19",
+    "passed": 40,
+    "failed": 0,
+    "hiddenClient": true,
+    "clientOptionsRestored": true,
+    "shaderPack": "Solas Shader V3.7b.zip",
+    "captures": [
+      ".tools/saiyan-prism-19/screenshots/ssj3-hair4-charge-late.png",
+      ".tools/saiyan-prism-19/screenshots/ssj3-hair4-charge-start.png",
+      ".tools/saiyan-prism-19/screenshots/ssj3-hair4-down-turn.png",
+      ".tools/saiyan-prism-19/screenshots/ssj3-hair4-front.png",
+      ".tools/saiyan-prism-19/screenshots/ssj3-hair4-head-turn.png",
+      ".tools/saiyan-prism-19/screenshots/ssj3-hair4-helmet-down.png",
+      ".tools/saiyan-prism-19/screenshots/ssj3-hair4-helmet.png",
+      ".tools/saiyan-prism-19/screenshots/ssj3-hair4-look-down.png",
+      ".tools/saiyan-prism-19/screenshots/ssj3-hair4-look-up.png",
+      ".tools/saiyan-prism-19/screenshots/ssj3-hair4-rear.png",
+      ".tools/saiyan-prism-19/screenshots/ssj3-hair4-side.png",
+      ".tools/saiyan-prism-19/screenshots/ssj3-hair4-three-quarter.png",
+      ".tools/saiyan-prism-19/screenshots/ssj3-hair4-up-turn.png"
+    ],
+    "agentVisualReview": true,
+    "rootConnectionReviewedAtStraightDownPitch": true,
+    "upDownAndCombinedHeadTurnReviewed": true,
+    "faceAndStandardHelmetClearanceReviewed": true,
+    "userHairAcceptancePending": true,
+    "audioContentUnchangedFromHair3": true,
+    "wholeGameFpsAndGpuTested": false,
+    "cpuDeformation": {
+      "scope": "CPU deformation of one mane; excludes draw submission, crown, GPU and whole-game FPS",
+      "verticesPerFrame": 13312,
+      "cases": [
+        {
+          "yaw": 0,
+          "pitch": 0,
+          "samples": 150,
+          "averageMs": 1.293866,
+          "p95Ms": 1.6037,
+          "maxMs": 2.3784
+        },
+        {
+          "yaw": 0,
+          "pitch": 90,
+          "samples": 150,
+          "averageMs": 2.6802306666666667,
+          "p95Ms": 6.921,
+          "maxMs": 39.5024
+        },
+        {
+          "yaw": 75,
+          "pitch": -90,
+          "samples": 150,
+          "averageMs": 1.411136,
+          "p95Ms": 1.9157,
+          "maxMs": 2.5344
+        }
+      ]
+    },
+    "statsAtRecordTime": {
+      "snapshots": 67,
+      "manaPayments": 412,
+      "reductionChecks": 0,
+      "failedChecks": 0,
+      "observedForms": [
+        "BASE",
+        "SUPER_SAIYAN_1",
+        "SUPER_SAIYAN_2",
+        "SUPER_SAIYAN_3"
+      ]
+    },
+    "worldSaved": true
+  }
+}
