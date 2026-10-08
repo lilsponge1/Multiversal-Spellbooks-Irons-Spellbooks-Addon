@@ -1,5 +1,121 @@
 {
-  "thundercrash_cast": {"subtitle":"subtitles.irons_ultimate_explosion.thundercrash_cast","sounds":[{"name":"irons_ultimate_explosion:thundercrash/thundercrash_cast","stream":false}]},
-  "thundercrash_flight": {"subtitle":"subtitles.irons_ultimate_explosion.thundercrash_flight","sounds":[{"name":"irons_ultimate_explosion:thundercrash/thundercrash_flight","stream":false}]},
-  "thundercrash_impact": {"subtitle":"subtitles.irons_ultimate_explosion.thundercrash_impact","sounds":[{"name":"irons_ultimate_explosion:thundercrash/thundercrash_impact","stream":false}]}
+  "thundercrash_cast": {
+    "subtitle": "subtitles.irons_ultimate_explosion.thundercrash_cast",
+    "sounds": [
+      {
+        "name": "irons_ultimate_explosion:thundercrash/thundercrash_cast",
+        "stream": false
+      }
+    ]
+  },
+  "thundercrash_flight": {
+    "subtitle": "subtitles.irons_ultimate_explosion.thundercrash_flight",
+    "sounds": [
+      {
+        "name": "irons_ultimate_explosion:thundercrash/thundercrash_flight",
+        "stream": false
+      }
+    ]
+  },
+  "thundercrash_impact": {
+    "subtitle": "subtitles.irons_ultimate_explosion.thundercrash_impact",
+    "sounds": [
+      {
+        "name": "irons_ultimate_explosion:thundercrash/thundercrash_impact",
+        "stream": false
+      }
+    ]
+  },
+  "saiyan_charge": {
+    "subtitle": "subtitles.irons_ultimate_explosion.saiyan_charge",
+    "sounds": [
+      {
+        "name": "irons_spellbooks:spell.black_hole.charge",
+        "type": "event"
+      }
+    ]
+  },
+  "saiyan_burst": {
+    "subtitle": "subtitles.irons_ultimate_explosion.saiyan_burst",
+    "sounds": [
+      {
+        "name": "minecraft:entity.generic.explode",
+        "type": "event",
+        "pitch": 0.55
+      }
+    ]
+  },
+  "saiyan_down": {
+    "subtitle": "subtitles.irons_ultimate_explosion.saiyan_down",
+    "sounds": [
+      {
+        "name": "minecraft:block.beacon.deactivate",
+        "type": "event",
+        "pitch": 0.85
+      }
+    ]
+  },
+  "saiyan_charge_2": {
+    "subtitle": "subtitles.irons_ultimate_explosion.saiyan_charge_2",
+    "sounds": [
+      {
+        "name": "irons_spellbooks:loop.electrocute",
+        "type": "event"
+      }
+    ]
+  },
+  "saiyan_crack": {
+    "subtitle": "subtitles.irons_ultimate_explosion.saiyan_crack",
+    "sounds": [
+      {
+        "name": "irons_spellbooks:entity.lightning_strike.strike",
+        "type": "event"
+      }
+    ]
+  },
+  "saiyan_yell": {
+    "subtitle": "subtitles.irons_ultimate_explosion.saiyan_yell",
+    "sounds": [
+      {
+        "name": "irons_ultimate_explosion:saiyan/yell",
+        "stream": false
+      }
+    ]
+  },
+  "saiyan_yell_2": {
+    "subtitle": "subtitles.irons_ultimate_explosion.saiyan_yell",
+    "sounds": [
+      {
+        "name": "irons_ultimate_explosion:saiyan/yell_2",
+        "stream": false
+      }
+    ]
+  },
+  "saiyan_charge_3": {
+    "subtitle": "subtitles.irons_ultimate_explosion.saiyan_charge_3",
+    "sounds": [
+      {
+        "name": "irons_ultimate_explosion:saiyan/ssj3_charge",
+        "stream": false
+      }
+    ]
+  },
+  "saiyan_yell_3": {
+    "subtitle": "subtitles.irons_ultimate_explosion.saiyan_yell_3",
+    "sounds": [
+      {
+        "name": "irons_ultimate_explosion:saiyan/ssj3_yell",
+        "stream": false
+      }
+    ]
+  },
+  "saiyan_music_3": {
+    "subtitle": "subtitles.irons_ultimate_explosion.saiyan_music_3",
+    "sounds": [
+      {
+        "name": "irons_ultimate_explosion:saiyan/ssj3_music",
+        "stream": false
+      }
+    ]
+  }
 }

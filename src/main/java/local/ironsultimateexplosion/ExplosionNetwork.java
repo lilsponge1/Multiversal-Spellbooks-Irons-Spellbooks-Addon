@@ -8,7 +8,7 @@ import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
 public final class ExplosionNetwork {
-    private static final String VERSION = "3";
+    private static final String VERSION = "5";
     private static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
             new ResourceLocation(GrandExplosionMod.ID, "effects"), () -> VERSION, VERSION::equals, VERSION::equals);
 
@@ -20,9 +20,27 @@ public final class ExplosionNetwork {
                 .encoder(ThundercrashStatePacket::encode).decoder(ThundercrashStatePacket::decode).consumerNetworkThread(ThundercrashStatePacket::handle).add();
         CHANNEL.messageBuilder(ThundercrashImpactPacket.class, 3, net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT)
                 .encoder(ThundercrashImpactPacket::encode).decoder(ThundercrashImpactPacket::decode).consumerNetworkThread(ThundercrashImpactPacket::handle).add();
+        CHANNEL.messageBuilder(SaiyanInputPacket.class, 4, net.minecraftforge.network.NetworkDirection.PLAY_TO_SERVER)
+                .encoder(SaiyanInputPacket::encode).decoder(SaiyanInputPacket::decode).consumerNetworkThread(SaiyanInputPacket::handle).add();
+        CHANNEL.messageBuilder(SaiyanStatePacket.class, 5, net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT)
+                .encoder(SaiyanStatePacket::encode).decoder(SaiyanStatePacket::decode).consumerNetworkThread(SaiyanStatePacket::handle).add();
+        CHANNEL.messageBuilder(SaiyanCombatPacket.class,6,net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT)
+                .encoder(SaiyanCombatPacket::encode).decoder(SaiyanCombatPacket::decode).consumerNetworkThread(SaiyanCombatPacket::handle).add();
     }
 
     static void input(ThundercrashInputPacket packet) { CHANNEL.sendToServer(packet); }
+    public static void saiyanInput(SaiyanInputPacket packet) { CHANNEL.sendToServer(packet); }
+    static void saiyanState(net.minecraft.server.level.ServerPlayer player, SaiyanStatePacket packet) {
+        CHANNEL.send(PacketDistributor.TRACKING_ENTITY.with(() -> player), packet);
+        saiyanTo(player, packet);
+    }
+    static void saiyanTo(net.minecraft.server.level.ServerPlayer viewer, SaiyanStatePacket packet) {
+        if (viewer.f_8906_ != null) CHANNEL.send(PacketDistributor.PLAYER.with(() -> viewer), packet);
+    }
+    static void saiyanCombat(net.minecraft.server.level.ServerPlayer player,SaiyanCombatPacket packet) {
+        CHANNEL.send(PacketDistributor.TRACKING_ENTITY.with(()->player),packet);
+        if(player.f_8906_!=null) CHANNEL.send(PacketDistributor.PLAYER.with(()->player),packet);
+    }
     static void state(net.minecraft.server.level.ServerPlayer player, ThundercrashStatePacket packet) {
         CHANNEL.send(PacketDistributor.TRACKING_ENTITY.with(() -> player), packet);
         if (player.f_8906_ != null) CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), packet);

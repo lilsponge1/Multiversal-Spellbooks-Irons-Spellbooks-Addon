@@ -3,10 +3,10 @@ loaderVersion="[47,)"
 license="All Rights Reserved"
 [[mods]]
 modId="irons_ultimate_explosion"
-version="0.3.3"
+version="0.3.5"
 displayName="Grand Explosion"
 authors="Sponge"
-description="Grand Explosion, Thundercrash, Cuirass of the Thunderstar, the Cinderstar Staff, and Cinderstar Regalia."
+description="Saiyan Ascension, Grand Explosion, Thundercrash, Cuirass of the Thunderstar, the Cinderstar Staff, and Cinderstar Regalia."
 [[dependencies.irons_ultimate_explosion]]
 modId="forge"
 mandatory=true

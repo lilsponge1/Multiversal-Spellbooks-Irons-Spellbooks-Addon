@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "WWW",
+    "LNG",
+    "WPW"
+  ],
+  "key": {
+    "G": {
+      "item": "minecraft:golden_apple"
+    },
+    "L": {
+      "item": "irons_spellbooks:lightning_bottle"
+    },
+    "W": {
+      "item": "minecraft:black_wool"
+    },
+    "N": {
+      "item": "minecraft:nether_star"
+    },
+    "P": {
+      "item": "minecraft:blaze_powder"
+    }
+  },
+  "result": {
+    "item": "irons_ultimate_explosion:saiyan_wig"
+  }
+}

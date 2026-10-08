@@ -25,10 +25,12 @@ public final class ExplosionConfig {
         EXHAUSTION_SECONDS = b.comment("Slowness after detonation; set to zero to disable.").defineInRange("exhaustionSeconds", 15, 0, 20);
         b.pop();
         ThundercrashConfig.server(b);
+        SaiyanConfig.server(b);
         SERVER = b.build();
         ForgeConfigSpec.Builder client = new ForgeConfigSpec.Builder();
         PARTICLE_QUALITY = client.comment("0 low, 1 medium, 2 high particle density").defineInRange("particleQuality", 2, 0, 2);
         ThundercrashConfig.client(client);
+        SaiyanConfig.client(client);
         CLIENT = client.build();
     }
     private ExplosionConfig() {}

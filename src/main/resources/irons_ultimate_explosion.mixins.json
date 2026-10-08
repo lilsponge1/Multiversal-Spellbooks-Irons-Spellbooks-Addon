@@ -4,6 +4,6 @@
   "package": "local.ironsultimateexplosion.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": ["ThundercrashTravelMixin", "ThundercrashConnectionMixin", "ThundercrashScrollForgeMixin", "ThundercrashInscriptionSlotMixin"],
-  "client": ["ThundercrashLocalPlayerMixin"],
+  "client": ["ThundercrashLocalPlayerMixin", "SaiyanCastInputMixin"],
   "injectors": {"defaultRequire": 1}
 }

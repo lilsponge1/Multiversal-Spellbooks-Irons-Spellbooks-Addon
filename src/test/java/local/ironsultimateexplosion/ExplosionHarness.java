@@ -63,6 +63,7 @@ public final class ExplosionHarness {
     private int audioDuration;
     public ExplosionHarness() {
         new ThunderstarHarness();
+        new SaiyanHarness();
         new ThundercrashHarness();
         MinecraftForge.EVENT_BUS.addListener(this::commands);
         MinecraftForge.EVENT_BUS.addListener(this::protectBlock);
