@@ -1,0 +1,85 @@
+{
+  "artifact": "ki-school-1.0.0.jar",
+  "sha256": "5DAEAD5F658A6CB74124994143A06BB13A69ED148EC5CDE1EA49A46C5924B49D",
+  "modId": "ki_school",
+  "version": "1.0.0",
+  "networkProtocol": 1,
+  "independentNamespacesConfigsAndChannel": true,
+  "otherAddonIdsOrClassesBundled": false,
+  "testHelpersBundled": false,
+  "minecraft": "1.20.1",
+  "forge": "47.4.10",
+  "ironsSpellbooks": "3.16.3",
+  "saiyanServerChecks": {
+    "passed": 410,
+    "failed": 0
+  },
+  "coexistenceChecks": {
+    "passed": 9,
+    "failed": 0
+  },
+  "clientChecks": {
+    "passed": 27,
+    "failed": 0,
+    "exitCode": 0
+  },
+  "totalPassed": 446,
+  "totalFailed": 0,
+  "coinstalledUnchangedOmegaRelease": {
+    "tag": "v0.3.3-omega-form-0.2.4",
+    "sha256": "95602ECB3368691F1952DABBEE912A32C79D57DF4E3ED58130507C2025EDB878",
+    "contains": [
+      "irons_ultimate_explosion",
+      "crimson_susanoo",
+      "ignis_armor_compat",
+      "irons_omega_rush"
+    ],
+    "jarModified": false
+  },
+  "visualReview": {
+    "hiddenClient": true,
+    "shader": "Solas V3.7b",
+    "embeddium": "0.3.31",
+    "oculus": "1.8.0",
+    "capturesReviewed": [
+      "ki-ssj2.png",
+      "ki-ssj3-charge.png",
+      "ki-ssj3.png"
+    ],
+    "checked": [
+      "Face and sculpted wig visible",
+      "Gold aura and lightning render with Solas",
+      "Charge pose renders",
+      "Long SSJ3 hair renders",
+      "Native wig item model is not missing",
+      "Native sound registrations resolve"
+    ],
+    "humanAudioListeningRepeated": false,
+    "fullPackFpsBenchmark": false
+  },
+  "covered": [
+    "Wig recipe and Curios Head access",
+    "SSJ1/2/3 stats and 10/17/30 mana upkeep",
+    "Exact 300-tick SSJ3 charge",
+    "Damage reduction and bypasses",
+    "Regeneration cap",
+    "Health, crit and jump modifiers",
+    "Power-down and lifecycle cleanup",
+    "Native packet round trips",
+    "Client/server independent channel and all three ascensions",
+    "Hold returns to Base",
+    "Coexisting base addon/Omega IDs and scarf registry",
+    "No third-party or other addon classes bundled"
+  ],
+  "rebuildByteIdentical": true,
+  "serverExitCode": 0,
+  "clientExitCode": 0,
+  "worldSaved": true,
+  "installedProfilesOrProductionServerChanged": false,
+  "limitations": [
+    "Focused disposable compatibility pack, not an exhaustive replay of every mod combination",
+    "Extended multiplayer FPS/GPU benchmark not repeated",
+    "Old experimental namespace items are not automatically migrated",
+    "First fixture lacked the existing Cataclysm/Travel Optics compatibility patches and failed before tests; the corrected fixture includes those unchanged pack patches"
+  ]
+}

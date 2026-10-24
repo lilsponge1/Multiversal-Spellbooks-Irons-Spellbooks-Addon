@@ -2,7 +2,9 @@
 
 ## Ki School development
 
-This branch contains **Saiyan Ascension** (0.3.5 candidate), a craftable Curios Head wig with Super Saiyan I, II and III, synchronized aura/lightning, transformation audio and the connected SSJ3 mane. A dedicated **Ki** spell school is planned; Saiyan Ascension currently remains in **Lightning**. See [Ki School](KI-SCHOOL.md), [controls and stats](SAIYAN-ASCENSION.md) and [SSJ3 validation](SAIYAN-SSJ3.md).
+**[Ki School 1.0.0 is a separate addon JAR](https://github.com/lilsponge1/Multiversal-Spellbooks-Irons-Spellbooks-Addon/releases/tag/ki-school-v1.0.0).** Add `ki-school-1.0.0.jar` beside the existing Omega Form Ritual 0.2.4 combined JAR on the server and every client. It provides the craftable Saiyan Wig with Super Saiyan I, II and III. Do not install the superseded `multiversal-spellbooks-0.3.5-saiyan-ssj3-hair4.jar` review bundle beside the current combined addon. The standalone package has its own `ki_school` IDs, configs and network channel; dedicated Ki school registration remains planned, and its spell currently uses Lightning. See [installation](docs/INSTALL-KI-SCHOOL.txt), [controls](SAIYAN-ASCENSION.md), and [standalone validation](docs/KI-STANDALONE-VALIDATION.json).
+
+Build the independent addon with `build-ki.ps1` or `tools/build_ki_standalone.py`. Its packaging sources and focused tests are included here alongside the preserved Omega module. The published Ki JAR SHA-256 is `5daead5f658a6cb74124994143a06bb13a69ed148ec5cde1ea49a46c5924b49d`.
 
 Forge Minecraft 1.20.1 addon for Iron's Spells 'n Spellbooks. This update combines Grand Explosion **0.3.3**, Crimson Susanoo **0.1.1**, Ignis Armor Compatibility **0.1.0**, and Omega Rush / Omega Form **0.2.4** into one JAR while retaining separate mod IDs, packages, resources and configs.
 
