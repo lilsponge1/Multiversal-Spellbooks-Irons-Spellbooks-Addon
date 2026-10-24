@@ -1,5 +1,9 @@
 # Ki School
 
+## Current release: independent 1.0.0
+
+Install [ki-school-1.0.0.jar](https://github.com/lilsponge1/Multiversal-Spellbooks-Irons-Spellbooks-Addon/releases/tag/ki-school-v1.0.0) **alongside** the unchanged Omega Form Ritual 0.2.4 combined addon, on both server and clients. The old bundled 0.3.5 review artifact is superseded. Standalone source is under `src/standalone`, its build entry point is `build-ki.ps1`, and [446 focused checks](docs/KI-STANDALONE-VALIDATION.json) record the exact published file. The earlier combined-development notes below remain historical context; use [the standalone installation guide](docs/INSTALL-KI-SCHOOL.txt) for deployment.
+
 Development branch: `codex/ki-school`.
 
 This branch publishes the current Saiyan Ascension feature and prepares a place for a future **Ki** spell school. The spell currently uses **Lightning**; a new school is not registered in this change.
