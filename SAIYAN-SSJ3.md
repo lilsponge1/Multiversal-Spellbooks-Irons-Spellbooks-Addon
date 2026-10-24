@@ -1,5 +1,7 @@
 # Super Saiyan III
 
+The current deployable artifact is **[ki-school-1.0.0.jar](https://github.com/lilsponge1/Multiversal-Spellbooks-Irons-Spellbooks-Addon/releases/tag/ki-school-v1.0.0)**. It is an independent addon with its own `ki_school` namespace, configs and protocol-1 channel, installed beside the existing addon/Omega JAR. The geometry, audio and balance described here are retained; the hair4 hashes and protocol-5 references below are historical evidence for the original review package. See [current standalone validation](docs/KI-STANDALONE-VALIDATION.json).
+
 The 0.3.5 review candidate extends the existing Saiyan Ascension spell and craftable Curios Head wig. The accepted wig12 release is preserved. It does not add another spell, replace armor equipment or modify the installed Iron's Spells JAR.
 
 ## Controls and sequence

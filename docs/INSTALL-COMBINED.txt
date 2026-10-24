@@ -1,14 +1,19 @@
-KI SCHOOL / SAIYAN ASCENSION — SERVER AND CLIENT DOWNLOAD
+KI SCHOOL — INDEPENDENT SERVER/CLIENT ADDON
 
-Download: https://github.com/lilsponge1/Multiversal-Spellbooks-Irons-Spellbooks-Addon/releases/download/v0.3.5-saiyan-ssj3-hair4/multiversal-spellbooks-0.3.5-saiyan-ssj3-hair4.jar
-Release notes/checksum: https://github.com/lilsponge1/Multiversal-Spellbooks-Irons-Spellbooks-Addon/releases/tag/v0.3.5-saiyan-ssj3-hair4
+Download ki-school-1.0.0.jar:
+https://github.com/lilsponge1/Multiversal-Spellbooks-Irons-Spellbooks-Addon/releases/download/ki-school-v1.0.0/ki-school-1.0.0.jar
 
-Minecraft 1.20.1 / Forge 47.4.10+ / Iron's Spells 3.16.3.
-Install the same JAR on the server and every client after stopping both. Back up worlds and configs first.
-Replace previous packages providing irons_ultimate_explosion, crimson_susanoo or ignis_armor_compat; avoid duplicate mod IDs. Keep the normal modpack dependencies.
-The published release includes complete dependency requirements and the validation summary.
+1. Stop the server and Minecraft clients.
+2. Add ki-school-1.0.0.jar to mods on the server and every client.
+3. Keep your existing addon and Omega JARs installed.
+4. Start with the same modpack dependencies.
 
-JEI: Saiyan Wig. Equip: Curios Head. Forms: SSJ1, SSJ2, SSJ3.
-This is the Ki/Saiyan branch. Omega Rush/Form is developed on its separate branch and is not packaged here.
+Ki's own mod ID is ki_school. Its configs and network are independent.
+Do not install the superseded multiversal-spellbooks-0.3.5-saiyan-ssj3-hair4.jar review bundle alongside the existing addon.
 
-SHA-256: 8164908EA961477EEE436BB9E6299F0A58FF55020187A0149574CD0FB36BE7BD
+Minecraft 1.20.1; Forge 47.4.10+; Iron's Spells 3.16.3; Curios 5.x; Player Animator 1.x, and their normal dependencies.
+
+JEI: Saiyan Wig. Equip in Curios Head. Mana/second: SSJ1=10, SSJ2=17, SSJ3=30.
+Command: /give @p ki_school:saiyan_wig
+
+Source branch: codex/ki-school. Your friend's Omega work stays on its existing branches.

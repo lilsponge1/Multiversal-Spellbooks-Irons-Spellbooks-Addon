@@ -1,0 +1,19 @@
+KI SCHOOL — INDEPENDENT SERVER/CLIENT ADDON
+
+Download ki-school-1.0.0.jar:
+https://github.com/lilsponge1/Multiversal-Spellbooks-Irons-Spellbooks-Addon/releases/download/ki-school-v1.0.0/ki-school-1.0.0.jar
+
+1. Stop the server and Minecraft clients.
+2. Add ki-school-1.0.0.jar to mods on the server and every client.
+3. Keep your existing addon and Omega JARs installed.
+4. Start with the same modpack dependencies.
+
+Ki's own mod ID is ki_school. Its configs and network are independent.
+Do not install the superseded multiversal-spellbooks-0.3.5-saiyan-ssj3-hair4.jar review bundle alongside the existing addon.
+
+Minecraft 1.20.1; Forge 47.4.10+; Iron's Spells 3.16.3; Curios 5.x; Player Animator 1.x, and their normal dependencies.
+
+JEI: Saiyan Wig. Equip in Curios Head. Mana/second: SSJ1=10, SSJ2=17, SSJ3=30.
+Command: /give @p ki_school:saiyan_wig
+
+Source branch: codex/ki-school. Your friend's Omega work stays on its existing branches.

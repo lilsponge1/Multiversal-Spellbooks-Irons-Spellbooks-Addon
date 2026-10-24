@@ -1,5 +1,13 @@
 # Working together
 
+## Independent Ki build
+
+Use `build-ki.ps1` for the deployable Ki School addon. It reuses the reviewed Saiyan implementation with independent package, registry, config and network wiring under `src/standalone`. Do not use the historical combined build as the Ki download. Build `tools/build_ki_test.py` separately for disposable diagnostics; its helper is excluded from releases.
+
+Keep this work on `codex/ki-school`. Add its JAR beside the existing addon/Omega JARs and test that arrangement. The instructions below describe the shared legacy source retained in this branch; they do not authorize changing your friend's Omega branches or merging the projects.
+
+## Legacy shared source
+
 1. Accept the repository collaborator invitation and sign in to GitHub on your development PC.
 2. Continue Ki/Saiyan work on `codex/ki-school`. Keep Omega Rush/Form work on its own Omega branches. Do not merge the two features or assemble them into one release without an explicit request.
 3. Keep Grand Explosion, Thundercrash, Thunderstar and Cinderstar source under root `src/`. Keep Crimson Susanoo under `modules/crimson-susanoo/` and Ignis enchanting compatibility under `modules/ignis-armor-compat/`. Use unique Java packages, resource paths, registry IDs and network channel names for future features.

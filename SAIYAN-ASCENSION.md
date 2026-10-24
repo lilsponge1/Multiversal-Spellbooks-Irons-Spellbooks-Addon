@@ -1,5 +1,7 @@
 # Saiyan Ascension
 
+Current installation: **[ki-school-1.0.0.jar](https://github.com/lilsponge1/Multiversal-Spellbooks-Irons-Spellbooks-Addon/releases/tag/ki-school-v1.0.0)** is an independent addon placed beside the existing addon/Omega JAR. Its item/spell namespace is `ki_school`, its config files are `ki_school-server.toml` and `ki_school-client.toml`, and its channel uses protocol 1. Command: `/give @p ki_school:saiyan_wig`. Gameplay controls, crafting ingredients and balance below are retained. References to protocol 5, `irons_ultimate_explosion` IDs, combined candidates and older hashes below describe the original review packages.
+
 Minecraft 1.20.1 / Forge 47.4.10 / Iron's Spells 3.16.3 add-on feature. Iron's dependency JAR is unchanged. One registered spell, `irons_ultimate_explosion:saiyan_ascension`, owns Base, Super Saiyan, Super Saiyan II and Super Saiyan III internally. The current combined candidate is 0.3.5. See [SAIYAN-SSJ3.md](SAIYAN-SSJ3.md) for the new sequence and validation limits.
 
 ## Obtain and use

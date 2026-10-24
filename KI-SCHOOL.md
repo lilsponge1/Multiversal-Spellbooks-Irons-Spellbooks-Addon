@@ -4,6 +4,14 @@ Development branch: `codex/ki-school`.
 
 This branch publishes the current Saiyan Ascension feature and prepares a place for a future **Ki** spell school. The spell currently uses **Lightning**; a new school is not registered in this change.
 
+## Independent installation
+
+The deployable artifact is now **`ki-school-1.0.0.jar`**, with mod ID and resource namespace `ki_school`, config files `ki_school-server.toml` / `ki_school-client.toml`, and an independent protocol-1 network channel. Add it beside the existing addon/Omega JAR; it does not bundle their mod IDs or classes. The earlier hair4 archive is a historical combined review candidate, not the independent installation package.
+
+Build with `build-ki.ps1`; standalone registration code lives in `src/standalone`. The existing Saiyan implementation is reused through explicit package/namespace adapters during compilation. Geometry and encoded audio are retained. New item/spell IDs are `ki_school:saiyan_wig`, `ki_school:book_of_saiyan_ascension`, and `ki_school:saiyan_ascension`.
+
+See [installation instructions](docs/INSTALL-KI-SCHOOL.txt) and [current validation](docs/KI-STANDALONE-VALIDATION.json). The historical audits below apply to the original review artifacts; the independent JAR has its own checks.
+
 ## Included feature
 
 - One transformation spell with Super Saiyan I, II and III, granted by a craftable wig worn in Curios: Head.
@@ -28,7 +36,7 @@ Run the pure-Java attachment check independently of Minecraft:
 python tools/check_saiyan_attached_hair.py --jdk-bin C:/path/to/jdk-17/bin --joml C:/path/to/joml-1.10.5.jar
 ```
 
-Build root `src/` with `build.ps1` and the matching pack/SRG dependencies, then build each independent module and assemble with `build-combined.ps1`; see [contributing](CONTRIBUTING.md). Use matching protocol-5 addon builds on server and clients. Built JARs, worlds, dependencies, local caches and raw reference recordings are excluded from source history.
+Build the independent Ki package with `build-ki.ps1` and matching pack/SRG dependencies; see [contributing](CONTRIBUTING.md). The independent Ki package uses protocol 1; install that same package on server and clients. Built JARs, worlds, dependencies, local caches and raw reference recordings are excluded from source history.
 
 ## Future Ki school
 
