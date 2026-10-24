@@ -1,45 +1,5 @@
 # Changelog
 
-## Omega Rush / Omega Form 0.2.4
-
-- Added the supplied fire-spell recording as a once-per-success cue for the caster and nearby players, synchronized with absorption and final effects.
-- Converted it to mono 44.1 kHz Ogg Vorbis and verified the combined package. Existing audio/gameplay is preserved; live testing of this final cue was left to the user as requested.
-
-## Omega Rush / Omega Form 0.2.3
-
-- Added a 3.5-block levitating, bent-knee transformation with six sequential Minecraft flowers, tilted orbit, inward absorption, nearby flash, halo and three finishing pulses.
-- Refined the sequence to 6.4 seconds by default, faster arrivals, one-shot car-drive audio, and flower pitches from 1.0 to 1.9 in 0.18 steps.
-- Added charge movement/gravity ownership and cleanup, effective-clock synchronization and protocol 4. The ritual passed 279 server checks and real caster/observer review.
-
-## Omega Rush / Omega Form 0.2.2
-
-- Omega Rush has a 10-second base cooldown during Form, retaining Iron's equipment reductions and native cooldown synchronization. Added `omegaRush.omegaFormCooldownSeconds`; the normal outside-Form cooldown stays unchanged.
-- Enabled Form hover now uses Rush's horizontal, arms-forward pose without changing hover movement. Shared animation cleanup preserves a pose still needed by either controller.
-- The exact combined JAR passed 135 Form and 114 Rush/compatibility assertions. Published as one combined release artifact with a checksum and installation notes.
-
-## Omega Rush / Omega Form 0.2.1
-
-- Replaced automatic takeoff with a quick double-tap jump toggle, keeping normal single jumps and the selected mode across Rush handoffs.
-- Added flower and rainbow explosion HUD icons at Iron's native spell-icon resource paths.
-- Updated the Omega network to protocol 3. The user reviewed the revision in game and accepted it.
-
-## Omega Rush 0.2.0: Omega Form and the Flowery Scarf
-
-- Added a visible charm-slot scarf with a locked, equipment-only Omega Form spell. Rare player-attributed boss drops are 5%; generated chest loot is 0.2%, without extra nested or co-op rolls.
-- Added 200-mana activation, 30-mana-per-second sustain, native free dismissal, and a 120-second cooldown on ending.
-- Added automatic hover, one-time eight-heart absorption, Resistance III/Strength I equivalents that preserve stronger effects, and a 25% Nature attribute bonus.
-- Added shared hover/Rush gravity ownership, a configurable Form prerequisite, safe continuation of committed Rush after Form expiry, rainbow body/hand tint, and bounded posed-mesh after-images.
-- Replaced crossed-hands preparation with a bent-elbow power-up flex. Existing sound files remain unchanged.
-- Updated the Omega network to protocol 2 and kept the single-JAR distribution.
-
-## Combined Omega Rush update
-
-- Added Omega Rush 0.1.0 to the existing combined JAR, preserving Grand Explosion, Thundercrash, Thunderstar, Crimson Susanoo, and Ignis compatibility payloads.
-- Seven seconds of guided flight with a short rainbow charge and a broad horizontal cone of delayed trail explosions. Legendary Nature scroll uses Poisonous Potato at the Scroll Forge.
-- Forward-arm flight posture, three intermixed animated rainbow explosions, 4.05-block damage radius, charge-only car-drive audio, and about six bomb sounds per second.
-- Independent source module and build script; package assembly supports either four separately compiled modules or appending Omega Rush to the previously accepted combined release.
-- Existing spell/item IDs, settings, and saved worlds retain their namespaces. Remove the separate Omega Rush JAR when installing this combined release.
-
 ## 0.3.2
 
 - Replaced only Thundercrash's impact recording with the corrected file supplied under the same filename. The cast and flight recordings, spell behavior, scroll crafting and command integration are unchanged.

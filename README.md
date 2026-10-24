@@ -1,43 +1,41 @@
-# Multiversal Spellbooks addon
+# Ki School — Saiyan Ascension
 
-## Ki School development
+Branch: **`codex/ki-school`**. This branch contains the Saiyan transformation feature and its shared addon base.
 
-This branch contains **Saiyan Ascension** (0.3.5 candidate), a craftable Curios Head wig with Super Saiyan I, II and III, synchronized aura/lightning, transformation audio and the connected SSJ3 mane. A dedicated **Ki** spell school is planned; Saiyan Ascension currently remains in **Lightning**. See [Ki School](KI-SCHOOL.md), [controls and stats](SAIYAN-ASCENSION.md) and [SSJ3 validation](SAIYAN-SSJ3.md).
+## Download and install
 
-Forge Minecraft 1.20.1 addon for Iron's Spells 'n Spellbooks. This update combines Grand Explosion **0.3.3**, Crimson Susanoo **0.1.1**, Ignis Armor Compatibility **0.1.0**, and Omega Rush / Omega Form **0.2.4** into one JAR while retaining separate mod IDs, packages, resources and configs.
+**[Download the tested Saiyan SSJ1–3 JAR](https://github.com/lilsponge1/Multiversal-Spellbooks-Irons-Spellbooks-Addon/releases/download/v0.3.5-saiyan-ssj3-hair4/multiversal-spellbooks-0.3.5-saiyan-ssj3-hair4.jar)** · [Release notes and checksum](https://github.com/lilsponge1/Multiversal-Spellbooks-Irons-Spellbooks-Addon/releases/tag/v0.3.5-saiyan-ssj3-hair4)
+
+Install that same JAR on the server and every client, replacing the previous addon package. The package includes Grand Explosion/Saiyan Ascension, Crimson Susanoo and Ignis compatibility; avoid duplicate copies of those mod IDs. Keep the normal modpack dependencies. The release page includes complete installation notes.
+
+Search **Saiyan Wig** in JEI and equip it in **Curios: Head**. Mana upkeep is **10 / 17 / 30 per second** for SSJ1 / SSJ2 / SSJ3. SSJ3 has a fifteen-second charge and ten seconds of completion music. Saiyan Ascension currently uses Lightning; registration of the dedicated Ki school remains future work.
+
+Omega Rush/Form development stays on the separate [`codex/omega-form-ritual`](https://github.com/lilsponge1/Multiversal-Spellbooks-Irons-Spellbooks-Addon/tree/codex/omega-form-ritual) branch. Omega sources and packaging are excluded here.
+
+See [Ki School](KI-SCHOOL.md), [controls and stats](SAIYAN-ASCENSION.md), and [SSJ3 validation](SAIYAN-SSJ3.md).
+
+Forge Minecraft 1.20.1 addon for Iron's Spells 'n Spellbooks. The Ki candidate packages Grand Explosion/Saiyan Ascension **0.3.5**, Crimson Susanoo **0.1.1** and Ignis Armor Compatibility **0.1.0** in one JAR while retaining separate mod IDs, packages, resources and configs.
 
 ## Latest changes
 
-- Omega Form ritual: a 6.4-second charge raises the player 3.5 blocks with a bent knee, summons six orbiting Minecraft flowers with rising-pitch cues, then absorbs them with a flash, halo, follow-up pulses and the supplied fire-spell finish sound. The car-drive clip plays once at charge start. See [ritual details](OMEGA-RITUAL.md).
-
-- Omega Form: a rare Flowery Scarf in the charm slot unlocks sustained rainbow transformation, hover flight, eight absorption hearts, Resistance III, Strength I, and +25% Nature power. Boss drops are 5%; generated chest loot is one in 500. See [Omega Form](OMEGA-FORM.md).
-- Omega Form flight now toggles with a quick double-tap of jump; single jumps remain normal. Form and Rush have dedicated flower and rainbow explosion HUD icons.
-- Omega Rush now requires active Omega Form by default and has a 10-second base cooldown during Form. Form flight uses Rush's forward-arm posture while retaining the double-tap hover controls.
-- Omega Rush: guided rainbow flight, a broad horizontal explosion trail, forward-arm flying posture, charge-only car-drive audio, and about six bomb sounds per second. Craft its Legendary Nature scroll with Legendary Ink, Paper, and a Poisonous Potato.
 - Thundercrash: new lightning-gauntlet icon and charge/flight/impact audio synchronized to actual flight and collision.
 - Cuirass of the Thunderstar: refined ivory/gold/blue armor, one equipped spell slot, normal Travel Optics Riptide material attributes and a unique 20% Thundercrash impact bonus.
 - Crimson Susanoo: remote walking synchronization, smooth pose interpolation, corrected right-hand katana/grip, half outgoing direct damage by default, co-op damage/aggro protection and a second-cast recall with no extra mana.
 - Ignis Mage armor: normal enchanting-table and anvil support, including survival XP/lapis costs and ordinary compatibility rules.
 
-See [Omega Form and its review checkpoint](OMEGA-FORM.md), [earlier release notes](RELEASE-0.3.3.md), [validation](INTEGRATION.md), [Thunderstar](THUNDERSTAR-CUIRASS.md), [Susanoo](modules/crimson-susanoo/README.md) and [Ignis compatibility](modules/ignis-armor-compat/README.md).
+See [release notes](RELEASE-0.3.3.md), [validation](INTEGRATION.md), [Thunderstar](THUNDERSTAR-CUIRASS.md), [Susanoo](modules/crimson-susanoo/README.md) and [Ignis compatibility](modules/ignis-armor-compat/README.md).
 
-## Install
+## Addon installation details
 
-Download [Omega Form 0.2.4 — single combined JAR](https://github.com/lilsponge1/Multiversal-Spellbooks-Irons-Spellbooks-Addon/releases/tag/v0.3.3-omega-form-0.2.4). See [release notes](RELEASE-OMEGA-RITUAL.md) for the six-flower ritual, new completion audio and installation instructions.
+Use the Saiyan download above. SHA-256: `8164908EA961477EEE436BB9E6299F0A58FF55020187A0149574CD0FB36BE7BD`
 
-`multiversal-spellbooks-0.3.3-crimson-0.1.1-ignis-0.1.0-omega-0.2.4.jar`
-
-Release SHA-256: `95602ECB3368691F1952DABBEE912A32C79D57DF4E3ED58130507C2025EDB878`
-
-Stop Minecraft and the server, back up the world/configs, and replace the older addon JAR with this **same file on the server and every client**. Remove separate Grand Explosion, Crimson Susanoo, Ignis compatibility, and Omega Rush JARs if present; their contents are already included. Keep normal modpack dependencies beside it. This build requires Travel Optics 6.3.0+ and Cataclysm: Spellbooks 1.2.9 (below 1.3), in addition to the existing Iron's/Cataclysm/GeckoLib dependencies. Testing used Forge 47.4.10 and Iron's Spells 3.16.3. Omit diagnostic JVM flags in normal play.
-
-Omega Rush keeps the spell ID `irons_omega_rush:omega_rush` and its existing configuration files. For worlds upgrading from the first standalone build, set `damageRadius = 4.05` in the world's `serverconfig/irons_omega_rush-server.toml`. See [Omega Rush](modules/omega-rush/README.md) and [integration validation](OMEGA-INTEGRATION.md).
+Stop Minecraft and the server, back up the world/configs, and replace the older addon JAR with this **same file on the server and every client**. Remove separate Grand Explosion, Crimson Susanoo and Ignis compatibility JARs if present; their contents are already included. Keep normal modpack dependencies beside it. This build requires Travel Optics 6.3.0+ and Cataclysm: Spellbooks 1.2.9 (below 1.3), in addition to the existing Iron's/Cataclysm/GeckoLib dependencies. Testing used Forge 47.4.10 and Iron's Spells 3.16.3. Omit diagnostic JVM flags in normal play.
 
 Existing item/spell IDs and config files remain valid. The new Susanoo `damageMultiplier=0.5` applies to saved older damage bases; keep `friendlyFire=false` for co-op protection. The server owners handle production installation and the final two-player visual check. See [installation checklist](docs/INSTALL-COMBINED.txt).
 
 ## Build and collaborate
 
-Root `src/` contains Grand Explosion, Thundercrash, Thunderstar and Cinderstar. Independent modules live under `modules/crimson-susanoo/`, `modules/ignis-armor-compat/`, and `modules/omega-rush/`. See [CONTRIBUTING.md](CONTRIBUTING.md).
+Root `src/` contains Grand Explosion, Thundercrash, Thunderstar and Cinderstar. Independent modules live under `modules/crimson-susanoo/` and `modules/ignis-armor-compat/`. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 Use Java 17. Build root `src/` with `build.ps1`; its defaults reference an existing development workspace, so supply `-JdkBin`, `-LibraryDir`, `-ModDir`, `-MinecraftJar`, `-MinecraftServerJar` and `-SrgMinecraftJar` for another machine. The script needs the matching Forge runtime and SRG Minecraft JARs plus the pack libraries. Root output defaults to `build/grand-explosion-0.3.5.jar`. `build-test.ps1` creates a separate disposable-world harness, excluded from production.
 
@@ -47,13 +45,7 @@ Build each module with its own Gradle wrapper (see its README), then assemble:
 ./build-combined.ps1 -GrandExplosionJar ./build/grand-explosion-0.3.5.jar
 ```
 
-Build Omega Rush separately with `modules/omega-rush/build.ps1` before assembly, or pass `-BuildOmega`. To preserve all existing bytes in an accepted combined release and add only Omega Rush:
-
-```powershell
-./build-combined.ps1 -CombinedBaseJar ./path/to/accepted-multiversal.jar -BuildOmega
-```
-
-Python 3.11+ is required for the packager; pass `-Python <python.exe>` if needed. `-BuildCrimson` and `-BuildIgnisArmor` build the modules first; `-Offline` requires cached Gradle dependencies. `-CrimsonJar`, `-IgnisArmorJar`, `-OmegaJar`, and `-OutputJar` override inputs/output. In the module-input mode, passing `-IgnisArmorJar ''` or `-OmegaJar ''` omits that optional module. Default output is `build/release/multiversal-spellbooks-0.3.5-crimson-0.1.1-ignis-0.1.0-omega-0.2.4.jar`, with checksum and input/payload report. Existing output files are never overwritten. Only shared metadata is merged; third-party dependencies are never bundled.
+Python 3.11+ is required for the packager; pass `-Python <python.exe>` if needed. `-BuildCrimson` and `-BuildIgnisArmor` build the modules first; `-Offline` requires cached Gradle dependencies. `-CrimsonJar`, `-IgnisArmorJar` and `-OutputJar` override inputs/output. Passing `-IgnisArmorJar ''` omits the optional compatibility module. Default output is `build/release/multiversal-spellbooks-0.3.5-saiyan-ssj3-hair4.jar`, with checksum and input/payload report. Existing output files are never overwritten. Only shared metadata is merged; third-party dependencies are never bundled.
 
 The published review artifact retains its tested filename and bytes. A fresh build can differ in archive metadata; validate and test a rebuilt release before deploying it.
 

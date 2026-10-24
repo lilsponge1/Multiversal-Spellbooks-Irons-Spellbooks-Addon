@@ -59,7 +59,7 @@ State is server-owned and synchronized to the caster and entity-tracking players
 
 Death, clone, respawn, logout, server shutdown, dimension change, lost book/spell access, burnout and forced reset remove modifiers. Sessions are never saved. The public `SaiyanManager.reset(player, SaiyanStatePacket.RESET)` entry point supports administrative integrations. A canceled Iron's pre-cast event or mana-change event prevents a free transformation.
 
-Networking protocol is **5**. The server and every client need the same combined candidate. The candidate is a local review build; it is not installed in the live pack or published. Use a disposable world for first testing. Existing Susanoo and Ignis module payloads are retained by the combined-JAR packager.
+Networking protocol is **5**. The server and every client need the same combined candidate. The tested candidate is published as [a Ki/Saiyan prerelease](https://github.com/lilsponge1/Multiversal-Spellbooks-Irons-Spellbooks-Addon/releases/tag/v0.3.5-saiyan-ssj3-hair4); production server installation remains the server owner's responsibility. Use a disposable world for first testing. Existing Susanoo and Ignis module payloads are retained by the combined-JAR packager.
 
 ## Current SSJ3 verification
 
