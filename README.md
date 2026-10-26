@@ -27,11 +27,11 @@ See [Omega Form and its review checkpoint](OMEGA-FORM.md), [earlier release note
 
 ## Install
 
-Download [Omega Form 0.2.4 — single combined JAR](https://github.com/lilsponge1/Multiversal-Spellbooks-Irons-Spellbooks-Addon/releases/tag/v0.3.3-omega-form-0.2.4). See [release notes](RELEASE-OMEGA-RITUAL.md) for the six-flower ritual, new completion audio and installation instructions.
+Download [Omega Form 0.2.5 — single combined JAR](https://github.com/lilsponge1/Multiversal-Spellbooks-Irons-Spellbooks-Addon/releases/tag/v0.3.3-omega-form-0.2.5). See [release notes](RELEASE-OMEGA-MUSIC.md) for the music, flight and upkeep update, including saved-config installation instructions.
 
-`multiversal-spellbooks-0.3.3-crimson-0.1.1-ignis-0.1.0-omega-0.2.4.jar`
+`multiversal-spellbooks-0.3.3-crimson-0.1.1-ignis-0.1.0-omega-0.2.5.jar`
 
-Release SHA-256: `95602ECB3368691F1952DABBEE912A32C79D57DF4E3ED58130507C2025EDB878`
+Release SHA-256: `09309F6F6941414889BB4B9D1C9924D95012810BD951C2428C3949A5A6B5C7FC`
 
 Stop Minecraft and the server, back up the world/configs, and replace the older addon JAR with this **same file on the server and every client**. Remove separate Grand Explosion, Crimson Susanoo, Ignis compatibility, and Omega Rush JARs if present; their contents are already included. Keep normal modpack dependencies beside it. This build requires Travel Optics 6.3.0+ and Cataclysm: Spellbooks 1.2.9 (below 1.3), in addition to the existing Iron's/Cataclysm/GeckoLib dependencies. Testing used Forge 47.4.10 and Iron's Spells 3.16.3. Omit diagnostic JVM flags in normal play.
 
