@@ -6,7 +6,7 @@
 
 Build the independent addon with `build-ki.ps1` or `tools/build_ki_standalone.py`. Its packaging sources and focused tests are included here alongside the preserved Omega module. The published Ki JAR SHA-256 is `5daead5f658a6cb74124994143a06bb13a69ed148ec5cde1ea49a46c5924b49d`.
 
-Forge Minecraft 1.20.1 addon for Iron's Spells 'n Spellbooks. This update combines Grand Explosion **0.3.3**, Crimson Susanoo **0.1.1**, Ignis Armor Compatibility **0.1.0**, and Omega Rush / Omega Form **0.2.4** into one JAR while retaining separate mod IDs, packages, resources and configs.
+Forge Minecraft 1.20.1 addon for Iron's Spells 'n Spellbooks. This update combines Grand Explosion **0.3.3**, Crimson Susanoo **0.1.1**, Ignis Armor Compatibility **0.1.0**, and Omega Rush / Omega Form **0.2.5** into one JAR while retaining separate mod IDs, packages, resources and configs.
 
 ## Latest changes
 
@@ -51,13 +51,13 @@ Build each module with its own Gradle wrapper (see its README), then assemble:
 ./build-combined.ps1 -GrandExplosionJar ./build/grand-explosion-0.3.5.jar
 ```
 
-Build Omega Rush separately with `modules/omega-rush/build.ps1` before assembly, or pass `-BuildOmega`. To preserve all existing bytes in an accepted combined release and add only Omega Rush:
+Build Omega Rush separately with `modules/omega-rush/build.ps1` before assembly, or pass `-BuildOmega`. To preserve the other modules and add Omega, use an accepted combined base from before Omega was included. A base already containing Omega would collide with the replacement module:
 
 ```powershell
 ./build-combined.ps1 -CombinedBaseJar ./path/to/accepted-multiversal.jar -BuildOmega
 ```
 
-Python 3.11+ is required for the packager; pass `-Python <python.exe>` if needed. `-BuildCrimson` and `-BuildIgnisArmor` build the modules first; `-Offline` requires cached Gradle dependencies. `-CrimsonJar`, `-IgnisArmorJar`, `-OmegaJar`, and `-OutputJar` override inputs/output. In the module-input mode, passing `-IgnisArmorJar ''` or `-OmegaJar ''` omits that optional module. Default output is `build/release/multiversal-spellbooks-0.3.5-crimson-0.1.1-ignis-0.1.0-omega-0.2.4.jar`, with checksum and input/payload report. Existing output files are never overwritten. Only shared metadata is merged; third-party dependencies are never bundled.
+Python 3.11+ is required for the packager; pass `-Python <python.exe>` if needed. `-BuildCrimson` and `-BuildIgnisArmor` build the modules first; `-Offline` requires cached Gradle dependencies. `-CrimsonJar`, `-IgnisArmorJar`, `-OmegaJar`, and `-OutputJar` override inputs/output. In the module-input mode, passing `-IgnisArmorJar ''` or `-OmegaJar ''` omits that optional module. Default output is `build/release/multiversal-spellbooks-0.3.5-crimson-0.1.1-ignis-0.1.0-omega-0.2.5.jar`, with checksum and input/payload report. Existing output files are never overwritten. Only shared metadata is merged; third-party dependencies are never bundled.
 
 The published review artifact retains its tested filename and bytes. A fresh build can differ in archive metadata; validate and test a rebuilt release before deploying it.
 
