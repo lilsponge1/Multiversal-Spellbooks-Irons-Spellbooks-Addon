@@ -90,7 +90,8 @@ public final class OmegaFormHarness {
                 try(var stream=OmegaFormHarness.class.getClassLoader().getResourceAsStream(path)){check("native_hud_icon_"+iconSpell.getSpellName(),stream!=null&&Arrays.equals(stream.readNBytes(8),new byte[]{(byte)137,80,78,71,13,10,26,10}));}
             }
             tapCases();
-            check("default_cost_upkeep_cooldown",spell.getManaCost(1)==200&&OmegaConfig.FORM_UPKEEP.get()==30&&spell.getSpellCooldown()==2400&&spell.getCastTime(1)==128);
+            check("default_cost_upkeep_cooldown",spell.getManaCost(1)==200&&OmegaConfig.FORM_UPKEEP.get()==25&&spell.getSpellCooldown()==2400&&spell.getCastTime(1)==128);
+            check("doubled_hover_defaults",OmegaConfig.HOVER_SPEED.get()==12&&OmegaConfig.HOVER_VERTICAL.get()==8);
             check("form_not_craftable_or_lootable",!spell.allowCrafting()&&!spell.allowLooting()&&spell.getMaxLevel()==1);
             check("no_scarf_no_form",!spell.canBeCastedBy(1,CastSource.SWORD,magic,p).isSuccess());
             check("no_form_no_rush",!OmegaManager.start(p,1,12));
@@ -107,7 +108,7 @@ public final class OmegaFormHarness {
             System.out.println("OMEGA_FORM_TEST_ACTIVATION active="+OmegaFormManager.active(p)+" mana="+magic.getMana());
             check("native_activation_charges_once",OmegaFormManager.active(p)&&magic.getMana()==800);check("native_recast_registered",magic.getPlayerRecasts().hasRecastForSpell(spell));
             check("form_status_has_no_time_cap",p.m_21124_(OmegaEffects.FORM.get()).m_267577_());
-            steps(20,0,0);check("upkeep_exact_30_per_second",Math.abs(magic.getMana()-770)<0.001);
+            steps(20,0,0);check("upkeep_exact_25_per_second",Math.abs(magic.getMana()-775)<0.001);
             check("absorption_once",p.m_6103_()==16);steps(10,0,0);check("absorption_not_refilled",p.m_6103_()==16);
             var nature=p.m_21051_(AttributeRegistry.NATURE_SPELL_POWER.get());check("nature_times_1_25",Math.abs(nature.m_22135_()-1.25)<0.001);
             check("rush_power_buffed_once",Math.abs(rush.getSpellPower(1,p)-15)<0.001);
@@ -118,7 +119,7 @@ public final class OmegaFormHarness {
             start();p.m_6853_(false);steps(2,1,1);check("single_jump_keeps_normal_gravity",!OmegaFormManager.owns(p)&&!p.m_20068_());
             float beforeToggle=magic.getMana();toggle();check("toggle_enables_flight",OmegaFormManager.owns(p)&&p.m_20068_());
             toggle();check("toggle_disables_without_ending_form",!OmegaFormManager.owns(p)&&!p.m_20068_()&&OmegaFormManager.active(p)&&p.m_6103_()==16);
-            check("toggle_keeps_upkeep_no_activation_cost",Math.abs(magic.getMana()-(beforeToggle-3))<0.001);
+            check("toggle_keeps_upkeep_no_activation_cost",Math.abs(magic.getMana()-(beforeToggle-2.5f))<0.001);
             var toggleFall=new LivingFallEvent(p,10,1);OmegaFormManager.fall(toggleFall);check("toggle_off_landing_protection",toggleFall.isCanceled());
             long toggleSession=(long)field(state(),"session");int toggleAccepted=(int)field(state(),"sequence");
             OmegaFormManager.input(p,new OmegaFormInputPacket(toggleSession,toggleAccepted,0,0,0,0,0,true));

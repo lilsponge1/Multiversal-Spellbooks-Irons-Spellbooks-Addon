@@ -10,6 +10,8 @@ Forge Minecraft 1.20.1 addon for Iron's Spells 'n Spellbooks. This update combin
 
 ## Latest changes
 
+- Omega Form 0.2.5: the supplied Flower Man song follows the caster with 20-block positional audio until Form ends. Double-tap flight is twice as fast (12 horizontal / 8 vertical blocks per second), and passive upkeep is reduced from 30 to 25 mana/second. See [release and saved-config instructions](RELEASE-OMEGA-MUSIC.md).
+
 - Omega Form ritual: a 6.4-second charge raises the player 3.5 blocks with a bent knee, summons six orbiting Minecraft flowers with rising-pitch cues, then absorbs them with a flash, halo, follow-up pulses and the supplied fire-spell finish sound. The car-drive clip plays once at charge start. See [ritual details](OMEGA-RITUAL.md).
 
 - Omega Form: a rare Flowery Scarf in the charm slot unlocks sustained rainbow transformation, hover flight, eight absorption hearts, Resistance III, Strength I, and +25% Nature power. Boss drops are 5%; generated chest loot is one in 500. See [Omega Form](OMEGA-FORM.md).

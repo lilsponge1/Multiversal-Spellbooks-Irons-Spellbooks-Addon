@@ -10,5 +10,6 @@ public final class OmegaSounds {
     public static final RegistryObject<SoundEvent> BOMB=SOUNDS.register("bomb",()->SoundEvent.m_262824_(new ResourceLocation(OmegaMod.ID,"bomb")));
     public static final RegistryObject<SoundEvent> FLOWER=SOUNDS.register("flower_appear",()->SoundEvent.m_262824_(new ResourceLocation(OmegaMod.ID,"flower_appear")));
     public static final RegistryObject<SoundEvent> FORM_FINISH=SOUNDS.register("form_finish",()->SoundEvent.m_262824_(new ResourceLocation(OmegaMod.ID,"form_finish")));
+    public static final RegistryObject<SoundEvent> FORM_MUSIC=SOUNDS.register("form_music",()->SoundEvent.m_262824_(new ResourceLocation(OmegaMod.ID,"form_music")));
     private OmegaSounds() {}
 }
