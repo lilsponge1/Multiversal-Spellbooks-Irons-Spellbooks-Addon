@@ -7,7 +7,7 @@ import net.minecraft.world.phys.Vec3;
 final class OmegaFormClient {
     static final class Form {
         OmegaFormPacket packet;LivingEntity entity;Vec3 velocity;long received=System.nanoTime();int sequence,age,steps;
-        OmegaFlightSound sound;final OmegaFlightToggle toggle=new OmegaFlightToggle();final ArrayDeque<OmegaFormInputPacket> pending=new ArrayDeque<>();
+        OmegaFlightSound sound;OmegaFormMusic music;final OmegaFlightToggle toggle=new OmegaFlightToggle();final ArrayDeque<OmegaFormInputPacket> pending=new ArrayDeque<>();
         Form(OmegaFormPacket p){packet=p;velocity=p.velocity();age=p.age();sequence=Math.max(0,p.accepted());}
     }
     static final Map<UUID,Form> FORMS=new HashMap<>();
@@ -68,8 +68,9 @@ final class OmegaFormClient {
         var mc=Minecraft.m_91087_();var l=mc.f_91073_;if(l==null||mc.f_91074_==null){clear();return;}
         for(Form f:new ArrayList<>(FORMS.values())){
             if(System.nanoTime()-f.received>2_000_000_000L){remove(f.packet.caster());continue;}
-            var e=l.m_6815_(f.packet.entity());if(!(e instanceof LivingEntity living)||!living.m_20148_().equals(f.packet.caster()))continue;
+            var e=l.m_6815_(f.packet.entity());if(!(e instanceof LivingEntity living)||!living.m_20148_().equals(f.packet.caster())||!living.m_6084_()||living.m_213877_()){remove(f.packet.caster());continue;}
             f.entity=living;f.age++;
+            if(f.packet.phase()==1&&f.music==null){f.music=new OmegaFormMusic(living);mc.m_91106_().m_120367_(f.music);}
             if(f.packet.phase()==1&&f.packet.hover()&&living instanceof net.minecraft.client.player.AbstractClientPlayer player)OmegaAnimations.start(player);
             else OmegaAnimations.stop(f.packet.caster());
             if(f.packet.phase()==0){if(living instanceof net.minecraft.client.player.AbstractClientPlayer player)OmegaAnimations.charge(player,f.packet.chargeTicks());if(f.sound==null&&f.packet.age()<=6){f.sound=new OmegaFlightSound(living,false);mc.m_91106_().m_120367_(f.sound);}}else{stopSound(f);OmegaAnimations.stopCharge(f.packet.caster());}
@@ -77,7 +78,7 @@ final class OmegaFormClient {
         }
     }
     private static void stopSound(Form f){if(f.sound!=null){f.sound.end();Minecraft.m_91087_().m_91106_().m_120399_(f.sound);f.sound=null;}}
-    static void remove(UUID id){Form f=FORMS.remove(id);if(f==null)return;stopSound(f);OmegaEchoes.clear(id);OmegaAnimations.stopCharge(id);OmegaAnimations.stop(id);
+    static void remove(UUID id){Form f=FORMS.remove(id);if(f==null)return;stopSound(f);if(f.music!=null){f.music.end();Minecraft.m_91087_().m_91106_().m_120399_(f.music);f.music=null;}OmegaEchoes.clear(id);OmegaAnimations.stopCharge(id);OmegaAnimations.stop(id);
         if(f.entity==Minecraft.m_91087_().f_91074_&&!OmegaClient.owns(f.entity))f.entity.m_20242_(f.packet.originalGravity());}
     static void clear(){for(UUID id:new ArrayList<>(FORMS.keySet()))remove(id);ENDED.clear();OmegaEchoes.clear();}
 }

@@ -35,9 +35,9 @@ public final class OmegaConfig {
         FORM_CHARGE=b.comment("Base ritual clock before its 20% acceleration: 160 becomes 128 effective ticks (6.4 seconds). Casting-speed gear can reduce it to 96 ticks.").defineInRange("chargeTicks",160,160,400);
         FORM_LIFT=b.defineInRange("chargeLiftBlocks",3.5,0.0,8.0);
         FORM_COOLDOWN=b.defineInRange("cooldownSeconds",120,0,3600);
-        FORM_UPKEEP=b.defineInRange("manaPerSecond",30.0,0.0,1000.0);
-        HOVER_SPEED=b.defineInRange("horizontalBlocksPerSecond",6.0,0.1,20.0);
-        HOVER_VERTICAL=b.defineInRange("verticalBlocksPerSecond",4.0,0.1,12.0);
+        FORM_UPKEEP=b.defineInRange("manaPerSecond",25.0,0.0,1000.0);
+        HOVER_SPEED=b.defineInRange("horizontalBlocksPerSecond",12.0,0.1,20.0);
+        HOVER_VERTICAL=b.defineInRange("verticalBlocksPerSecond",8.0,0.1,12.0);
         FORM_RESISTANCE=b.defineInRange("resistanceLevel",3,0,4);
         FORM_STRENGTH=b.defineInRange("strengthLevel",1,0,5);
         FORM_HEARTS=b.defineInRange("absorptionHearts",8,0,40);

@@ -6,9 +6,11 @@
 
 Build the independent addon with `build-ki.ps1` or `tools/build_ki_standalone.py`. Its packaging sources and focused tests are included here alongside the preserved Omega module. The published Ki JAR SHA-256 is `5daead5f658a6cb74124994143a06bb13a69ed148ec5cde1ea49a46c5924b49d`.
 
-Forge Minecraft 1.20.1 addon for Iron's Spells 'n Spellbooks. This update combines Grand Explosion **0.3.3**, Crimson Susanoo **0.1.1**, Ignis Armor Compatibility **0.1.0**, and Omega Rush / Omega Form **0.2.4** into one JAR while retaining separate mod IDs, packages, resources and configs.
+Forge Minecraft 1.20.1 addon for Iron's Spells 'n Spellbooks. This update combines Grand Explosion **0.3.3**, Crimson Susanoo **0.1.1**, Ignis Armor Compatibility **0.1.0**, and Omega Rush / Omega Form **0.2.5** into one JAR while retaining separate mod IDs, packages, resources and configs.
 
 ## Latest changes
+
+- Omega Form 0.2.5: the supplied Flower Man song follows the caster with 20-block positional audio until Form ends. Double-tap flight is twice as fast (12 horizontal / 8 vertical blocks per second), and passive upkeep is reduced from 30 to 25 mana/second. See [release and saved-config instructions](RELEASE-OMEGA-MUSIC.md).
 
 - Omega Form ritual: a 6.4-second charge raises the player 3.5 blocks with a bent knee, summons six orbiting Minecraft flowers with rising-pitch cues, then absorbs them with a flash, halo, follow-up pulses and the supplied fire-spell finish sound. The car-drive clip plays once at charge start. See [ritual details](OMEGA-RITUAL.md).
 
@@ -25,11 +27,11 @@ See [Omega Form and its review checkpoint](OMEGA-FORM.md), [earlier release note
 
 ## Install
 
-Download [Omega Form 0.2.4 — single combined JAR](https://github.com/lilsponge1/Multiversal-Spellbooks-Irons-Spellbooks-Addon/releases/tag/v0.3.3-omega-form-0.2.4). See [release notes](RELEASE-OMEGA-RITUAL.md) for the six-flower ritual, new completion audio and installation instructions.
+Download [Omega Form 0.2.5 — single combined JAR](https://github.com/lilsponge1/Multiversal-Spellbooks-Irons-Spellbooks-Addon/releases/tag/v0.3.3-omega-form-0.2.5). See [release notes](RELEASE-OMEGA-MUSIC.md) for the music, flight and upkeep update, including saved-config installation instructions.
 
-`multiversal-spellbooks-0.3.3-crimson-0.1.1-ignis-0.1.0-omega-0.2.4.jar`
+`multiversal-spellbooks-0.3.3-crimson-0.1.1-ignis-0.1.0-omega-0.2.5.jar`
 
-Release SHA-256: `95602ECB3368691F1952DABBEE912A32C79D57DF4E3ED58130507C2025EDB878`
+Release SHA-256: `09309F6F6941414889BB4B9D1C9924D95012810BD951C2428C3949A5A6B5C7FC`
 
 Stop Minecraft and the server, back up the world/configs, and replace the older addon JAR with this **same file on the server and every client**. Remove separate Grand Explosion, Crimson Susanoo, Ignis compatibility, and Omega Rush JARs if present; their contents are already included. Keep normal modpack dependencies beside it. This build requires Travel Optics 6.3.0+ and Cataclysm: Spellbooks 1.2.9 (below 1.3), in addition to the existing Iron's/Cataclysm/GeckoLib dependencies. Testing used Forge 47.4.10 and Iron's Spells 3.16.3. Omit diagnostic JVM flags in normal play.
 
@@ -49,13 +51,13 @@ Build each module with its own Gradle wrapper (see its README), then assemble:
 ./build-combined.ps1 -GrandExplosionJar ./build/grand-explosion-0.3.5.jar
 ```
 
-Build Omega Rush separately with `modules/omega-rush/build.ps1` before assembly, or pass `-BuildOmega`. To preserve all existing bytes in an accepted combined release and add only Omega Rush:
+Build Omega Rush separately with `modules/omega-rush/build.ps1` before assembly, or pass `-BuildOmega`. To preserve the other modules and add Omega, use an accepted combined base from before Omega was included. A base already containing Omega would collide with the replacement module:
 
 ```powershell
 ./build-combined.ps1 -CombinedBaseJar ./path/to/accepted-multiversal.jar -BuildOmega
 ```
 
-Python 3.11+ is required for the packager; pass `-Python <python.exe>` if needed. `-BuildCrimson` and `-BuildIgnisArmor` build the modules first; `-Offline` requires cached Gradle dependencies. `-CrimsonJar`, `-IgnisArmorJar`, `-OmegaJar`, and `-OutputJar` override inputs/output. In the module-input mode, passing `-IgnisArmorJar ''` or `-OmegaJar ''` omits that optional module. Default output is `build/release/multiversal-spellbooks-0.3.5-crimson-0.1.1-ignis-0.1.0-omega-0.2.4.jar`, with checksum and input/payload report. Existing output files are never overwritten. Only shared metadata is merged; third-party dependencies are never bundled.
+Python 3.11+ is required for the packager; pass `-Python <python.exe>` if needed. `-BuildCrimson` and `-BuildIgnisArmor` build the modules first; `-Offline` requires cached Gradle dependencies. `-CrimsonJar`, `-IgnisArmorJar`, `-OmegaJar`, and `-OutputJar` override inputs/output. In the module-input mode, passing `-IgnisArmorJar ''` or `-OmegaJar ''` omits that optional module. Default output is `build/release/multiversal-spellbooks-0.3.5-crimson-0.1.1-ignis-0.1.0-omega-0.2.5.jar`, with checksum and input/payload report. Existing output files are never overwritten. Only shared metadata is merged; third-party dependencies are never bundled.
 
 The published review artifact retains its tested filename and bytes. A fresh build can differ in archive metadata; validate and test a rebuilt release before deploying it.
 

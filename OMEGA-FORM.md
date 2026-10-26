@@ -1,6 +1,6 @@
 # Omega Form and the Flowery Scarf
 
-Omega Rush 0.2.4 includes a reusable Flowery Scarf and a sustained Omega Form transformation to the single Multiversal Spellbooks JAR. The other combined modules retain their existing payloads and versions.
+Omega Rush 0.2.5 includes a reusable Flowery Scarf and a sustained Omega Form transformation to the single Multiversal Spellbooks JAR. The other combined modules retain their existing payloads and versions. See [music and flight update](RELEASE-OMEGA-MUSIC.md).
 
 ## Obtain and equip
 
@@ -14,7 +14,7 @@ Naturally generated chest loot has a **0.2% chance (one in 500)**. This includes
 
 ## Activate and control
 
-Select Omega Form in the normal spell wheel and cast it. The default 6.4-second ritual lifts the player 3.5 blocks into a bent-knee power-up pose, then summons six orbiting flowers and absorbs them with finishing effects. Car-drive audio plays once at the start, with separate flower and completion cues. See [ritual details](OMEGA-RITUAL.md). Successful activation costs **200 mana**, and upkeep costs **30 mana per second** at normal TPS, whether grounded, hovering, or Rushing. Ordinary mana regeneration continues. There is no fixed Form duration.
+Select Omega Form in the normal spell wheel and cast it. The default 6.4-second ritual lifts the player 3.5 blocks into a bent-knee power-up pose, then summons six orbiting flowers and absorbs them with finishing effects. Car-drive audio plays once at the start, with separate flower and completion cues. The supplied Flower Man song starts on successful transformation, follows the caster within 20 blocks, and loops until Form ends. Use the Jukebox/Note Blocks slider and Omega presentation volume to adjust it. See [ritual details](OMEGA-RITUAL.md). Successful activation costs **200 mana**, and upkeep costs **25 mana per second** at normal TPS, whether grounded, hovering, or Rushing. Ordinary mana regeneration continues. There is no fixed Form duration.
 
 | Benefit | Default |
 |---|---|
@@ -22,7 +22,7 @@ Select Omega Form in the normal spell wheel and cast it. The default 6.4-second 
 | Absorption | Eight extra hearts, granted once per transformation |
 | Melee strength | Strength I equivalent; stronger normal Strength wins |
 | Nature spell power | Attribute multiplier ×1.25 |
-| Hover speed | Six blocks/second horizontally; four vertically |
+| Hover speed | 12 blocks/second horizontally; eight vertically |
 | Cooldown | 120 seconds starting when Form ends |
 
 Flight starts **off**. Double-tap the jump key (normally Space) within seven ticks, approximately 0.35 seconds, to toggle flight on or off. A single tap jumps normally; holding jump does not toggle repeatedly. While flight is on, hold jump to rise, sneak to descend, and use ordinary movement keys horizontally. Releasing movement settles into a hover. Toggling flight off restores normal gravity with short landing protection; the transformation, buffs, and upkeep continue. Riding, swimming, and climbing temporarily use normal movement. Hovering does not change game mode, grant creative flight permissions, or bypass collision. Ordinary spellcasting remains available; incompatible flight controllers are blocked or end Form.

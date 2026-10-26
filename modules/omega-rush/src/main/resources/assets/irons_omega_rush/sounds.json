@@ -1,4 +1,7 @@
 {
+  "form_music": {
+    "sounds": [{"name": "irons_omega_rush:flower_man", "stream": true, "attenuation_distance": 20}]
+  },
   "car_drive": {
     "sounds": [{"name": "irons_omega_rush:snd_cardrive", "stream": true, "attenuation_distance": 32}]
   },
