@@ -1,5 +1,9 @@
 package local.omegarush;
 import java.util.*;
+import io.redspace.ironsspellbooks.api.spells.SpellData;
+import io.redspace.ironsspellbooks.network.gui.SelectSpellPacket;
+import io.redspace.ironsspellbooks.player.ClientMagicData;
+import io.redspace.ironsspellbooks.setup.PacketDistributor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.*;
@@ -21,7 +25,9 @@ final class OmegaFormClient {
         Form f=FORMS.get(p.caster());if(f!=null&&(p.session()<f.packet.session()||p.session()==f.packet.session()&&p.tick()<f.packet.tick()))return;
         if(p.phase()==2){if(p.closed())ENDED.merge(p.caster(),p.session(),Math::max);remove(p.caster());return;}
         if(p.session()<=ENDED.getOrDefault(p.caster(),-1L))return;
-        if(f==null||p.session()!=f.packet.session()){remove(p.caster());f=new Form(p);FORMS.put(p.caster(),f);}
+        boolean local=p.caster().equals(mc.f_91074_.m_20148_());
+        boolean wasActive=f!=null&&f.packet.phase()==1;
+        if(f==null||p.session()!=f.packet.session()){remove(p.caster(),false);f=new Form(p);FORMS.put(p.caster(),f);}
         boolean launched=f.packet.phase()==0&&p.phase()==1;f.packet=p;f.received=System.nanoTime();f.age=launched?p.age():Math.max(f.age,p.age());f.sequence=Math.max(f.sequence,p.accepted());
         f.entity=l.m_6815_(p.entity()) instanceof LivingEntity e&&e.m_20148_().equals(p.caster())?e:null;
         if(p.reset()){f.pending.clear();OmegaEchoes.clear(p.caster());if(f.entity==mc.f_91074_)f.toggle.reset(mc.f_91074_.f_108618_.f_108572_);}
@@ -37,6 +43,7 @@ final class OmegaFormClient {
             else f.entity.m_6478_(MoverType.SELF,correction);
         }
         f.velocity=v;
+        if(local&&wasActive!=(p.phase()==1)) refreshWheel(mc.f_91074_,true);
     }
     static boolean input(LocalPlayer p){
         Form f=FORMS.get(p.m_20148_());if(f==null)return false;
@@ -76,9 +83,39 @@ final class OmegaFormClient {
             if(f.packet.phase()==0){if(living instanceof net.minecraft.client.player.AbstractClientPlayer player)OmegaAnimations.charge(player,f.packet.chargeTicks());if(f.sound==null&&f.packet.age()<=6){f.sound=new OmegaFlightSound(living,false);mc.m_91106_().m_120367_(f.sound);}}else{stopSound(f);OmegaAnimations.stopCharge(f.packet.caster());}
             if(!living.m_20145_()&&f.packet.phase()==1)OmegaVisuals.form(l,living,f.packet.session(),f.age,f.packet.chargeTicks(),true);
         }
+        restoreWheelSelection(mc.f_91074_);
     }
     private static void stopSound(Form f){if(f.sound!=null){f.sound.end();Minecraft.m_91087_().m_91106_().m_120399_(f.sound);f.sound=null;}}
-    static void remove(UUID id){Form f=FORMS.remove(id);if(f==null)return;stopSound(f);if(f.music!=null){f.music.end();Minecraft.m_91087_().m_91106_().m_120399_(f.music);f.music=null;}OmegaEchoes.clear(id);OmegaAnimations.stopCharge(id);OmegaAnimations.stop(id);
-        if(f.entity==Minecraft.m_91087_().f_91074_&&!OmegaClient.owns(f.entity))f.entity.m_20242_(f.packet.originalGravity());}
-    static void clear(){for(UUID id:new ArrayList<>(FORMS.keySet()))remove(id);ENDED.clear();OmegaEchoes.clear();}
+    static void remove(UUID id){remove(id,true);}
+    private static void remove(UUID id,boolean refresh){
+        Form f=FORMS.remove(id);if(f==null)return;stopSound(f);if(f.music!=null){f.music.end();Minecraft.m_91087_().m_91106_().m_120399_(f.music);f.music=null;}OmegaEchoes.clear(id);OmegaAnimations.stopCharge(id);OmegaAnimations.stop(id);
+        var player=Minecraft.m_91087_().f_91074_;
+        if(player!=null&&f.entity==player&&!OmegaClient.owns(player))player.m_20242_(f.packet.originalGravity());
+        if(refresh&&player!=null&&id.equals(player.m_20148_())&&f.packet.phase()==1) refreshWheel(player,true);
+    }
+    static void clear(){
+        var player=Minecraft.m_91087_().f_91074_;
+        boolean hadForm=player!=null&&active(player);
+        for(UUID id:new ArrayList<>(FORMS.keySet()))remove(id,false);
+        ENDED.clear();OmegaEchoes.clear();
+        if(hadForm) refreshWheel(player,false);
+    }
+
+    private static void refreshWheel(LocalPlayer player,boolean restore) {
+        ClientMagicData.updateSpellSelectionManager();
+        if(restore) restoreWheelSelection(player);
+    }
+
+    private static void restoreWheelSelection(LocalPlayer player) {
+        var current=ClientMagicData.getSyncedSpellData(player).getSpellSelection();
+        if(!OmegaFormSpells.RUSH_SLOT.equals(current.equipmentSlot)) return;
+        var wheel=ClientMagicData.getSpellSelectionManager();
+        var fallback=wheel.getSelection();
+        if(fallback==null||fallback.spellData==SpellData.EMPTY||OmegaFormSpells.RUSH_SLOT.equals(fallback.slot)) return;
+
+        // Iron's displays the previous option when an entry vanishes, but its
+        // fallback doesn't notify the server. Explicitly sync the displayed slot.
+        current.makeSelection(fallback.slot,fallback.slotIndex);
+        PacketDistributor.sendToServer(new SelectSpellPacket(current));
+    }
 }

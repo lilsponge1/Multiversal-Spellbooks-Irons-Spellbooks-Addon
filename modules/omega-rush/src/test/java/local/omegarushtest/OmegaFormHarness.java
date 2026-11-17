@@ -6,6 +6,10 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import io.redspace.ironsspellbooks.api.magic.*;
 import io.redspace.ironsspellbooks.api.spells.*;
 import io.redspace.ironsspellbooks.api.registry.*;
+import io.redspace.ironsspellbooks.api.util.Utils;
+import io.redspace.ironsspellbooks.config.ServerConfigs;
+import io.redspace.ironsspellbooks.gui.overlays.SpellSelection;
+import io.redspace.ironsspellbooks.registries.ItemRegistry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.*;
 import net.minecraft.world.entity.*;
@@ -172,6 +176,7 @@ public final class OmegaFormHarness {
             magic.getPlayerCooldowns().clearCooldowns();magic.setMana(199);OmegaFormManager.charge(p,30);spell.castSpell(level,1,p,CastSource.SWORD,false);check("mana_drop_during_charge_rejected",!OmegaFormManager.active(p)&&magic.getMana()==199);
             var flex=OmegaChargeAnimation.create(160);check("charge_knee_animation_valid",flex.isInfinite()&&flex.getPart("rightArm").bend.isEnabled()&&flex.getPart("leftArm").bend.isEnabled()&&flex.getPart("leftLeg").bend.isEnabled()&&flex.getPart("leftLeg").pitch.isEnabled());
             ritualCases(level);
+            grantedRushCases(level);
             cooldownCases(level);
             lootCases(level);
             if(failed>0)throw new AssertionError("failed="+failed+" passed="+passed);
@@ -210,6 +215,67 @@ public final class OmegaFormHarness {
         var packet=new OmegaRitualEventPacket(p.m_20148_(),14,level.m_46472_().m_135782_().toString(),6,p.m_20182_());
         var encode=OmegaRitualEventPacket.class.getDeclaredMethod("encode",OmegaRitualEventPacket.class,net.minecraft.network.FriendlyByteBuf.class);var decode=OmegaRitualEventPacket.class.getDeclaredMethod("decode",net.minecraft.network.FriendlyByteBuf.class);encode.setAccessible(true);decode.setAccessible(true);
         var buf=new net.minecraft.network.FriendlyByteBuf(io.netty.buffer.Unpooled.buffer());try{encode.invoke(null,packet,buf);check("ritual_event_round_trip",packet.equals(decode.invoke(null,buf)));}finally{buf.release();}
+    }
+    private List<SpellSelectionManager.SelectionOption> rushOptions(){
+        return new SpellSelectionManager(p).getAllSpells().stream()
+                .filter(option->option.spellData.getSpell()==ModSpells.OMEGA_RUSH.get()).toList();
+    }
+    private void grantedRushCases(ServerLevel level)throws Exception{
+        var rush=ModSpells.OMEGA_RUSH.get();var form=ModSpells.OMEGA_FORM.get();var magic=MagicData.getPlayerMagicData(p);
+        var selectionBefore=magic.getSyncedData().getSpellSelection();
+        var bookBefore=Utils.getPlayerSpellbookStack(p);
+        var reductions=p.m_21051_(AttributeRegistry.COOLDOWN_REDUCTION.get());double priorReduction=reductions.m_22115_();
+        boolean swordsCostMana=ServerConfigs.SWORDS_CONSUME_MANA.get();
+        try{
+            OmegaManager.abort(p);OmegaFormManager.end(p,false);equip(true);Utils.setPlayerSpellbookStack(p,ItemStack.f_41583_);
+            magic.resetCastingState();magic.getPlayerCooldowns().clearCooldowns();reductions.m_22100_(1);ServerConfigs.SWORDS_CONSUME_MANA.set(false);
+            check("no_temporary_rush_while_untransformed",rushOptions().isEmpty());
+            OmegaFormManager.charge(p,form.getEffectiveCastTime(1,p));
+            check("no_temporary_rush_during_form_ritual",state()!=null&&!OmegaFormManager.active(p)&&rushOptions().isEmpty());
+            start();
+            var granted=rushOptions();
+            var equippedBook=Utils.getPlayerSpellbookStack(p);
+            check("active_form_grants_one_rank_one_rush_without_a_book",(equippedBook==null||equippedBook.m_41619_())&&granted.size()==1&&granted.get(0).spellData.getLevel()==1);
+            var grant=granted.stream().findFirst().orElseThrow(()->new AssertionError("missing temporary Rush in the native wheel"));
+            check("temporary_rush_uses_paid_spellbook_source",grant.getCastSource()==CastSource.SPELLBOOK&&grant.getCastSource().consumesMana());
+            var formOption=new SpellSelectionManager(p).getAllSpells().stream().filter(option->option.spellData.getSpell()==form).findFirst().orElseThrow();
+            var selection=new SpellSelection(formOption.slot,formOption.slotIndex);selection.makeSelection(grant.slot,grant.slotIndex);
+            magic.getSyncedData().setSpellSelection(selection);
+            magic.setMana(rush.getManaCost(1)-1);
+            check("native_temporary_rush_rejects_insufficient_mana",!Utils.serverSideInitiateCast(p)&&!magic.isCasting());
+            magic.setMana(1000);float before=magic.getMana();
+            boolean initiated=Utils.serverSideInitiateCast(p);
+            check("native_spell_wheel_initiates_bookless_rush",initiated&&magic.isCasting()&&rush.getSpellId().equals(magic.getCastingSpellId())&&magic.getCastSource()==CastSource.SPELLBOOK);
+            if(initiated){
+                // Complete the cast the same way Iron's tick does, using the rank and source selected by its native cast entry point.
+                rush.castSpell(level,magic.getCastingSpellLevel(),p,magic.getCastSource(),true);
+                rush.onServerCastComplete(level,magic.getCastingSpellLevel(),p,magic,false);
+            }
+            var cooldown=magic.getPlayerCooldowns().getSpellCooldowns().get(rush.getSpellId());
+            check("native_granted_rush_pays_mana_and_keeps_form_cooldown",OmegaManager.owns(p)&&magic.getMana()==before-rush.getManaCost(1)&&cooldown!=null&&cooldown.getSpellCooldown()==OmegaConfig.FORM_RUSH_COOLDOWN.get()*20);
+            OmegaManager.abort(p);form.castSpell(level,1,p,CastSource.SWORD,true);
+            check("manual_dismiss_removes_temporary_rush",!OmegaFormManager.active(p)&&rushOptions().isEmpty());
+            magic.getPlayerCooldowns().clearCooldowns();
+            check("stale_grant_selection_cannot_cast_fallback_before_sync",!Utils.serverSideInitiateCast(p)&&!magic.isCasting()&&state()==null);
+            selection.makeSelection(formOption.slot,formOption.slotIndex);
+            check("server_accepts_resynced_form_selection_after_grant_disappears",new SpellSelectionManager(p).getSelectedSpellData().getSpell()==form);
+            start();
+            var book=ItemRegistry.IRON_SPELL_BOOK.get().m_7968_();
+            var container=ISpellContainer.create(2,true,true).mutableCopy();
+            container.addSpell(rush,4,false);ISpellContainer.set(book,container.toImmutable());Utils.setPlayerSpellbookStack(p,book);
+            var inscribed=rushOptions();
+            check("equipped_rank_four_rush_takes_priority_without_duplicate",inscribed.size()==1&&inscribed.get(0).spellData.getLevel()==4);
+            magic.setMana(1);steps(1,0,0);
+            magic.setMana(1000);magic.getPlayerCooldowns().clearCooldowns();
+            var afterExpiry=rushOptions();
+            check("mana_expiry_preserves_inscribed_rush_without_allowing_cast",!OmegaFormManager.active(p)&&afterExpiry.size()==1&&afterExpiry.get(0).spellData.getLevel()==4&&!rush.canBeCastedBy(4,CastSource.SPELLBOOK,magic,p).isSuccess());
+            Utils.setPlayerSpellbookStack(p,ItemStack.f_41583_);
+            check("mana_expiry_removes_grant_when_no_rush_is_equipped",rushOptions().isEmpty());
+        }finally{
+            OmegaManager.abort(p);OmegaFormManager.end(p,false);magic.resetCastingState();magic.getPlayerCooldowns().clearCooldowns();
+            Utils.setPlayerSpellbookStack(p,bookBefore==null?ItemStack.f_41583_:bookBefore);magic.getSyncedData().setSpellSelection(selectionBefore);
+            reductions.m_22100_(priorReduction);ServerConfigs.SWORDS_CONSUME_MANA.set(swordsCostMana);
+        }
     }
     private void cooldownCases(ServerLevel level)throws Exception{
         var rush=ModSpells.OMEGA_RUSH.get();var form=ModSpells.OMEGA_FORM.get();var magic=MagicData.getPlayerMagicData(p);

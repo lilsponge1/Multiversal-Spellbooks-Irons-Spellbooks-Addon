@@ -1,6 +1,6 @@
 # Omega Form and the Flowery Scarf
 
-Omega Rush 0.2.5 includes a reusable Flowery Scarf and a sustained Omega Form transformation to the single Multiversal Spellbooks JAR. The other combined modules retain their existing payloads and versions. See [music and flight update](RELEASE-OMEGA-MUSIC.md).
+The combined Multiversal Spellbooks JAR includes a reusable Flowery Scarf and a sustained Omega Form transformation. See [music and flight update](RELEASE-OMEGA-MUSIC.md) for the 0.2.5 changes.
 
 ## Obtain and equip
 
@@ -31,6 +31,8 @@ Cast Form again to dismiss it immediately for no additional mana. Removing the s
 
 ## Omega Rush interaction
 
+When the transformation ritual finishes, **Omega Rush I appears in your normal spell wheel**. Select it and use the usual cast control; no scroll, spellbook, or hover toggle is required. The temporary option goes away when Form ends. If it was selected, the wheel returns to your previous spell if that spell is still available. If you already have Rush equipped, the wheel uses that entry and its rank instead of adding a duplicate. An inscribed Rush remains in its spellbook after Form ends.
+
 Enabled Form flight uses Rush's horizontal, arms-forward animation. This changes rendering only; hover speeds, collision, aiming, and the double-tap toggle retain their current behavior. Disabling flight restores the normal pose. The shared animation stays active while either Form hover or Rush owns movement and clears on cleanup or resource reload.
 
 Omega Form is required to begin a new Omega Rush by default. Rush uses a **10-second base cooldown while Form is active**, with normal cooldown-reduction attributes and cast-source modifiers still applied. Outside Form, the existing 120-second cooldown remains (when standalone Rush is allowed). It keeps its 200-mana cost, seven-second flight, guided steering, 4.05-block explosion radius, horizontal spread, and approximately six bomb sounds per second. Its scroll recipe remains Legendary Ink + Paper + Poisonous Potato.
@@ -43,7 +45,7 @@ Form adds a cycling rainbow body tint, first-person hand tint, restrained aura, 
 
 The new `[omegaForm]` and `[floweryScarf]` sections of the existing server config expose mana, upkeep, cooldown, hover speeds, defensive values, Nature bonus, drop chances, and eligible boss IDs. `omegaRush.requireOmegaForm=true` enables the prerequisite; set it false to retain standalone Rush access. `omegaRush.omegaFormCooldownSeconds=10` controls the shorter Rush cooldown independently of the normal `cooldownSeconds`. Client `presentation.afterImages` complements the existing particle quality, rainbow overlay, flashes, and sound settings.
 
-Network protocol **4** requires the matching combined JAR on every client and the server. Replace the older combined addon and remove any separate Omega Rush JAR; the module remains inside the one combined file. Existing Rush IDs and settings remain valid.
+Omega 0.2.6 uses network protocol **5**. Install matching combined JARs on the server and clients. The existing spell IDs, saved settings, and scrolls remain valid.
 
 ## Development and verification
 
