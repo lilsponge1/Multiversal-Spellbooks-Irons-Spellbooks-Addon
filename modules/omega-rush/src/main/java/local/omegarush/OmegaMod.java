@@ -23,6 +23,7 @@ public final class OmegaMod {
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, OmegaConfig.CLIENT);
         MinecraftForge.EVENT_BUS.register(OmegaManager.class);
         MinecraftForge.EVENT_BUS.register(OmegaFormManager.class);
+        MinecraftForge.EVENT_BUS.register(OmegaFormSpells.class);
         MinecraftForge.EVENT_BUS.register(OmegaLoot.class);
         OmegaNetwork.register();
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {

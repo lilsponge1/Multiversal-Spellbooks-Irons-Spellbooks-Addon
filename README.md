@@ -10,6 +10,8 @@ Forge Minecraft 1.20.1 addon for Iron's Spells 'n Spellbooks. This update combin
 
 ## Latest changes
 
+- Omega Form 0.2.6 source: finishing the ritual temporarily adds Omega Rush I to the normal spell wheel without requiring a scroll or spellbook. An equipped Rush keeps its existing rank. See [how it works](OMEGA-FORM.md#omega-rush-interaction).
+
 - Omega Form 0.2.5: the supplied Flower Man song follows the caster with 20-block positional audio until Form ends. Double-tap flight is twice as fast (12 horizontal / 8 vertical blocks per second), and passive upkeep is reduced from 30 to 25 mana/second. See [release and saved-config instructions](RELEASE-OMEGA-MUSIC.md).
 
 - Omega Form ritual: a 6.4-second charge raises the player 3.5 blocks with a bent knee, summons six orbiting Minecraft flowers with rising-pitch cues, then absorbs them with a flash, halo, follow-up pulses and the supplied fire-spell finish sound. The car-drive clip plays once at charge start. See [ritual details](OMEGA-RITUAL.md).
@@ -57,7 +59,7 @@ Build Omega Rush separately with `modules/omega-rush/build.ps1` before assembly,
 ./build-combined.ps1 -CombinedBaseJar ./path/to/accepted-multiversal.jar -BuildOmega
 ```
 
-Python 3.11+ is required for the packager; pass `-Python <python.exe>` if needed. `-BuildCrimson` and `-BuildIgnisArmor` build the modules first; `-Offline` requires cached Gradle dependencies. `-CrimsonJar`, `-IgnisArmorJar`, `-OmegaJar`, and `-OutputJar` override inputs/output. In the module-input mode, passing `-IgnisArmorJar ''` or `-OmegaJar ''` omits that optional module. Default output is `build/release/multiversal-spellbooks-0.3.5-crimson-0.1.1-ignis-0.1.0-omega-0.2.5.jar`, with checksum and input/payload report. Existing output files are never overwritten. Only shared metadata is merged; third-party dependencies are never bundled.
+Python 3.11+ is required for the packager; pass `-Python <python.exe>` if needed. `-BuildCrimson` and `-BuildIgnisArmor` build the modules first; `-Offline` requires cached Gradle dependencies. `-CrimsonJar`, `-IgnisArmorJar`, `-OmegaJar`, and `-OutputJar` override inputs/output. In the module-input mode, passing `-IgnisArmorJar ''` or `-OmegaJar ''` omits that optional module. Default output is `build/release/multiversal-spellbooks-0.3.5-crimson-0.1.1-ignis-0.1.0-omega-0.2.6.jar`, with checksum and input/payload report. Existing output files are never overwritten. Only shared metadata is merged; third-party dependencies are never bundled.
 
 The published review artifact retains its tested filename and bytes. A fresh build can differ in archive metadata; validate and test a rebuilt release before deploying it.
 

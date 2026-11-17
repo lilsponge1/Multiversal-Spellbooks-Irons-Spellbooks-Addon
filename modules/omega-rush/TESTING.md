@@ -1,5 +1,11 @@
 # Omega Rush verification
 
+## Omega Form 0.2.6 wheel grant
+
+The combined JAR passed **181 Form checks and 114 Rush checks** on a disposable Forge 47.4.10 server. The native Iron's cast path worked without a spellbook, paid 200 mana, rejected insufficient mana, and applied the 200-tick base cooldown. The harness also covered ritual gating, an equipped rank IV, both dismissal and mana expiry, and a stale selection that must never cast the fallback by accident.
+
+The matching disposable client passed the opt-in loopback smoke test (`-Domega.formClientSmoke=true`): simulated Form snapshots exercised ritual completion, explicit close, stale-state timeout, and restoring and syncing the previous selection without sending a cast. The production archive excludes all test classes.
+
 ## Omega Form 0.2.2 release
 
 The exact combined artifact passed **135 Form assertions plus 114 legacy Rush/compatibility assertions**, for **249 server checks** in the disposable copied pack. SHA-256: `08ACF74C03472305CCD5E7292F19769FD6E6BB6907925F4821F619DEFE225805`. The archive audit verified 240 preserved payload entries. Packager code is unchanged and its seven unit tests passed in the preceding revision.

@@ -18,9 +18,11 @@ Iron's existing required dependencies must already be installed. Do not install 
 
 ## Craft and cast
 
-1. Put **Legendary Ink, Paper, and a Poisonous Potato** into Iron's Scroll Forge. The potato selects the Nature school. Select Omega Rush.
-2. Inscribe the resulting scroll into a normal spellbook with the Inscription Table.
+1. Equip a Flowery Scarf in a functional Charm slot, then cast Omega Form and finish the ritual.
+2. Select the temporary **Omega Rush I** in your normal spell wheel. A scroll and spellbook are optional. If you already have Rush equipped, your equipped rank appears instead.
 3. Hold the usual cast control through the brief charge. After launch, aim with the camera to steer. Releasing the cast control does not stop flight. Sneak to end it deliberately.
+
+To obtain a permanent scroll for rank progression, use **Legendary Ink, Paper, and a Poisonous Potato** (Nature focus) in Iron's Scroll Forge and select Omega Rush. Inscribe the scroll into a book at an Inscription Table. The usual active-Form requirement also applies to equipped copies with the default server settings.
 
 For an operator preview, use `/createScroll irons_omega_rush:omega_rush 1`, then inscribe that scroll normally. The spell ID is `irons_omega_rush:omega_rush`.
 
@@ -62,7 +64,7 @@ The spell does not force a camera mode or enable a spin attack. Flight posture i
 
 Run `build.ps1` from PowerShell. Its parameters point to the existing local Java 17, Forge, Minecraft, and Iron's development runtimes; adjust them for another computer. Extracted assets are already included in the source resources. `tools/extract-assets.py` documents their derivation from the supplied sprite sheet.
 
-The module output is `build/omega-rush-0.2.5.jar`. Assemble it with the root `build-combined.ps1`; users install the combined output. Build parameters also accept matching Minecraft client/server and SRG JAR paths for another development environment.
+The module output is `build/omega-rush-0.2.6.jar`. Assemble it with the root `build-combined.ps1`; users install the combined output. Build parameters also accept matching Minecraft client/server and SRG JAR paths for another development environment.
 
 `build-test.ps1` builds the separate test harness. Run `omega_test` only in a disposable world: the harness creates synthetic players, targets, and test blocks. `omega_latency` and `omega_actor` are development-only commands for local latency and graphics checks.
 
